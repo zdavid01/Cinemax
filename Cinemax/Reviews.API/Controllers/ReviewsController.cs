@@ -53,6 +53,21 @@ public class ReviewsController : ControllerBase
 
         return Ok(reviews);
     }
+    
+    [HttpGet("[action]/{movieId}")]
+    [ProducesResponseType(typeof(IEnumerable<Review>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<Review>), StatusCodes.Status404NotFound)]
+
+    public async Task<ActionResult<IEnumerable<Review>>> GetReviewsByMovieId(string movieId)
+    {
+        var reviews = await _repository.GetReviewsByMovieId(movieId);
+        if (reviews is null)
+        {
+            return NotFound(null);
+        }
+
+        return Ok(reviews);
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]

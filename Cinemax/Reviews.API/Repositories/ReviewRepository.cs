@@ -29,6 +29,11 @@ public class ReviewRepository : IReviewRepository
         return await _context.Reviews.Find(r => r.UserId == userId).ToListAsync();
     }
 
+    public async Task<IEnumerable<Review>> GetReviewsByMovieId(string movieId)
+    {
+        return await _context.Reviews.Find(r=>r.MovieId == movieId).ToListAsync();
+    }
+
     public async Task CreateReview(Review review)
     {
         await _context.Reviews.InsertOneAsync(review);
