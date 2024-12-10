@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj": {}
+    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/WebApplication1/WebApplication1.csproj": {}
   },
   "projects": {
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj": {
+    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/WebApplication1/WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
-        "projectName": "MovieCatalog.API",
-        "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
+        "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/WebApplication1/WebApplication1.csproj",
+        "projectName": "WebApplication1",
+        "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/WebApplication1/WebApplication1.csproj",
         "packagesPath": "/home/davidz/.nuget/packages/",
-        "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/obj/",
+        "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/WebApplication1/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/davidz/.nuget/NuGet/NuGet.Config"
@@ -45,15 +45,11 @@
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[8.0.10, )"
-            },
-            "MongoDB.Driver": {
-              "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[8.0.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.6.2, )"
+              "version": "[6.4.0, )"
             }
           },
           "imports": [

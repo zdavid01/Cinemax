@@ -1070,19 +1070,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bojan\\.nuget\\packages\\": {}
+    "/home/davidz/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\MovieCatalog.API.csproj",
+      "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
       "projectName": "MovieCatalog.API",
-      "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\MovieCatalog.API.csproj",
-      "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\obj\\",
+      "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
+      "packagesPath": "/home/davidz/.nuget/packages/",
+      "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/home/davidz/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1143,7 +1143,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/home/davidz/.dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
