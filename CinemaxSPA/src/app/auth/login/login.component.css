@@ -9,9 +9,14 @@
     min-width: 300px;
 }
 
+mat-card {
+    margin-bottom: 18px;
+}
+
 mat-card-title,
 mat-card-content {
     display: flex;
+    padding-top: 10px;
     justify-content: center;
 }
 
