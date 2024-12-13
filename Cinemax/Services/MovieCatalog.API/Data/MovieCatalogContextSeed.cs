@@ -10,17 +10,17 @@ public class MovieCatalogContextSeed
         var existMovies = moviesCollection.Find(p => true).Any();
         if (!existMovies)
         {
-            moviesCollection.InsertManyAsync(GetPreconfiguredMovies());
+            moviesCollection.InsertManyAsync(GetConfiguredMovies());
         }
     }
 
-    private static IEnumerable<Movie> GetPreconfiguredMovies()
+    private static IEnumerable<Movie> GetConfiguredMovies()
     {
         return new List<Movie>()
         {
             new Movie()
             {
-                Id = "1",
+                Id = "602d2149e773f2a3990b47f5",
                 Title = "Star Wars: The Force Awakens",
                 Description = "The Force Awakens was the future of the world.",
                 Genre = "Action",
@@ -30,14 +30,14 @@ public class MovieCatalogContextSeed
             },
             new Movie()
             {
-                Id = "2",
+                Id = "602d2149e773f2a3990b47f6",
                 Title = "Harry Potter",
                 Description = "The Force Awakens was the future of the world.",
                 Genre = "Action",
                 Actors = "The Force Awakens",
                 Director = "J. K. Rowling",
                 Length = 120
-        }
+            }
         };
     }
 }

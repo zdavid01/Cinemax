@@ -31,6 +31,7 @@ public class MovieRepository : IMovieRepository
     public async Task CreateMovie(Movie movie)
     {
         await _context.Movies.InsertOneAsync(movie);
+
     }
 
     public async Task<bool> UpdateMovie(Movie movie)

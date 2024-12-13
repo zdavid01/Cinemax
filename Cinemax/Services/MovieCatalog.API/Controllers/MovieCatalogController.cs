@@ -18,9 +18,59 @@ public class MovieCatalogController : ControllerBase
     
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Movie>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<Movie>>> GetProducts()
+    public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
     {
-        var products = await _repository.GetMovies();
-        return Ok(products);
+        var movies = await _repository.GetMovies();
+        return Ok(movies);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Movie), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Movie), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<Movie>>> GetMovieById(string id)
+    {
+        var movie = await _repository.GetMovieById(id);
+        if (movie == null) return NotFound();
+        return Ok(movie);
+    }
+
+    [Route("Genre/{genre}")]
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<Movie>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<Movie>>> GetMoviesByGenre(string genre)
+    {
+        var movies = await _repository.GetMoviesByGenre(genre);
+        return Ok(movies);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(IEnumerable<Movie>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<Movie>> CreateMovie([FromBody] Movie movie)
+    {
+        await _repository.CreateMovie(movie);
+        return CreatedAtRoute("GetMovie", new { id = movie.Id }, movie);
+    }
+    
+    [HttpPut]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType( StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateMovie([FromBody] Movie movie)
+    {
+        var result = await _repository.UpdateMovie(movie);
+        if(!result)
+            return NotFound(null);
+        return Ok();
+    }
+
+    [HttpDelete]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType( StatusCodes.Status404NotFound)]
+
+    public async Task<ActionResult> DeleteMovie(string id)
+    {
+        var result = await _repository.DeleteMovie(id);
+        if(!result)
+            return NotFound(null);
+        return Ok();
     }
 }

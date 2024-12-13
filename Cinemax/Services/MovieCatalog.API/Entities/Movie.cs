@@ -1,7 +1,11 @@
-﻿namespace MovieCatalog.API.Entities;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace MovieCatalog.API.Entities;
 
 public class Movie
 {
+    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public string Title { get; set; }
     public int Length { get; set; }
