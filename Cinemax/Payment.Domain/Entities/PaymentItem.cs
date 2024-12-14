@@ -1,4 +1,5 @@
 using Payment.Domain.Common;
+using Payment.Domain.Exceptions;
 
 namespace Payment.Domain.Entities;
 
@@ -25,7 +26,7 @@ public class PaymentItem : EntityBase
         var newQuantity = Quantity + quantity;
         if (newQuantity <= 0)
         {
-            
+            throw new PaymentDomainException("Invalid number of quantities for payment item");
         }
         
         Quantity = newQuantity;
