@@ -18,7 +18,7 @@ public class PaymentItemRepository : IPaymentRepository
     }
 
 
-    public async Task<PaymentItemDTO> GetPaymentItem(string paymentId)
+    public async Task<PaymentItemDTO?> GetPaymentItem(int paymentId)
     {
         //if something fails connection closes
         await using var connection = _context.GetConnection();
@@ -29,6 +29,7 @@ public class PaymentItemRepository : IPaymentRepository
         
         return _mapper.Map<PaymentItemDTO>(paymentItem);
     }
+
 
     public async Task<bool> CreatePaymentItem(CreatePaymentItemDTO paymentItem)
     {
