@@ -24,8 +24,8 @@ public class PaymentItemRepository : IPaymentRepository
         await using var connection = _context.GetConnection();
 
         var paymentItem = await connection.QueryFirstOrDefaultAsync<PaymentItem>(
-            "SELECT * FROM Payment WHERE PaymentId = @PaymentId", 
-            new { PaymentId = paymentId });
+            "SELECT * FROM Payment WHERE Id = @Id", 
+            new { Id = paymentId });
         
         return _mapper.Map<PaymentItemDTO>(paymentItem);
     }
@@ -36,19 +36,19 @@ public class PaymentItemRepository : IPaymentRepository
         await using var connection = _context.GetConnection();
 
         var affected = await connection.ExecuteAsync(
-            "INSERT INTO Payment (Moviename, MovieId, Price, Quantity) VALUES (@Moviename, @MovieId, @Price, @Quantity)",
-                new {paymentItem.Moviename, paymentItem.MovieId, paymentItem.Price, paymentItem.Quantity}
+            "INSERT INTO Payment (Moviename, MovieId, Price, Quantity) VALUES (@CreatedAt, @Moviename, @MovieId, @Price, @Quantity)",
+                new { Moviename = paymentItem.MovieName, paymentItem.MovieId, paymentItem.Price, paymentItem.Quantity}
             );
-
+        
         return affected != 0;
     }
 
-    public async Task<bool> DeletePaymentItem(string paymentItemId)
+    public async Task<bool> DeletePaymentItem(int paymentItemId)
     {
         await using var connection = _context.GetConnection();
 
         var affected = await connection.ExecuteAsync(
-            "DELETE FROM Payment WHERE PaymentId = @PaymentId",
+            "DELETE FROM Payment WHERE Id = @PaymentItemId",
             new { paymentItemId }
         );
 

@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "+UOOA75ZGks=",
+  "dgSpecHash": "FhUE7NvcYkk=",
   "success": true,
   "projectFilePath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj",
   "expectedPackageFiles": [
     "/home/davidz/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
-    "/home/davidz/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.1/automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "/home/davidz/.nuget/packages/dapper/2.1.35/dapper.2.1.35.nupkg.sha512",
     "/home/davidz/.nuget/packages/microsoft.aspnetcore.openapi/8.0.8/microsoft.aspnetcore.openapi.8.0.8.nupkg.sha512",
     "/home/davidz/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
@@ -22,16 +21,5 @@
     "/home/davidz/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.4.0/swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.4.0/swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 13.0.1 was resolved.",
-      "libraryId": "AutoMapper",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

@@ -6,7 +6,6 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Payment.API.dll
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Payment.API.pdb
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/AutoMapper.dll
-/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Dapper.dll
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll

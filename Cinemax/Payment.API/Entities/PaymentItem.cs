@@ -3,17 +3,20 @@ namespace Payment.API.Entities;
 public class PaymentItem
 {
     public int Id { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public string Moviename { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public string MovieName { get; set; }
     public string MovieId { get; set; }
     public decimal Price { get; set; }
     public int Quantity { get; private set; }
 
-    public PaymentItem(string moviename, string movieId, decimal price, int quantity)
+    
+    //todo FIX THIS DAPPER
+    public PaymentItem(int id, DateTime? createdAt, string movieName, string movieId, decimal price, int quantity)
     {
-        CreatedAt = DateTime.Now;
-        Moviename = moviename ?? throw new ArgumentNullException(nameof(moviename));
-        MovieId = movieId ?? throw new ArgumentNullException(nameof(MovieId));
+        Id = id;
+        CreatedAt = createdAt ?? DateTime.Now;
+        MovieName = movieName ?? throw new ArgumentNullException(nameof(movieName));
+        MovieId = movieId ?? throw new ArgumentNullException(nameof(movieId));
         Price = price;
         AddQuantity(quantity);
     }

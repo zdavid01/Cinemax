@@ -14,6 +14,6 @@ public class PaymentContext : IPaymentContext
 
     public NpgsqlConnection GetConnection()
     {
-        return new NpgsqlConnection(_configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
+        return new NpgsqlConnection(_configuration.GetValue<string>("DatabaseSettings:ConnectionSettings"));
     }
 }
