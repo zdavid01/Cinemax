@@ -1,0 +1,12 @@
+﻿services:
+  moviecatalogdb:
+    image: mongo
+  
+  moviecatalog.api:
+    image: moviecatalog.api
+    build:
+      context: .
+      dockerfile: Services/MovieCatalog.API/Dockerfile
+
+volumes:
+  mongo_data:
