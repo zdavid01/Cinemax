@@ -5,9 +5,9 @@ namespace MovieCatalog.API.Data;
 
 public class MovieCatalogContext : IMovieCatalogContext
 {
-    public MovieCatalogContext()
+    public MovieCatalogContext(IConfiguration config)
     {
-        var client = new MongoClient("mongodb://localhost:27017");
+        var client = new MongoClient(config.GetValue<string>("DBSettings:ConnectionString"));
         var database = client.GetDatabase("CinemaxMoviesDB");
 
         Movies = database.GetCollection<Movie>("Movies");

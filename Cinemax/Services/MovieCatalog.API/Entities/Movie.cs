@@ -13,4 +13,7 @@ public class Movie
     public string Director { get; set; }
     public string Actors { get; set; }
     public string Description { get; set; }
+    public string ImageUrl { get; set; }
+    public string linkToTrailer { get; set; }
+    public string Rating { get; set; }
 }

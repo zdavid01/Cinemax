@@ -38,3 +38,13 @@ C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\obj\De
 C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\obj\Debug\net8.0\MovieCatalog.API.pdb
 C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\obj\Debug\net8.0\MovieCatalog.API.genruntimeconfig.cache
 C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\obj\Debug\net8.0\ref\MovieCatalog.API.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\StackExchange.Redis.dll
+C:\Users\bojan\OneDrive\Desktop\Cinemax\Cinemax\Services\MovieCatalog.API\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
