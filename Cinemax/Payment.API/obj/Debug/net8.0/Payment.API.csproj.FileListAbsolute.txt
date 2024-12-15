@@ -40,3 +40,9 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/obj/Debug/net8.0/Payment.API.pdb
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/obj/Debug/net8.0/Payment.API.genruntimeconfig.cache
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/obj/Debug/net8.0/ref/Payment.API.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/DotNetEnv.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Newtonsoft.Json.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/OpenSSL.PrivateKeyDecoder.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/OpenSSL.X509Certificate2.Provider.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/CloudrailSI.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Sprache.dll

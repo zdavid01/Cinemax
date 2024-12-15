@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[2.1.35, )"
             },
+            "DotNetEnv": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.8, )"
@@ -66,6 +70,10 @@
             "Npgsql": {
               "target": "Package",
               "version": "[9.0.2, )"
+            },
+            "PayPal.Api": {
+              "target": "Package",
+              "version": "[1.0.6, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
