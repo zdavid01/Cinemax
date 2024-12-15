@@ -38,3 +38,6 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/obj/Debug/net8.0/MovieCatalog.API.pdb
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/obj/Debug/net8.0/MovieCatalog.API.genruntimeconfig.cache
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/obj/Debug/net8.0/ref/MovieCatalog.API.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Binder.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll
