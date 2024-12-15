@@ -7,7 +7,7 @@ public class MovieCatalogContext : IMovieCatalogContext
 {
     public MovieCatalogContext(IConfiguration config)
     {
-        var client = new MongoClient(config.GetValue<string>("DBSettings:ConnectionString"));
+        var client = new MongoClient(config.GetValue<string>("DataBaseSettings:ConnectionString"));
         var database = client.GetDatabase("CinemaxMoviesDB");
 
         Movies = database.GetCollection<Movie>("Movies");
