@@ -1,4 +1,6 @@
-using Payment.API.Extension;
+using System.Reflection;
+using Payment.Application;
+using Payment.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//
 builder.Services.AddControllers();
-builder.Services.AddPaymentServices();
+
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+//Mapper
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+
 
 
 var app = builder.Build();

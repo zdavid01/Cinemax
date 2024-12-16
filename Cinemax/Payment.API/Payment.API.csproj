@@ -29,4 +29,15 @@
       <Folder Include="Paypal\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="MediatR">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\mediatr\12.4.1\lib\net6.0\MediatR.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Payment.Application\Payment.Application.csproj" />
+      <ProjectReference Include="..\Payment.Infrastructure\Payment.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
