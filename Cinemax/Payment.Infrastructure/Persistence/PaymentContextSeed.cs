@@ -5,11 +5,14 @@ namespace Payment.Infrastructure.Persistence;
 
 public class PaymentContextSeed
 {
-    public static async Task SeedAsync(PaymentContext paymentContext)
+    public static async Task SeedAsync(PaymentContext paymentContext, ILogger<PaymentContext> logger)
     {
         if (!paymentContext.Payments.Any())
         {
             paymentContext.Payments.AddRange(GetPreconfiguredPayments());
+            await paymentContext.SaveChangesAsync();
+            
+            logger.LogInformation($"Seeding database with context {nameof(PaymentContext)}.");
         }
     }
 

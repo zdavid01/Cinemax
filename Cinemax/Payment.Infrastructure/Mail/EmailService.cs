@@ -4,6 +4,7 @@ using MimeKit;
 using Payment.Application.Contracts.Infrastructure;
 using Payment.Application.Models;
 using MailKit.Net.Smtp;
+using Org.BouncyCastle.Tls;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 
@@ -13,10 +14,12 @@ public class EmailService : IEmailService
 {
     
     private readonly EmailSettings _mailSettings;
+    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IOptions<EmailSettings> mailSettings)
+    public EmailService(IOptions<EmailSettings> mailSettings, ILogger<EmailService> logger)
     {
         _mailSettings = mailSettings.Value ?? throw new ArgumentNullException(nameof(mailSettings));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
     public async Task<bool> SendEmail(Email emailRequest)
@@ -41,14 +44,17 @@ public class EmailService : IEmailService
 
         try
         {
+            _logger.LogInformation($"Sending email via SMTP server {_mailSettings.Host} to: {emailRequest.To}");
             await smtp.SendAsync(email);
         }
         catch (Exception e)
         {
+            _logger.LogInformation($"An error had occured when sending email via SMTP server {_mailSettings.Host}: {e.Message}");
             return false;
         }
         finally
         {
+            
             await smtp.DisconnectAsync(true);
         }
 

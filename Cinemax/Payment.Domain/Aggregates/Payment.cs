@@ -34,6 +34,13 @@ public class Payment : AggregateRoot
         Id = id;
     }
 
+    public Payment(string buyerId, string buyerUsername, string currency)
+    {
+        BuyerId = buyerId ?? throw new ArgumentNullException(nameof(buyerId));
+        BuyerUsername = buyerUsername ?? throw new ArgumentNullException(nameof(buyerUsername));
+        Money = new Money(GetTotal(), currency) ?? throw new ArgumentNullException(nameof(currency));
+    }
+
     //check if that item exists, if it does only increase quantity
     public void AddPaymentItem(PaymentItem paymentItem)
     {

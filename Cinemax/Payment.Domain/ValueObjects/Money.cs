@@ -4,10 +4,10 @@ namespace Payment.Domain.ValueObjects;
 
 public class Money : ValueObject
 {
-    public int Amount;
+    public decimal Amount;
     public string Currency;
 
-    public Money(int amount, string currency)
+    public Money(decimal amount, string currency)
     {
         Amount = amount;
         Currency = currency ?? throw new ArgumentNullException(nameof(currency));
