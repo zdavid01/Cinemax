@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\MovieCatalog.API.csproj": {}
+    "/Users/dusantrtica/projects/matf/rs2/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\MovieCatalog.API.csproj": {
+    "/Users/dusantrtica/projects/matf/rs2/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\MovieCatalog.API.csproj",
+        "projectUniqueName": "/Users/dusantrtica/projects/matf/rs2/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
         "projectName": "MovieCatalog.API",
-        "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\MovieCatalog.API.csproj",
-        "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Services\\MovieCatalog.API\\obj\\",
+        "projectPath": "/Users/dusantrtica/projects/matf/rs2/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
+        "packagesPath": "/Users/dusantrtica/.nuget/packages/",
+        "outputPath": "/Users/dusantrtica/projects/matf/rs2/Cinemax/Cinemax/Services/MovieCatalog.API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/dusantrtica/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -75,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
