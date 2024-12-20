@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0.101</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
@@ -9,25 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
         <PackageReference Include="Grpc" Version="2.46.6" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
         <PackageReference Include="Grpc.Core" Version="2.46.6" />
+        <PackageReference Include="MassTransit" Version="7.3.1" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\..\Discount\Discount.GRPC\Protos\Coupon.proto" GrpcServices="Client" >
-            <Link>Protos\Coupon.proto</Link>
-        </Protobuf>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <ProjectReference Include="..\..\..\Common\EventBus.Messages\EventBus.Messages.csproj" />
     </ItemGroup>
 
 </Project>

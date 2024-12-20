@@ -1,0 +1,12 @@
+﻿services:
+  basketdb:
+    image: redis:alpine
+  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+  
+  basket.api:
+    image: basket.api
+    build:
+      context: .
+      dockerfile: Services/Basket.API/Dockerfile

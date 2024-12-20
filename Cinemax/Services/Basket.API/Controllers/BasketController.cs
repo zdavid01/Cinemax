@@ -23,16 +23,15 @@ public class BasketController: ControllerBase
     private readonly ILogger<BasketController> _logger;
     private readonly IMapper _mapper;
     private readonly IPublishEndpoint _publishEndpoint;
-	private readonly CouponGrpcService _couponService;
 
     public BasketController(IBasketRepository basketRepository, ILogger<BasketController> logger,
-        IMapper mapper, IPublishEndpoint publishEndpoint, CouponGrpcService couponService)
+        IMapper mapper, IPublishEndpoint publishEndpoint)
     {
         _basketRepository = basketRepository ?? throw new ArgumentNullException(nameof(basketRepository));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
-        _couponService = couponService ?? throw new ArgumentNullException(nameof(couponService));
+        // _couponService = couponService ?? throw new ArgumentNullException(nameof(couponService));
     }
 
     [HttpGet("{username}")]
@@ -72,6 +71,7 @@ public class BasketController: ControllerBase
     }
 
     
+	/*
     [HttpPut]
     [ProducesResponseType(typeof(ShoppingCart), StatusCodes.Status200OK)]
     public async Task<ActionResult<ShoppingCart>> UpdateBasket([FromBody] ShoppingCart basket)
@@ -92,6 +92,7 @@ public class BasketController: ControllerBase
         
         return Ok(await _basketRepos+itory.UpdateBasket(basket));
     }
+	*/
 
     [HttpDelete("{username}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]

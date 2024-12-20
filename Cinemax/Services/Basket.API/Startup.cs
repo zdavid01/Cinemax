@@ -38,9 +38,11 @@ namespace Basket.API
             services.AddScoped<IBasketRepository, BasketRepository>();
 
             // gRPC
+			/*
             services.AddGrpcClient<CouponProtoService.CouponProtoServiceClient>(
                 options => options.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"]));
             services.AddScoped<CouponGrpcService>();
+			*/
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
