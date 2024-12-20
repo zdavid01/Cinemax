@@ -1,13 +1,23 @@
 ﻿services:
   
-#  paymentdb:
-#    image: postgres
-    
+  #  paymentdb:
+  #    image: postgres
+  
   pgadmin:
     image: dpage/pgadmin4
   
   mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
+  
+  moviecatalogdb:
+    image: mongo
+
+  moviecatalog.api:
+    image: moviecatalog.api
+    build:
+      context: .
+      dockerfile: Services/MovieCatalog.API/Dockerfile
+  
   
   payment.api:
     image: payment.api
@@ -17,6 +27,7 @@
 
 
 volumes:
-#  postgres_data:
+  #  postgres_data:
   pgadmin_data:
   mssql_data:
+  mongo_data:
