@@ -196,3 +196,8 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/obj/Debug/net8.0/Payment.Infrastructure.pdb
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/obj/Debug/net8.0/Payment.Infrastructure.genruntimeconfig.cache
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/obj/Debug/net8.0/ref/Payment.Infrastructure.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/bin/Debug/net8.0/Payment.Domain.staticwebassets.endpoints.json
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/bin/Debug/net8.0/Payment.Application.staticwebassets.endpoints.json
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/bin/Debug/net8.0/Payment.Infrastructure.staticwebassets.endpoints.json
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/obj/Debug/net8.0/staticwebassets/msbuild.Payment.Infrastructure.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

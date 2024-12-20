@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "h0kup/EuHdE=",
+  "dgSpecHash": "qeoTkRDg/XNDAHit+2pGuy5NAg2gAUK6T1z0jPc6P2aRyTtiyDBvHGDgnNHtn3/h6c2k/sPkJXflcirZi+YZ4A==",
   "success": true,
   "projectFilePath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj",
   "expectedPackageFiles": [
@@ -176,7 +176,8 @@
     "/home/davidz/.nuget/packages/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.xml.xmldocument/4.3.0/system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "/home/davidz/.nuget/packages/webactivatorex/2.0.0/webactivatorex.2.0.0.nupkg.sha512"
+    "/home/davidz/.nuget/packages/webactivatorex/2.0.0/webactivatorex.2.0.0.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
   ],
   "logs": [
     {

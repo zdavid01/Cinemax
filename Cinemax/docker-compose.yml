@@ -6,7 +6,7 @@
   pgadmin:
     image: dpage/pgadmin4
   
-  paymentdb:
+  mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
   
   payment.api:
@@ -19,4 +19,4 @@
 volumes:
 #  postgres_data:
   pgadmin_data:
-  paymentdb_data:
+  mssql_data:

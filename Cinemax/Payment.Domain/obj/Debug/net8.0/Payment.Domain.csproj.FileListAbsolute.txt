@@ -22,3 +22,6 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/refint/Payment.Domain.dll
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/Payment.Domain.pdb
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/ref/Payment.Domain.dll
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/bin/Debug/net8.0/Payment.Domain.staticwebassets.endpoints.json
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/staticwebassets/msbuild.Payment.Domain.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

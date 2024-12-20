@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Gn36S7VHI0fwaCiPqwu3UgZKAnlE/QP6P2notNd8nbU=",
+  "Hash": "t8JjpW2mppyNkaADM0KqvQTHXcOr4MUOxSxtOoga5u8=",
   "Source": "Payment.Domain",
   "BasePath": "_content/Payment.Domain",
   "Mode": "Default",
@@ -22,7 +22,7 @@
       "SourceType": "Computed",
       "ContentRoot": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/bundle/",
       "BasePath": "_content/Payment.Domain",
-      "RelativePath": "Payment.Domain.styles.css",
+      "RelativePath": "Payment.Domain#[.{fingerprint}]?.styles.css",
       "AssetKind": "All",
       "AssetMode": "CurrentProject",
       "AssetRole": "Primary",
@@ -31,6 +31,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
+      "Fingerprint": "0hjb3c4r8i",
+      "Integrity": "VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/bundle/Payment.Domain.styles.css"
@@ -41,7 +43,7 @@
       "SourceType": "Computed",
       "ContentRoot": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/projectbundle/",
       "BasePath": "_content/Payment.Domain",
-      "RelativePath": "Payment.Domain.bundle.scp.css",
+      "RelativePath": "Payment.Domain#[.{fingerprint}]!.bundle.scp.css",
       "AssetKind": "All",
       "AssetMode": "Reference",
       "AssetRole": "Primary",
@@ -50,6 +52,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
+      "Fingerprint": "0hjb3c4r8i",
+      "Integrity": "VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/projectbundle/Payment.Domain.bundle.scp.css"
@@ -60,15 +64,17 @@
       "SourceType": "Discovered",
       "ContentRoot": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/",
       "BasePath": "_content/Payment.Domain",
-      "RelativePath": "background.png",
+      "RelativePath": "background#[.{fingerprint}]?.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeBehavior": "",
       "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
+      "Fingerprint": "x2rx4ajns0",
+      "Integrity": "WeOKCkI7IdJHs2kCqsKgLfiWX4/sNPbaRUspOLefkCY=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/background.png"
@@ -79,18 +85,350 @@
       "SourceType": "Discovered",
       "ContentRoot": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/",
       "BasePath": "_content/Payment.Domain",
-      "RelativePath": "exampleJsInterop.js",
+      "RelativePath": "exampleJsInterop#[.{fingerprint}]?.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeBehavior": "",
       "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
+      "Fingerprint": "luzdqbu196",
+      "Integrity": "Q4NTLlisgAvNajNKkeD3c0qLXE5q8YduQMx9wE/SeNk=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/exampleJsInterop.js"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "background.png",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/background.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "378"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WeOKCkI7IdJHs2kCqsKgLfiWX4/sNPbaRUspOLefkCY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 14 Dec 2024 16:23:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-WeOKCkI7IdJHs2kCqsKgLfiWX4/sNPbaRUspOLefkCY="
+        }
+      ]
+    },
+    {
+      "Route": "background.x2rx4ajns0.png",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/background.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "378"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WeOKCkI7IdJHs2kCqsKgLfiWX4/sNPbaRUspOLefkCY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 14 Dec 2024 16:23:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x2rx4ajns0"
+        },
+        {
+          "Name": "label",
+          "Value": "background.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-WeOKCkI7IdJHs2kCqsKgLfiWX4/sNPbaRUspOLefkCY="
+        }
+      ]
+    },
+    {
+      "Route": "exampleJsInterop.js",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/exampleJsInterop.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "241"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q4NTLlisgAvNajNKkeD3c0qLXE5q8YduQMx9wE/SeNk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 14 Dec 2024 16:23:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q4NTLlisgAvNajNKkeD3c0qLXE5q8YduQMx9wE/SeNk="
+        }
+      ]
+    },
+    {
+      "Route": "exampleJsInterop.luzdqbu196.js",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/exampleJsInterop.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "241"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q4NTLlisgAvNajNKkeD3c0qLXE5q8YduQMx9wE/SeNk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 14 Dec 2024 16:23:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "luzdqbu196"
+        },
+        {
+          "Name": "label",
+          "Value": "exampleJsInterop.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q4NTLlisgAvNajNKkeD3c0qLXE5q8YduQMx9wE/SeNk="
+        }
+      ]
+    },
+    {
+      "Route": "Payment.Domain.0hjb3c4r8i.bundle.scp.css",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/projectbundle/Payment.Domain.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "200"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 11:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0hjb3c4r8i"
+        },
+        {
+          "Name": "label",
+          "Value": "Payment.Domain.bundle.scp.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U="
+        }
+      ]
+    },
+    {
+      "Route": "Payment.Domain.0hjb3c4r8i.styles.css",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/bundle/Payment.Domain.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "200"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 11:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0hjb3c4r8i"
+        },
+        {
+          "Name": "label",
+          "Value": "Payment.Domain.styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U="
+        }
+      ]
+    },
+    {
+      "Route": "Payment.Domain.bundle.scp.css",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/projectbundle/Payment.Domain.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "200"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 11:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U="
+        }
+      ]
+    },
+    {
+      "Route": "Payment.Domain.styles.css",
+      "AssetFile": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/bundle/Payment.Domain.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "200"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 15 Dec 2024 11:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-VMpx2FtGD9QIVXXqAAUVwMbTZ1IMvuMZ60MupRU9f5U="
+        }
+      ]
     }
   ]
 }

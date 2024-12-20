@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Release/net8.0/scopedcss/projectbundle/Payment.Domain.bundle.scp.css",
+      "PackagePath": "staticwebassets/Payment.Domain.bundle.scp.css"
+    },
+    {
+      "Id": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/background.png",
+      "PackagePath": "staticwebassets/background.png"
+    },
+    {
+      "Id": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/exampleJsInterop.js",
+      "PackagePath": "staticwebassets/exampleJsInterop.js"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.Payment.Domain.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.build.Payment.Domain.props",
+      "PackagePath": "build\\Payment.Domain.props"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.buildMultiTargeting.Payment.Domain.props",
+      "PackagePath": "buildMultiTargeting\\Payment.Domain.props"
+    },
+    {
+      "Id": "obj/Release/net8.0/staticwebassets/msbuild.buildTransitive.Payment.Domain.props",
+      "PackagePath": "buildTransitive\\Payment.Domain.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

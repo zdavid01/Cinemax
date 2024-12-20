@@ -17,7 +17,7 @@ public class PaymentController : ControllerBase
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    [HttpGet("{username}")]
+    [HttpGet("get-payments/{username}")]
     [ProducesResponseType(typeof(IEnumerable<PaymentViewModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PaymentViewModel>>> GetPayments(string username)
     {
@@ -26,7 +26,7 @@ public class PaymentController : ControllerBase
         return Ok(payments);
     }
 
-    [HttpPost]
+    [HttpPost("create-payment")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     public async Task<ActionResult<int>> CreatePayment([FromBody] CreatePaymentCommand command)
     {

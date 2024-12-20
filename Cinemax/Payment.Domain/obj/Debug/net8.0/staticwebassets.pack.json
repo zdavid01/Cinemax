@@ -2,7 +2,7 @@
   "Files": [
     {
       "Id": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/Debug/net8.0/scopedcss/projectbundle/Payment.Domain.bundle.scp.css",
-      "PackagePath": "staticwebassets/Payment.Domain.bundle.scp.css"
+      "PackagePath": "staticwebassets/Payment.Domain.0hjb3c4r8i.bundle.scp.css"
     },
     {
       "Id": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/background.png",
@@ -11,6 +11,10 @@
     {
       "Id": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/wwwroot/exampleJsInterop.js",
       "PackagePath": "staticwebassets/exampleJsInterop.js"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.Payment.Domain.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.Payment.Domain.Microsoft.AspNetCore.StaticWebAssets.props",
