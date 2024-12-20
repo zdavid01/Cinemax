@@ -2,6 +2,25 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieCatalog.API", "Services\MovieCatalog.API\MovieCatalog.API.csproj", "{3F4CDAF4-9F1F-4D31-95F0-6CF0270E4996}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reviews", "Reviews", "{0AADC8C6-983A-4CF9-B7E8-E50E7C42D293}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reviews.API", "Reviews.API\Reviews.API.csproj", "{0760978E-A4E4-4C2F-8B14-6FB62A25DCFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PaymentDir", "PaymentDir", "{1BF7D921-E8EC-4FE8-B6CC-4424819EC8C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.API", "Payment.API\Payment.API.csproj", "{5649641A-5DEC-41B8-A826-5DE9196E0D01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EE55E4C6-4245-4761-AE5D-E537A57903CD}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Domain", "Payment.Domain\Payment.Domain.csproj", "{2BDAA4AC-B3DE-4140-B567-E3E3062B9029}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Application", "Payment.Application\Payment.Application.csproj", "{6F6462AA-BE21-4E9D-8808-177BD284CC11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Infrastructure", "Payment.Infrastructure\Payment.Infrastructure.csproj", "{4CEE6D1F-E98E-476D-952E-695B276CBD2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +31,32 @@ Global
 		{3F4CDAF4-9F1F-4D31-95F0-6CF0270E4996}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F4CDAF4-9F1F-4D31-95F0-6CF0270E4996}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F4CDAF4-9F1F-4D31-95F0-6CF0270E4996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0760978E-A4E4-4C2F-8B14-6FB62A25DCFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0760978E-A4E4-4C2F-8B14-6FB62A25DCFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0760978E-A4E4-4C2F-8B14-6FB62A25DCFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0760978E-A4E4-4C2F-8B14-6FB62A25DCFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5649641A-5DEC-41B8-A826-5DE9196E0D01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5649641A-5DEC-41B8-A826-5DE9196E0D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5649641A-5DEC-41B8-A826-5DE9196E0D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5649641A-5DEC-41B8-A826-5DE9196E0D01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BDAA4AC-B3DE-4140-B567-E3E3062B9029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BDAA4AC-B3DE-4140-B567-E3E3062B9029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BDAA4AC-B3DE-4140-B567-E3E3062B9029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BDAA4AC-B3DE-4140-B567-E3E3062B9029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6462AA-BE21-4E9D-8808-177BD284CC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6462AA-BE21-4E9D-8808-177BD284CC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6462AA-BE21-4E9D-8808-177BD284CC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6462AA-BE21-4E9D-8808-177BD284CC11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CEE6D1F-E98E-476D-952E-695B276CBD2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CEE6D1F-E98E-476D-952E-695B276CBD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CEE6D1F-E98E-476D-952E-695B276CBD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CEE6D1F-E98E-476D-952E-695B276CBD2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0760978E-A4E4-4C2F-8B14-6FB62A25DCFE} = {0AADC8C6-983A-4CF9-B7E8-E50E7C42D293}
+		{5649641A-5DEC-41B8-A826-5DE9196E0D01} = {1BF7D921-E8EC-4FE8-B6CC-4424819EC8C0}
+		{2BDAA4AC-B3DE-4140-B567-E3E3062B9029} = {1BF7D921-E8EC-4FE8-B6CC-4424819EC8C0}
+		{6F6462AA-BE21-4E9D-8808-177BD284CC11} = {1BF7D921-E8EC-4FE8-B6CC-4424819EC8C0}
+		{4CEE6D1F-E98E-476D-952E-695B276CBD2E} = {1BF7D921-E8EC-4FE8-B6CC-4424819EC8C0}
 	EndGlobalSection
 EndGlobal

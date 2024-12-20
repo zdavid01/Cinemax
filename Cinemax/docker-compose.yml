@@ -1,0 +1,22 @@
+﻿services:
+  
+#  paymentdb:
+#    image: postgres
+    
+  pgadmin:
+    image: dpage/pgadmin4
+  
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+  
+  payment.api:
+    image: payment.api
+    build:
+      context: .
+      dockerfile: Payment.API/Dockerfile
+
+
+volumes:
+#  postgres_data:
+  pgadmin_data:
+  mssql_data:
