@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "n0uFp6fBCzPtNuhkrHBU4Weir4GD/q7LceNBWoKFLQeZ08PF/G2kHSaWt7RanfhnYVAqKszzGwNbR/QgMaNc3w==",
+  "dgSpecHash": "ugq5uufRJgQ=",
   "success": true,
   "projectFilePath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Services/MovieCatalog.API/MovieCatalog.API.csproj",
   "expectedPackageFiles": [
@@ -28,7 +28,9 @@
     "/home/davidz/.nuget/packages/system.security.accesscontrol/5.0.0/system.security.accesscontrol.5.0.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.security.principal.windows/5.0.0/system.security.principal.windows.5.0.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/zstdsharp.port/0.7.3/zstdsharp.port.0.7.3.nupkg.sha512",
-    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.ref/8.0.11/microsoft.netcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.11/microsoft.aspnetcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.11/microsoft.netcore.app.host.linux-x64.8.0.11.nupkg.sha512"
   ],
   "logs": []
 }

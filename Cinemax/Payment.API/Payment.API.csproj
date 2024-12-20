@@ -26,10 +26,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Paypal\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="MediatR">
         <HintPath>..\..\..\..\..\..\.nuget\packages\mediatr\12.4.1\lib\net6.0\MediatR.dll</HintPath>
       </Reference>

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qeoTkRDg/XNDAHit+2pGuy5NAg2gAUK6T1z0jPc6P2aRyTtiyDBvHGDgnNHtn3/h6c2k/sPkJXflcirZi+YZ4A==",
+  "dgSpecHash": "3yup+p6jVJs=",
   "success": true,
   "projectFilePath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj",
   "expectedPackageFiles": [
@@ -71,6 +71,7 @@
     "/home/davidz/.nuget/packages/paypal.api/1.0.6/paypal.api.1.0.6.nupkg.sha512",
     "/home/davidz/.nuget/packages/polly/8.5.0/polly.8.5.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/polly.core/8.5.0/polly.core.8.5.0.nupkg.sha512",
+    "/home/davidz/.nuget/packages/restsharp/112.1.1-alpha.0.4/restsharp.112.1.1-alpha.0.4.nupkg.sha512",
     "/home/davidz/.nuget/packages/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/home/davidz/.nuget/packages/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/home/davidz/.nuget/packages/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
@@ -177,9 +178,21 @@
     "/home/davidz/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.xml.xmldocument/4.3.0/system.xml.xmldocument.4.3.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/webactivatorex/2.0.0/webactivatorex.2.0.0.nupkg.sha512",
-    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.ref/8.0.11/microsoft.netcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.11/microsoft.aspnetcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.11/microsoft.netcore.app.host.linux-x64.8.0.11.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Newtonsoft.Json' 10.0.3 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
+      "libraryId": "Newtonsoft.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

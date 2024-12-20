@@ -1,6 +1,4 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/bin/Debug/net8.0/Payment.Domain.staticwebassets.runtime.json
-/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/bin/Debug/net8.0/appsettings.Development.json
-/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/bin/Debug/net8.0/appsettings.json
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/bin/Debug/net8.0/Payment.Application.staticwebassets.runtime.json
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/bin/Debug/net8.0/Payment.Application
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/bin/Debug/net8.0/Payment.Application.deps.json

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ht1S25Am8k4L1p1J3OlnTPcRiky/Rpn96IlZrzpxtCyoKfY27UPu4qBhHqcZoyAutsPcH80kcImol2nTq7Addg==",
+  "dgSpecHash": "RO99U/ObmAw=",
   "success": true,
   "projectFilePath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj",
   "expectedPackageFiles": [
@@ -17,7 +17,8 @@
     "/home/davidz/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/microsoft.jsinterop/8.0.8/microsoft.jsinterop.8.0.8.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.io.pipelines/8.0.0/system.io.pipelines.8.0.0.nupkg.sha512",
-    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.ref/8.0.11/microsoft.netcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.11/microsoft.aspnetcore.app.ref.8.0.11.nupkg.sha512"
   ],
   "logs": []
 }

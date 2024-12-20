@@ -141,3 +141,4 @@
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/Payment.API.staticwebassets.endpoints.json
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/obj/Debug/net8.0/staticwebassets.build.endpoints.json
 /home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/obj/Debug/net8.0/staticwebassets/msbuild.Payment.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/bin/Debug/net8.0/RestSharp.dll

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uNEv+PjrVniJ7YDvMlN3YcvGJuXwPuEmHxGc6rbGGhfAW4HbpFJMZRdguECeUytSGo+B49dcxLxyu5T9robVlg==",
+  "dgSpecHash": "hPL8kHYevVU=",
   "success": true,
   "projectFilePath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/Payment.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -71,6 +71,7 @@
     "/home/davidz/.nuget/packages/newtonsoft.json/7.0.1/newtonsoft.json.7.0.1.nupkg.sha512",
     "/home/davidz/.nuget/packages/polly/8.5.0/polly.8.5.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/polly.core/8.5.0/polly.core.8.5.0.nupkg.sha512",
+    "/home/davidz/.nuget/packages/restsharp/112.1.1-alpha.0.4/restsharp.112.1.1-alpha.0.4.nupkg.sha512",
     "/home/davidz/.nuget/packages/swashbuckle/5.6.0/swashbuckle.5.6.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/swashbuckle.core/5.6.0/swashbuckle.core.5.6.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.clientmodel/1.0.0/system.clientmodel.1.0.0.nupkg.sha512",
@@ -109,9 +110,21 @@
     "/home/davidz/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "/home/davidz/.nuget/packages/system.windows.extensions/6.0.0/system.windows.extensions.6.0.0.nupkg.sha512",
     "/home/davidz/.nuget/packages/webactivatorex/2.0.0/webactivatorex.2.0.0.nupkg.sha512",
-    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.ref/8.0.11/microsoft.netcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.11/microsoft.aspnetcore.app.ref.8.0.11.nupkg.sha512",
+    "/home/davidz/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.11/microsoft.netcore.app.host.linux-x64.8.0.11.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Newtonsoft.Json' 7.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-5crp-9r3c-p9vr",
+      "libraryId": "Newtonsoft.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",
