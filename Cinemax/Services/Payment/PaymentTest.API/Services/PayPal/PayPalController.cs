@@ -26,10 +26,6 @@ public class PayPalController : ControllerBase
         {
             var payment = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency);
 
-            SendEmailRequest emailRequest = new SendEmailRequest(From: "dzivkovicd1@gmail.com", To:"dzivkovicd1@gmail.com", Subject:"CreatedPaypal", Body:"Najveci");
-            
-            await _emailService.SendEmailAsync(emailRequest);
-
             return Ok(payment);
         }
         catch (Exception ex)
@@ -45,6 +41,11 @@ public class PayPalController : ControllerBase
         try
         {
             var state = await _payPalService.ExecutePayment(executeRequest.PaymentId, executeRequest.PayerId);
+            
+            SendEmailRequest emailRequest = new SendEmailRequest(From: "dzivkovicd1@gmail.com", To:"dzivkovicd1@gmail.com", Subject:"Executed payment", Body:"Odose dOlAri");
+            
+            await _emailService.SendEmailAsync(emailRequest);
+            
             return Ok(new { state });
         }
         catch (Exception ex)
@@ -54,27 +55,28 @@ public class PayPalController : ControllerBase
     }
     
     [HttpGet("return")]
-    public async Task<IActionResult> ReturnFromPayPal(string paymentId, string payerId)
+    public async Task<IActionResult> ReturnFromPayPal(string token, string payerId, string paymentId)
     {
-        try
+        if (string.IsNullOrEmpty(token))
         {
-            // Execute the payment after the user approves it
-            var paymentState = await _payPalService.ExecutePayment(paymentId, payerId);
+            return BadRequest("Access token is missing");
+        }    
+        if (string.IsNullOrEmpty(payerId))
+        {
+            return BadRequest("PayerId is missing");
+        }    
+        //verify request/process payment
 
-            // If the payment was successful, return a success message
-            if (paymentState == "approved")
-            {
-                return Ok("Payment successfully completed.");
-            }
-            else
-            {
-                return BadRequest("Payment not approved.");
-            }
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        var state = await _payPalService.ExecutePayment(paymentId, payerId);
+        
+        SendEmailRequest emailRequest = new SendEmailRequest(From: "dzivkovicd1@gmail.com", To:"dzivkovicd1@gmail.com", Subject:"Executed payment", Body:"Odose dOlAri");
+            
+        await _emailService.SendEmailAsync(emailRequest);
+        
+        string externalUrl = "http://localhost:5281/swagger/index.html";
+        return Redirect(externalUrl);
+        
+        return Ok(state);
     }
 }
 

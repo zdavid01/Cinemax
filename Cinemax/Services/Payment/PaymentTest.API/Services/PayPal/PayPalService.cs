@@ -51,7 +51,7 @@ public class PayPalService
 
     // Step 2: Create a payment
     public async Task<CreatePayPalPaymentResponse> CreatePayment(decimal amount, string currency = "USD", 
-        string returnUrl = "http://localhost:5281/swagger/index.html", string cancelUrl = "http://localhost:5017/swagger/index.html/api/paypal/cancel")
+        string returnUrl = "http://localhost:5281/api/paypal/return", string cancelUrl = "http://localhost:5017/swagger/index.html/api/paypal/cancel")
     {
         if (string.IsNullOrEmpty(accessToken))
         {
