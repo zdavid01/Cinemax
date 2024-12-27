@@ -16,4 +16,14 @@ public class PaymentItem
     // public string PictureUrl { get; private set; }
     public decimal Price { get; private set; }
     public int Quantity { get; private set; } = 0;
+
+    public void AddQuantity(int quantity)
+    {
+        var newQuantity = quantity + Quantity;
+        if (newQuantity <= 0)
+        {
+            throw new ArgumentException("Quantity must be greater than zero");
+        }
+        Quantity = newQuantity;
+    }
 }

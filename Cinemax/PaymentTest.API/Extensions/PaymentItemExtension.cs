@@ -9,7 +9,7 @@ public static class PaymentItemExtension
 {
     public static void AddPaymentItemServices(this IServiceCollection services)
     {
-        services.AddScoped<IPaymentContext, PaymentContext>();
+        services.AddScoped<IPaymentItemContext, PaymentItemContext>();
         services.AddScoped<IPaymentItemRepository, PaymentItemRepository>();
 
         services.AddAutoMapper(configuration =>

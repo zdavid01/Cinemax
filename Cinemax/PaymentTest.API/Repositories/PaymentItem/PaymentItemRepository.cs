@@ -8,19 +8,19 @@ namespace PaymentTest.API.Repositories;
 
 public class PaymentItemRepository : IPaymentItemRepository
 {
-    private readonly IPaymentContext _context;
+    private readonly IPaymentItemContext _itemContext;
 
     private readonly IMapper _mapper;
 
-    public PaymentItemRepository(IPaymentContext context, IMapper mapper)
+    public PaymentItemRepository(IPaymentItemContext itemContext, IMapper mapper)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _itemContext = itemContext ?? throw new ArgumentNullException(nameof(itemContext));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
     
     public async Task<List<PaymentItemDTO>> GetPaymentItems()
     {
-        using var connection = _context.GetConnection();
+        using var connection = _itemContext.GetConnection();
         
         var payments = await connection.QueryAsync<PaymentItem>(
             "SELECT * FROM PaymentItem"); 
@@ -31,7 +31,7 @@ public class PaymentItemRepository : IPaymentItemRepository
 
     public async Task<PaymentItemDTO> GetPaymentItemByMovieId(string movieId)
     {
-        using var connection = _context.GetConnection();
+        using var connection = _itemContext.GetConnection();
 
         var paymentItem = await connection.QueryFirstOrDefaultAsync<PaymentItem>(
             "SELECT * FROM PaymentItem WHERE  MovieId = @movieId", new { movieId });
@@ -41,7 +41,7 @@ public class PaymentItemRepository : IPaymentItemRepository
 
     public async Task<bool> CreatePaymentItem(CreatePaymentItemDTO paymentItem)
     {
-        using var connection = _context.GetConnection();
+        using var connection = _itemContext.GetConnection();
 
         var affected = await connection.ExecuteAsync(
             "INSERT INTO PaymentItem (createdBy, userId, movieName, movieId, price, quantity) VALUES ('admin', @userId, @movieName, @movieId, @price, @quantity)",
@@ -52,7 +52,7 @@ public class PaymentItemRepository : IPaymentItemRepository
 
     public async Task<bool> UpdatePaymentItem(UpdatePaymentItemDTO paymentItem)
     {
-        await using var connection = _context.GetConnection();
+        await using var connection = _itemContext.GetConnection();
 
         /*, MovieName = @MovieName, MovieId = @MovieId, Price = @Price, Quantity = @Quantity*/
         // , paymentItem.MovieName, paymentItem.Price, paymentItem.Quantity, paymentItem.Id
@@ -68,7 +68,7 @@ public class PaymentItemRepository : IPaymentItemRepository
 
     public async Task<bool> DeletePaymentItem(int id)
     {
-        using var connection = _context.GetConnection();
+        using var connection = _itemContext.GetConnection();
 
         var affected = await connection.ExecuteAsync(
             "DELETE FROM PaymentItem WHERE Id = @id",
@@ -82,7 +82,7 @@ public class PaymentItemRepository : IPaymentItemRepository
 
     public async Task<IEnumerable<PaymentItemDTO>> GetPaymentItemsByMovieId(string movieId)
     {
-        using var connection = _context.GetConnection();
+        using var connection = _itemContext.GetConnection();
         
         var payments = await connection.QueryAsync<PaymentItem>(
             "SELECT * FROM PaymentItem WHERE MovieId = @movieId", new {movieId}); 
@@ -92,7 +92,7 @@ public class PaymentItemRepository : IPaymentItemRepository
 
     public async Task<IEnumerable<PaymentItemDTO>> GetPaymentItemsByUserId(string userId)
     {
-        using var connection = _context.GetConnection();
+        using var connection = _itemContext.GetConnection();
         
         var payments = await connection.QueryAsync<PaymentItem>(
             "SELECT * FROM PaymentItem WHERE UserId = @userId", new {userId}); 

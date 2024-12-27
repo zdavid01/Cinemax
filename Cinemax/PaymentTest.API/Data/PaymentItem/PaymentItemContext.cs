@@ -2,11 +2,11 @@ using Npgsql;
 
 namespace PaymentTest.API.Data;
 
-public class PaymentContext : IPaymentContext
+public class PaymentItemContext : IPaymentItemContext
 {
     private readonly IConfiguration _configuration;
 
-    public PaymentContext(IConfiguration configuration)
+    public PaymentItemContext(IConfiguration configuration)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }

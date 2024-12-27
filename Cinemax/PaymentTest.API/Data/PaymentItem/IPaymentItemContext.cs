@@ -2,7 +2,7 @@ using Npgsql;
 
 namespace PaymentTest.API.Data;
 
-public interface IPaymentContext
+public interface IPaymentItemContext
 {
     NpgsqlConnection GetConnection();
 }
