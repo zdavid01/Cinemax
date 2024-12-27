@@ -1,43 +1,43 @@
 ﻿services:
-  #  paymentdb:
-  #    image: postgres
+  postgres_data:
+    image: postgres
   
   pgadmin:
     image: dpage/pgadmin4
   
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+#  mssql:
+#    image: mcr.microsoft.com/mssql/server:2017-latest
   
-  moviecatalogdb:
-    image: mongo
-
-  moviecatalog.api:
-    image: moviecatalog.api
+#  moviecatalogdb:
+#    image: mongo
+#
+#  moviecatalog.api:
+#    image: moviecatalog.api
+#    build:
+#      context: .
+#      dockerfile: Services/MovieCatalog.API/Dockerfile
+  
+  
+  test.api:
+    image: test
     build:
       context: .
-      dockerfile: Services/MovieCatalog.API/Dockerfile
-  
-  
-  payment.api:
-    image: payment.api
-    build:
-      context: .
-      dockerfile: Payment.API/Dockerfile
+      dockerfile: Test/Dockerfile
 
-  basketdb:
-    image: redis:alpine
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-
-  basket.api:
-    image: basket.api
-    build:
-      context: .
-      dockerfile: Services/Basket.API/Dockerfile
+#  basketdb:
+#    image: redis:alpine
+#
+#  rabbitmq:
+#    image: rabbitmq:3-management-alpine
+#
+#  basket.api:
+#    image: basket.api
+#    build:
+#      context: .
+#      dockerfile: Services/Basket.API/Dockerfile
 
 volumes:
-  #  postgres_data:
+  postgres_data:
   pgadmin_data:
-  mssql_data:
   mongo_data:
+

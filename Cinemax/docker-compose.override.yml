@@ -1,17 +1,17 @@
 version: '3.4'
 
 services:
-    #  paymentdb:
-    #    container_name: paymentdb
-    #    environment:
-    #      - POSTGRES_USER=admin
-    #      - POSTGRES_PASSWORD=admin1234
-    #      - POSTGRES_DB=PaymentDb
-    #    restart: always
-    #    ports:
-    #      - "5432:5432"
-    #    volumes:
-    #      - postgres_data:/var/lib/postgresql/data
+    postgres_data:
+        container_name: postgres_data
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=admin1234
+            - POSTGRES_DB=PaymentDb
+        restart: always
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
 
     pgadmin:
         container_name: pgadmin
@@ -24,68 +24,69 @@ services:
         volumes:
             - pgadmin_data:/root/.pgadmin
 
-    mssql:
-        container_name: mssql
-        environment:
-            - SA_PASSWORD=MATF12345
-            - ACCEPT_EULA=Y
-        restart: always
-        ports:
-            - "1433:1433"
-        volumes:
-            - mssql_data:/var/opt/mssql/data
+#    mssql:
+#        container_name: mssql
+#        environment:
+#            - SA_PASSWORD=MATF12345
+#            - ACCEPT_EULA=Y
+#        restart: always
+#        ports:
+#            - "1433:1433"
+#        volumes:
+#            - mssql_data:/var/opt/mssql/data
 
-    moviecatalogdb:
-        container_name: moviecatalogdb
-        restart: always
-        ports:
-            - "27017:27017"
-        volumes:
-            - mongo_data:\data\db
+#    moviecatalogdb:
+#        container_name: moviecatalogdb
+#        restart: always
+#        ports:
+#            - "27017:27017"
+#        volumes:
+#            - mongo_data:\data\db
+#
+#    moviecatalog.api:
+#        container_name: movieCatalog.api
+#        environment:
+#            - ASPNETCORE_ENVIRONMENT=Development
+#            - "DataBaseSettings:ConnectionString=mongodb://moviecatalogdb:27017"
+#        depends_on:
+#            - moviecatalogdb
+#        ports:
+#            - "8000:8080"
 
-    moviecatalog.api:
-        container_name: movieCatalog.api
+    
+
+#    basketdb:
+#        container_name: basketdb
+#        restart: always
+#        ports:
+#            - "6379:6379"
+#
+#    rabbitmq:
+#        container_name: rabbitmq
+#        restart: always
+#        ports:
+#            - 5672:5672
+#            - 15672:15672
+#
+#    basket.api:
+#        container_name: basket.api
+#        environment:
+#            - ASPNETCORE_ENVIRONMENT=Development
+#            - "CacheSettings:ConnectionString=basketdb:6379"
+#            # - "GrpcSettings:DiscountUrl=http://discount.grpc"
+#            - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+#        depends_on:
+#            - basketdb
+#            - rabbitmq
+#        ports:
+#            - "8001:80"
+    
+    test.api:
+        container_name: test
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "DataBaseSettings:ConnectionString=mongodb://moviecatalogdb:27017"
+            - "DatabaseSettings:ConnectionString=Server=paymentdb;Port=5432;Database=PaymentDb;User Id=admin;Password=admin1234;"
         depends_on:
-            - moviecatalogdb
+            - postgres_data
         ports:
-            - "8000:8080"
-
-    payment.api:
-        container_name: payment.api
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Development
-            - "ConnectionSettings:OrderingConnectionString=Server=mssql;Database=OrderDb;User Id=sa;Password=MATF12345;"
-        depends_on:
-            - mssql
-
-        ports:
-            - "8004:80"
-
-    basketdb:
-        container_name: basketdb
-        restart: always
-        ports:
-            - "6379:6379"
-
-    rabbitmq:
-        container_name: rabbitmq
-        restart: always
-        ports:
-            - 5672:5672
-            - 15672:15672
-
-    basket.api:
-        container_name: basket.api
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Development
-            - "CacheSettings:ConnectionString=basketdb:6379"
-            # - "GrpcSettings:DiscountUrl=http://discount.grpc"
-            - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-        depends_on:
-            - basketdb
-            - rabbitmq
-        ports:
-            - "8001:80"
+            - "8002:80"
