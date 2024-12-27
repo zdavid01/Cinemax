@@ -1,9 +1,10 @@
 using System.Reflection;
+using DotNetEnv;
 using Microsoft.AspNetCore.Mvc;
 using PaymentTest.API.Extensions;
 using PaymentTest.API.Services.Email.Contracts;
 using PaymentTest.API.Services.Email.Persistance;
-using Test.Email.Services;
+using PaymentTest.API.Services.Email.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//env
+Env.Load();
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 
 //mail
 builder.Services.Configure<GmailOptions>(

@@ -4,8 +4,7 @@ using Microsoft.Extensions.Options;
 using PaymentTest.API.Services.Email.Contracts;
 using PaymentTest.API.Services.Email.Persistance;
 
-
-namespace Test.Email.Services;
+namespace PaymentTest.API.Services.Email.Services;
 
 public class GmailService : IMailService
 {
@@ -14,7 +13,7 @@ public class GmailService : IMailService
     
     public GmailService(IOptions<GmailOptions> gmailOptions)
     {
-        _gmailOptions = gmailOptions.Value ?? throw new ArgumentNullException(nameof(_gmailOptions));
+        _gmailOptions = gmailOptions.Value ?? throw new ArgumentNullException(nameof(gmailOptions));
     }
 
     public async Task SendEmailAsync(SendEmailRequest request)
@@ -36,5 +35,6 @@ public class GmailService : IMailService
         
         await smtpClient.SendMailAsync(mailMessage);
     }
-    
+
+
 }

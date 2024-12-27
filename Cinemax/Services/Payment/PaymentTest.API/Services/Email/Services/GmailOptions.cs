@@ -1,4 +1,4 @@
-namespace Test.Email.Services;
+namespace PaymentTest.API.Services.Email.Services;
 
 public class GmailOptions
 {
