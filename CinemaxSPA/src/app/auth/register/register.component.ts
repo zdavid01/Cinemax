@@ -35,7 +35,8 @@ export class RegisterComponent implements OnInit {
       createSubscriptionOnClient: (data) => <ICreateSubscriptionRequest>{
         plan_id: "123",
         custom_id: "some id",
-        quantity: 1
+        quantity: 1,
+        
       }
     }
 
