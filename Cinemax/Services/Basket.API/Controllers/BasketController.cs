@@ -15,6 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+[Authorize(Roles = "Buyer")]
 [ApiController]
 [Route("api/v1/[controller]")]
 public class BasketController: ControllerBase
@@ -39,6 +40,11 @@ public class BasketController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ShoppingCart>> GetBasket(string username)
     {
+        if (User.FindFirst(ClaimTypes.Name).Value != username)
+        {
+            return Forbid();
+        }
+        
         var basket = await _basketRepository.GetBasket(username);
         if (basket == null)
             return NotFound();
@@ -51,6 +57,11 @@ public class BasketController: ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Checkout([FromBody] BasketCheckout basketCheckout)
     {
+        if (User.FindFirst(ClaimTypes.Name).Value != basketCheckout.BuyerUsername)
+        {
+            return Forbid();
+        }
+        
         // Get existing basket
         var basket = await _basketRepository.GetBasket(basketCheckout.BuyerUsername);
         if (basket == null)
@@ -98,6 +109,11 @@ public class BasketController: ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteBasket(string username)
     {
+        if (User.FindFirst(ClaimTypes.Name).Value != username)
+        {
+            return Forbid();
+        }
+        
         await _basketRepository.DeleteBasket(username);
         return Ok();
     }
