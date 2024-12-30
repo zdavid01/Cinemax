@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj": {}
+    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.API\\Payment.API.csproj": {}
   },
   "projects": {
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj": {
+    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.API\\Payment.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj",
+        "projectUniqueName": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.API\\Payment.API.csproj",
         "projectName": "Payment.API",
-        "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/Payment.API.csproj",
-        "packagesPath": "/home/davidz/.nuget/packages/",
-        "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.API/obj/",
+        "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.API\\Payment.API.csproj",
+        "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/davidz/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -26,11 +26,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj": {
-                "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj"
+              "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj": {
+                "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj"
               },
-              "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/Payment.Infrastructure.csproj": {
-                "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/Payment.Infrastructure.csproj"
+              "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Infrastructure\\Payment.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Infrastructure\\Payment.Infrastructure.csproj"
               }
             }
           }
@@ -43,9 +43,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -99,20 +98,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -121,21 +106,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/davidz/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj": {
+    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj",
+        "projectUniqueName": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj",
         "projectName": "Payment.Application",
-        "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj",
-        "packagesPath": "/home/davidz/.nuget/packages/",
-        "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/obj/",
+        "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj",
+        "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/davidz/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -147,8 +132,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj": {
-                "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj"
+              "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj": {
+                "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj"
               }
             }
           }
@@ -161,9 +146,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -197,20 +181,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -219,21 +189,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/davidz/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj": {
+    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj",
         "projectName": "Payment.Domain",
-        "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj",
-        "packagesPath": "/home/davidz/.nuget/packages/",
-        "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/obj/",
+        "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj",
+        "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/davidz/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -255,9 +225,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -279,36 +248,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/davidz/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/Payment.Infrastructure.csproj": {
+    "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Infrastructure\\Payment.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/Payment.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Infrastructure\\Payment.Infrastructure.csproj",
         "projectName": "Payment.Infrastructure",
-        "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/Payment.Infrastructure.csproj",
-        "packagesPath": "/home/davidz/.nuget/packages/",
-        "outputPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Infrastructure/obj/",
+        "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Infrastructure\\Payment.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\bojan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/davidz/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\bojan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -320,11 +279,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj": {
-                "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Application/Payment.Application.csproj"
+              "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj": {
+                "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Application\\Payment.Application.csproj"
               },
-              "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj": {
-                "projectPath": "/home/davidz/kofultet/rs2/projekat/Cinemax/Cinemax/Payment.Domain/Payment.Domain.csproj"
+              "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj": {
+                "projectPath": "C:\\Users\\bojan\\OneDrive\\Desktop\\Cinemax\\Cinemax\\Payment.Domain\\Payment.Domain.csproj"
               }
             }
           }
@@ -337,9 +296,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -391,20 +349,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[8.0.11, 8.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.11, 8.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -413,7 +357,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/davidz/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
