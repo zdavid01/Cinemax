@@ -13,8 +13,7 @@
         <PackageReference Include="Grpc" Version="2.46.6" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
         <PackageReference Include="Grpc.Core" Version="2.46.6" />
-        <PackageReference Include="MassTransit" Version="7.3.1" />
-        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="MassTransit" Version="8.3.4" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0" />
@@ -23,7 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Common\EventBus.Messages\EventBus.Messages.csproj" />
+        <ProjectReference Include="..\..\Common\EventBus.Messages\EventBus.Messages.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="GrpcServices\" />
     </ItemGroup>
 
 </Project>
