@@ -39,6 +39,11 @@ public static class IdentityExtensions
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy", corsBuilder =>
+                corsBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+        });
         return services;
     }
     
