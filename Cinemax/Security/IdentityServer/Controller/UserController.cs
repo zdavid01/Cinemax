@@ -30,4 +30,16 @@ public class UserController : ControllerBase
         var users = await _userManager.Users.ToListAsync();
         return Ok(_mapper.Map<IEnumerable<UserDetails>>(users));
     }
+
+    [Authorize(Roles = "Admin,Buyer")]
+    [HttpGet("users/{username}")]
+    public async Task<ActionResult> GetUser(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(_mapper.Map<UserDetails>(user));
+    }
 }
