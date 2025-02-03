@@ -5,7 +5,6 @@ import { AuthenticationService } from '../../services/authentication.service';
   selector: 'app-logout',
   imports: [],
   templateUrl: './logout.component.html',
-  styleUrl: './logout.component.css'
 })
 export class LogoutComponent {
   constructor(private authenticationService: AuthenticationService){

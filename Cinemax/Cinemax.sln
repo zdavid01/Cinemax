@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Messages", "Common
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.API", "Services\Basket.API\Basket.API.csproj", "{3058B8E5-7427-44C4-B14B-E6960379C16D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrivateSession", "Services\PrivateSessions\PrivateSession\PrivateSession.csproj", "{B9C96BD2-0945-4B36-8887-55B41B51E8AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +37,9 @@ Global
 		{3058B8E5-7427-44C4-B14B-E6960379C16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3058B8E5-7427-44C4-B14B-E6960379C16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3058B8E5-7427-44C4-B14B-E6960379C16D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C96BD2-0945-4B36-8887-55B41B51E8AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C96BD2-0945-4B36-8887-55B41B51E8AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C96BD2-0945-4B36-8887-55B41B51E8AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C96BD2-0945-4B36-8887-55B41B51E8AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
