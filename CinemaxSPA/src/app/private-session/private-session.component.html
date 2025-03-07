@@ -1,8 +1,13 @@
 <div class="flex flex-row">
-    <div class="basis-9/10">Player</div>
+    <div class="basis-9/10">
+        @if(movieForStreaming) {
+            {{movieForStreaming.title}}
+        
+            <app-video-player [movieUrl]="movieStreamUrl" />            
+            }
+    </div>
     <div class="basis-xs">
         <app-group-chat />
     </div>
-    
-</div>
 
+</div>

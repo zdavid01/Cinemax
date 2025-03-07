@@ -4,6 +4,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { ChatComponent } from './chat/chat.component';
 import { PrivateSessionComponent } from './private-session/private-session.component';
+import { PrivateSessionsList } from './private-session/private-session-list.component';
 
 export const routes: Routes = [
     {
@@ -17,5 +18,8 @@ export const routes: Routes = [
     },
     {
         path: "session/:sessionId", component: PrivateSessionComponent,
+    },
+    {
+        path: "sessions", component: PrivateSessionsList
     }
 ];

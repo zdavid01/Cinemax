@@ -11,7 +11,9 @@ import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, AsyncPipe],
+  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, AsyncPipe
+
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
