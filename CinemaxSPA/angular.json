@@ -30,7 +30,9 @@
               "@angular/material/prebuilt-themes/rose-red.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/shaka-player/dist/shaka-player.ui.debug.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -46,12 +48,15 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all"              
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "scripts": [
+                "./node_modules/shaka-player/dist/shaka-player.ui.debug.js"
+              ]
             }
           },
           "defaultConfiguration": "production"
