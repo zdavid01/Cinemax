@@ -11,7 +11,15 @@
     {
     <button mat-button [matMenuTriggerFor]="menu">Hi, {{appState.firstName}}</button>
     <mat-menu #menu="matMenu">
-        <a mat-button href="/logout">Logout</a>      
+      @if(appState.isPremium) {
+      <button mat-menu-item>
+        <a mat-button href="/sessions">Watch online</a>
+      </button>
+      }
+      <button mat-menu-item>
+        <a mat-button href="/logout">Logout</a>
+      </button>
+
     </mat-menu>
 
     } @else {

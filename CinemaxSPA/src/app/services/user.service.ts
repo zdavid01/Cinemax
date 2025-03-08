@@ -7,6 +7,7 @@ export interface IUserDetails {
   firstName: string;
   lastName: string;
   id: string;
+  isPremium: boolean
 }
 
 @Injectable({
