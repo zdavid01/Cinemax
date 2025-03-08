@@ -10,6 +10,7 @@ export interface IAppState {
     firstName?: string;
     lastName?: string;
     userId?: string;
+    isPremium?: boolean;
     clone(): IAppState
 }
 
@@ -22,6 +23,7 @@ export class AppState implements IAppState {
     public firstName?: string | undefined;
     public lastName?: string | undefined;
     public userId?: string | undefined;
+    public isPremium?: boolean | undefined
 
     public constructor();
     public constructor(accessToken?: string, refreshToken?: string, username?: string, roles?: Role | Role[], email?: string, firstName?: string, lastName?: string, userId?: string);

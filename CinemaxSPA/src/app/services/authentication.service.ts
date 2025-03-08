@@ -94,6 +94,7 @@ export class AuthenticationService {
         this.appStateService.setFirstName(userDetails.firstName);
         this.appStateService.setLastName(userDetails.lastName);
         this.appStateService.setUserId(userDetails.id);
+        this.appStateService.setIsPremium(userDetails.isPremium)
         return true;
 
       }), catchError((err) => {

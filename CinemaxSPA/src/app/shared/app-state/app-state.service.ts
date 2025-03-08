@@ -81,6 +81,13 @@ export class AppStateService {
     this.appStateSubject.next(this.appState);
   }
 
+  setIsPremium(isPremium: boolean) {
+    this.appState = this.appState.clone();
+    this.appState.isPremium = isPremium;
+    this.localStorageService.set(LocalStorageKeys.AppState, this.appState);
+    this.appStateSubject.next(this.appState);
+  }
+
   public clearAppState(): void {
     this.appState = new AppState();
     this.appStateSubject.next(this.appState);
