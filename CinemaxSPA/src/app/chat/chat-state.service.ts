@@ -38,7 +38,6 @@ export class ChatStateService {
                 this.addMessageToState(sentChatMessage);
             });
         })
-
     }
 
     addMessageToState(message: ChatMessage) {

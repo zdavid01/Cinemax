@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatStateService } from './chat-state.service';
 import { IChatState } from './chat-state';
@@ -19,11 +19,11 @@ interface ChatMessage {
   standalone: true,
   imports: [CommonModule, FormsModule, AsyncPipe],
   templateUrl: "./chat.component.html",
-  styleUrls: ["./chat.component.css"],
   providers: [ChatStateService]
 })
 export class ChatComponent {
   @ViewChild("scrollContainer") private scrollContainer!: ElementRef;
+  @Input("movieTitle") movieTitle: string = "";
 
   public chatState$: Observable<IChatState>;
 
@@ -44,24 +44,6 @@ export class ChatComponent {
   }
 
   loadInitialMessages() {
-    this.messages = [
-      {
-        id: 1,
-        content: "Hey team! How's the new feature coming along?",
-        sender: "John Doe",
-        timestamp: new Date(),
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-        isSent: false
-      },
-      {
-        id: 2,
-        content: "Making good progress! The core functionality is implemented.",
-        sender: "Alice Smith",
-        timestamp: new Date(),
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-        isSent: true
-      }
-    ];
 
     this.messages =[]
   }
@@ -77,31 +59,10 @@ export class ChatComponent {
         isSent: true
       };
 
-      this.chatService.sendMessage(this.newMessage);
-      // this.messages.push(message);
+      this.chatService.sendMessage(this.newMessage);      
       this.newMessage = "";
-      this.scrollToBottom();
-
-      // Simulate receiving a response
-      // this.simulateResponse();
-      
+      this.scrollToBottom();  
     }
-  }
-
-  simulateResponse() {
-    this.isTyping = true;
-    setTimeout(() => {
-      this.isTyping = false;
-      const response: ChatMessage = {
-        id: this.messages.length + 1,
-        content: "Thanks for the update! Let me know if you need any help.",
-        sender: "John Doe",
-        timestamp: new Date(),
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-        isSent: false
-      };
-      this.messages.push(response);
-    }, 2000);
   }
 
   private scrollToBottom(): void {

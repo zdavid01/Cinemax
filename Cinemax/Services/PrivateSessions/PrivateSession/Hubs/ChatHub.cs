@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace PrivateSession.Hubs;
 
+[Authorize]
 public class ChatHub : Hub
 {
     protected readonly ILogger<ChatHub> _logger;
