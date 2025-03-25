@@ -1,3 +1,4 @@
 export enum LocalStorageKeys {
-    AppState = "appstate"
+    AppState = "appstate",
+    SessionId="sessionId",
 };
