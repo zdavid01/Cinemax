@@ -12,16 +12,6 @@ services:
     #      - "5432:5432"
     #    volumes:
     #      - postgres_data:/var/lib/postgresql/data
-    
-    sql-edge:
-        container_name: sql-edge
-        environment:
-            - SA_PASSWORD=MATF12345678rs2
-            - ACCEPT_EULA=1
-            - MSSQL_PID=Developer
-        restart: always
-        ports:
-            - "11433:11433"
 
     pgadmin:
         container_name: pgadmin

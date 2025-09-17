@@ -7,9 +7,6 @@
   
   mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
-    
-  sql-edge:
-    image: mcr.microsoft.com/azure-sql-edge
   
   moviecatalogdb:
     image: mongo
