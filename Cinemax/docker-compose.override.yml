@@ -57,10 +57,9 @@ services:
         container_name: payment.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "ConnectionSettings:OrderingConnectionString=Server=mssql;Database=OrderDb;User Id=sa;Password=MATF12345;"
+            - "ConnectionStrings:PaymentConnectionString=Host=paymentdb;Port=5432;Database=PaymentDb;Username=postgres;Password=MATF12345;"
         depends_on:
-            - mssql
-
+            - paymentdb
         ports:
             - "8004:8080"
 

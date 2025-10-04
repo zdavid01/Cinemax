@@ -1,4 +1,3 @@
-using Azure.Core;
 using Newtonsoft.Json;
 using RestSharp;
 

@@ -11,6 +11,11 @@ public class RepositoryBase<T> : IAsyncRepository<T> where T : AggregateRoot
 {
     protected readonly PaymentContext _dbContext;
     
+    public RepositoryBase(PaymentContext dbContext)
+    {
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    }
+    
     public virtual async Task<IReadOnlyList<T>> GetAllAsync()
     {
         return await _dbContext.Set<T>().ToListAsync();

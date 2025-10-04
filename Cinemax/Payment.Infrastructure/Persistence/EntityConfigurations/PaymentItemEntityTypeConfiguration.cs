@@ -10,7 +10,7 @@ public class PaymentItemEntityTypeConfiguration : IEntityTypeConfiguration<Payme
     {
         builder.ToTable("PaymentItems");
         builder.HasKey(o => o.Id);
-        builder.Property(o => o.Id).UseHiLo("paymentitemseq");
+        builder.Property(o => o.Id).UseIdentityColumn();
 
         builder.Property<string>("MovieId")
             .HasColumnType("VARCHAR(24)")

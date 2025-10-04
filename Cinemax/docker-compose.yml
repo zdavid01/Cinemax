@@ -1,6 +1,14 @@
 ﻿services:
-  #  paymentdb:
-  #    image: postgres
+  paymentdb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: MATF12345
+      POSTGRES_DB: PaymentDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   
   pgadmin:
     image: dpage/pgadmin4
@@ -37,7 +45,7 @@
       dockerfile: Services/Basket.API/Dockerfile
 
 volumes:
-  #  postgres_data:
+  postgres_data:
   pgadmin_data:
   mssql_data:
   mongo_data:

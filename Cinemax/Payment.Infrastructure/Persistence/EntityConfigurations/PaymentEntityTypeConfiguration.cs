@@ -9,11 +9,12 @@ public class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Ag
     {
         builder.ToTable("Payments");
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.Id).UseHiLo("paymentseq");
+        builder.Property(p => p.Id).UseIdentityColumn();
 
         builder.OwnsOne(p => p.Money, m =>
         {
-            m.Property<int>("PaymentId").UseHiLo("paymentseq");
+            m.Property(money => money.Amount).HasColumnName("Amount");
+            m.Property(money => money.Currency).HasColumnName("Currency");
             m.WithOwner();
         });
         

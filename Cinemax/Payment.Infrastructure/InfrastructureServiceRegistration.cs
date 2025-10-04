@@ -15,7 +15,8 @@ public static class InfrastructureServiceRegistration
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<PaymentContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("PaymentConnectionString")));
+            options.UseNpgsql(configuration.GetConnectionString("PaymentConnectionString") ?? 
+                             configuration["DatabaseSettings:ConnectionSettings"]));
 
         services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
         services.AddScoped<IPaymentRepository, PaymentRepository>();

@@ -19,10 +19,10 @@ public class PaymentContext : DbContext
         {
             switch (entry.State)
             {
-                case EntityState.Added:
-                    entry.Entity.CreatedDate = DateTime.Now;
-                    entry.Entity.CreatedBy = "dz"; //Todo set this
-                    break;
+                    case EntityState.Added:
+                        entry.Entity.CreatedDate = DateTime.UtcNow;
+                        entry.Entity.CreatedBy = "dz"; //Todo set this
+                        break;
                 //.Modified if needed
             }
         }
