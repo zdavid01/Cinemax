@@ -62,7 +62,7 @@ services:
             - mssql
 
         ports:
-            - "8004:8004"
+            - "8004:8080"
 
     basketdb:
         container_name: basketdb
