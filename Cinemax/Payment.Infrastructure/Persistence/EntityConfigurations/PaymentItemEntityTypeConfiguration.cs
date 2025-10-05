@@ -13,7 +13,7 @@ public class PaymentItemEntityTypeConfiguration : IEntityTypeConfiguration<Payme
         builder.Property(o => o.Id).UseIdentityColumn();
 
         builder.Property<string>("MovieId")
-            .HasColumnType("VARCHAR(24)")
+            .HasColumnType("VARCHAR(100)")
             .HasColumnName("MovieId")
             .IsRequired();
 

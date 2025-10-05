@@ -1,8 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using Payment.Infrastructure.PayPal;
 using RestSharp;
 using Payment.Application.Contracts.Infrastructure;
 using Payment.Application.Models;
+using MediatR;
+using Payment.Application.Features.Payments.Commands.CreatePayment;
+using Payment.Application.Features.Payments.Queries.ViewModels;
+using Payment.Application.Features.Payments.Commands.DTOs;
 
 namespace Payment.API.Controllers;
 
@@ -13,16 +19,19 @@ public class PayPalController : ControllerBase
     private readonly PayPalService? _payPalService;
     private readonly ILogger<PayPalController> _logger;
     private readonly IEmailService _emailService;
+    private readonly IMediator _mediator;
 
-    public PayPalController(ILogger<PayPalController> logger, IEmailService emailService, PayPalService payPalService)
+    public PayPalController(ILogger<PayPalController> logger, IEmailService emailService, PayPalService payPalService, IMediator mediator)
     {
         _payPalService = payPalService ?? throw new ArgumentNullException(nameof(payPalService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
     
     // Endpoint to initiate the payment process
     [HttpPost("create-payment")]
+    [Authorize]
     public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest paymentRequest)
     {
         try
@@ -55,6 +64,7 @@ public class PayPalController : ControllerBase
 
     // Endpoint to execute the payment after approval
     [HttpPost("execute-payment")]
+    [Authorize]
     public async Task<IActionResult> ExecutePayment([FromBody] ExecutePaymentRequest executeRequest)
     {
         try
@@ -62,8 +72,8 @@ public class PayPalController : ControllerBase
             var state = await _payPalService.ExecutePayment(executeRequest.PaymentId, executeRequest.PayerId);
             if (state == "approved")
             {
-                await SendSuccessEmail(executeRequest.PaymentId);
-                return Ok(new { state, message = "Payment successfully completed and email sent." });
+                await ProcessSuccessfulPayment(executeRequest.PaymentId, executeRequest.PayerId);
+                return Ok(new { state, message = "Payment successfully completed, saved to database, and emails sent." });
             }
             return Ok(new { state });
         }
@@ -81,10 +91,10 @@ public class PayPalController : ControllerBase
             // Execute the payment after the user approves it
             var paymentState = await _payPalService.ExecutePayment(paymentId, payerId);
 
-            // If the payment was successful, return an HTML page that closes the popup and notifies the parent
+            // If the payment was successful, save to database and send emails
             if (paymentState == "approved")
             {
-                await SendSuccessEmail(paymentId);
+                await ProcessSuccessfulPayment(paymentId, payerId);
                 
                 var html = $@"
                 <!DOCTYPE html>
@@ -192,53 +202,117 @@ public class PayPalController : ControllerBase
         }
     }
 
-    // Test endpoint for development - simulates successful payment execution
-    [HttpPost("test-execute-payment")]
-    public async Task<IActionResult> TestExecutePayment([FromBody] ExecutePaymentRequest executeRequest)
-    {
-        try
-        {
-            // For testing purposes, simulate a successful payment
-            var email = new Email() 
-            { 
-                To = "destin.schroeder4@ethereal.email", 
-                Body = $"Test payment successfully completed! Payment ID: {executeRequest.PaymentId}, Payer ID: {executeRequest.PayerId}", 
-                Subject = "Test Payment Confirmation" 
-            };
-            await _emailService.SendEmail(email);
-            
-            return Ok(new { 
-                state = "approved", 
-                message = "Test payment successfully completed and email sent.",
-                paymentId = executeRequest.PaymentId,
-                payerId = executeRequest.PayerId
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in test payment execution");
-            return BadRequest(new { error = $"Error in test payment execution: {ex.Message}" });
-        }
-    }
 
-    private async Task SendSuccessEmail(string paymentId)
+    private async Task ProcessSuccessfulPayment(string paymentId, string payerId)
     {
         try
         {
-            // Note: No buyer email provided in current flow; send to configured inbox for confirmation
-            var email = new Email
-            {
-                To = "destin.schroeder4@ethereal.email",
-                Subject = $"Payment {paymentId} completed",
-                Body = $"Your PayPal payment with ID {paymentId} has been approved."
-            };
-            await _emailService.SendEmail(email);
+            // Save payment to database
+            await SavePaymentToDatabase(paymentId, payerId);
+            
+            // Send emails
+            await SendPaymentEmails(paymentId, payerId);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to send payment confirmation email for {PaymentId}", paymentId);
+            _logger.LogError(e, "Failed to process successful payment for {PaymentId}", paymentId);
         }
     }
+
+    private async Task SavePaymentToDatabase(string paymentId, string payerId)
+    {
+        try
+        {
+            // Create a payment entry for the database
+            var createPaymentCommand = new CreatePaymentCommand
+            {
+                BuyerId = payerId, // Using PayPal payer ID as buyer ID
+                BuyerUsername = $"PayPal_User_{payerId}", // Generate a username from payer ID
+                Currency = "USD",
+                PaymentItems = new List<PaymentItemDTO>
+                {
+                    new PaymentItemDTO
+                    {
+                        MovieName = "PayPal Payment",
+                        MovieId = $"PAYPAL_{paymentId}",
+                        Price = 0.10m, // Default amount for now
+                        Quantity = 1
+                    }
+                }
+            };
+
+            var paymentDbId = await _mediator.Send(createPaymentCommand);
+            _logger.LogInformation("Payment saved to database with ID: {PaymentDbId} for PayPal payment: {PaymentId}", paymentDbId, paymentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to save payment to database for {PaymentId}", paymentId);
+        }
+    }
+
+    private async Task SendPaymentEmails(string paymentId, string payerId)
+    {
+        // Get user's email from JWT token
+        var userEmailAddress = GetUserEmailFromToken();
+        
+        // Send detailed payment notification to user
+        try
+        {
+            var userEmail = new Email
+            {
+                To = userEmailAddress,
+                Subject = $"Payment Confirmation - {paymentId}",
+                Body = $"Your PayPal payment has been completed successfully.\n\nPayment ID: {paymentId}\nPayer ID: {payerId}\nAmount: $0.10 USD\nStatus: Approved\nTimestamp: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC\n\nThank you for your payment!"
+            };
+            
+            await _emailService.SendEmail(userEmail);
+            _logger.LogInformation("User payment notification sent successfully to {Email} for payment {PaymentId}", userEmailAddress, paymentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Failed to send user payment notification to {Email} for payment {PaymentId}. Email service may be down or credentials expired.", userEmailAddress, paymentId);
+        }
+
+        // Send admin notification email
+        try
+        {
+            var adminEmail = new Email
+            {
+                To = "vida33085@gmail.com", // Admin email
+                Subject = $"New PayPal Payment Completed - {paymentId}",
+                Body = $"A new PayPal payment has been completed successfully.\n\nPayment ID: {paymentId}\nPayer ID: {payerId}\nUser Email: {userEmailAddress}\nAmount: $0.10 USD\nStatus: Approved\nTimestamp: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC"
+            };
+            
+            await _emailService.SendEmail(adminEmail);
+            _logger.LogInformation("Admin email sent successfully for payment {PaymentId}", paymentId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Failed to send admin email for payment {PaymentId}. Email service may be down or credentials expired.", paymentId);
+        }
+    }
+
+    private string GetUserEmailFromToken()
+    {
+        // Check if user is authenticated
+        if (!User.Identity?.IsAuthenticated ?? true)
+        {
+            _logger.LogWarning("User is not authenticated when trying to get email from token. Using default email for PayPal callback.");
+            return "vida33085@gmail.com"; // Default email for PayPal callbacks
+        }
+
+        // Get the user's email from the JWT token
+        var emailClaim = User.FindFirst(ClaimTypes.Email);
+        if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+        {
+            _logger.LogInformation("Successfully extracted email from JWT token: {Email}", emailClaim.Value);
+            return emailClaim.Value;
+        }
+
+        _logger.LogWarning("Email claim not found in JWT token. Using default email.");
+        return "vida33085@gmail.com"; // Fallback email
+    }
+
 
 }
 

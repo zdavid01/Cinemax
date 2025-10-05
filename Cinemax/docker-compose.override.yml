@@ -65,6 +65,14 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - "ConnectionStrings:PaymentConnectionString=Host=paymentdb;Port=5432;Database=PaymentDb;Username=postgres;Password=MATF12345;"
+            # Email Settings
+            - "EmailSettings:Mail=vida33085@gmail.com"
+            - "EmailSettings:Password=kmfu haci tnno kjqd"
+            # PayPal Settings
+            - "PayPal:ClientId=AbwOUURIy30Sv997qpH0-Xzwb-rKENp64r2-F8jJx-GNMHcQ9ZFIwvQLjP2-sMe7-u-kg2AGAjjKtGSk"
+            - "PayPal:ClientSecret=EP--0kzPAWPT9yg5or-0qKVMWnjusLoqZ-aSIBWhtMouaWcbyORFvfXPPKKCNU77rzq4LHA_d_D9OvI7"
+            # JWT Settings
+            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
         depends_on:
             - paymentdb
         ports:

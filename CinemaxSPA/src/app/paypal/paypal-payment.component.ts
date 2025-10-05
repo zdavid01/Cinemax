@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AppStateService } from '../shared/app-state/app-state.service';
 
 @Component({
   selector: 'app-paypal-payment',
@@ -34,6 +35,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         <!-- Step 1: Create Payment -->
         <div *ngIf="currentStep() === 'create'" class="step-container">
           <h3>Step 1: Create Payment</h3>
+          
+          <!-- Authentication Status -->
+          <div class="auth-status" [class.authenticated]="isUserAuthenticated()" [class.not-authenticated]="!isUserAuthenticated()">
+            <p *ngIf="isUserAuthenticated()">✅ You are logged in - JWT token will be included</p>
+            <p *ngIf="!isUserAuthenticated()">⚠️ You are not logged in - Please login to create payments</p>
+          </div>
+          
           <form (ngSubmit)="createPayment()">
             <div class="form-grid">
               <mat-form-field appearance="fill">
@@ -45,7 +53,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
                 <input matInput [ngModel]="currency()" (ngModelChange)="currency.set($event)" name="currency" required />
               </mat-form-field>
             </div>
-            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()">
+            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading() || !isUserAuthenticated()">
               <mat-spinner *ngIf="isLoading()" diameter="20"></mat-spinner>
               {{ isLoading() ? 'Creating...' : 'Create Payment' }}
             </button>
@@ -168,6 +176,22 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       border-radius: 4px;
       margin: 10px 0;
     }
+    .auth-status {
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-weight: 500;
+    }
+    .auth-status.authenticated {
+      background-color: #e8f5e8;
+      color: #2e7d32;
+      border-left: 4px solid #4caf50;
+    }
+    .auth-status.not-authenticated {
+      background-color: #fff3e0;
+      color: #ef6c00;
+      border-left: 4px solid #ff9800;
+    }
     mat-form-field {
       width: 100%;
     }
@@ -199,13 +223,20 @@ export class PayPalPaymentComponent {
 
   constructor(
     private paypalService: PayPalService, 
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private appStateService: AppStateService
   ) { 
     // Listen for messages from PayPal popup
     window.addEventListener('message', this.handlePayPalMessage.bind(this));
   }
 
   createPayment(): void {
+    // Check if user is authenticated
+    if (!this.isUserAuthenticated()) {
+      this.snackBar.open('Please login to create a payment', 'Close', { duration: 5000 });
+      return;
+    }
+
     this.isLoading.set(true);
     const request: PayPalPaymentRequest = {
       amount: this.amount(),
@@ -229,6 +260,14 @@ export class PayPalPaymentComponent {
     });
   }
 
+  isUserAuthenticated(): boolean {
+    let isAuthenticated = false;
+    this.appStateService.getAppState().subscribe(state => {
+      isAuthenticated = !!state.accessToken;
+    });
+    return isAuthenticated;
+  }
+
   simulateApproval(decision: 'approved' | 'denied'): void {
     if (decision === 'denied') {
       this.errorMessage.set('Payment was denied by the user');
@@ -248,7 +287,9 @@ export class PayPalPaymentComponent {
       payerId: this.payerId()
     };
 
-    this.paypalService.executePayment(request).subscribe({
+    // For now, use the test endpoint that doesn't require authentication
+    // In production, this would use the authenticated executePayment method
+    this.paypalService.testExecutePayment(request).subscribe({
       next: (response) => {
         this.paymentStatus.set(response.state);
         this.currentStep.set('success');
