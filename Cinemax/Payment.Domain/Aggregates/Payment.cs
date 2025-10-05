@@ -8,13 +8,13 @@ namespace Payment.Domain.Aggregates;
 public class Payment : AggregateRoot
 {
     public string BuyerId { get; set; }
-    public string BuyerUsername {get; private set;}
-    public DateTime PaymentDate {get; private set;}
-    public Money Money {get; private set;}
+    public string BuyerUsername {get; set;}
+    public DateTime PaymentDate {get; set;}
+    public Money Money {get; set;}
     
     private readonly List<PaymentItem> _paymentItems = new List<PaymentItem>();
     
-    public IReadOnlyCollection<PaymentItem> PaymentItems => _paymentItems;
+    public IReadOnlyCollection<PaymentItem> PaymentItems => _paymentItems.AsReadOnly();
 
     public Payment(string buyerId, string buyerUsername, DateTime paymentDate, Money money)
     {

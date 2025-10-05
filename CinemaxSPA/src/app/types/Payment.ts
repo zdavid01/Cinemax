@@ -12,6 +12,9 @@ export interface PaymentVM {
   currency: string;
   buyerId: string;
   buyerUsername: string;
+  paymentDate: string;
+  createdDate: string;
+  createdBy: string;
   totalPrice: number;
   paymentItems: PaymentItemVM[];
 }

@@ -4,6 +4,8 @@ public class PaymentViewModel
 {
     // Relevant information from EntityBase
     public int Id { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public string CreatedBy { get; set; }
     
     //relevant information from Money
     public decimal Amount { get; set; }
@@ -12,6 +14,7 @@ public class PaymentViewModel
     //relevant information from Payment
     public string BuyerId { get; set; }
     public string BuyerUsername { get; set; }
+    public DateTime PaymentDate { get; set; }
     public decimal TotalPrice { get; set; }
     public IEnumerable<PaymentItemViewModel> PaymentItems { get; set; }
 }

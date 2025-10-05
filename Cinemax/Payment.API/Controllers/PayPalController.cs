@@ -254,8 +254,8 @@ public class PayPalController : ControllerBase
                 {
                     new PaymentItemDTO
                     {
-                        MovieName = "PayPal Payment",
-                        MovieId = $"PAYPAL_{paymentId}",
+                        MovieName = GetRandomMovieName(),
+                        MovieId = $"CINEMAX_TICKET_{paymentId.Substring(0, Math.Min(8, paymentId.Length))}",
                         Price = 0.10m, // Default amount for now
                         Quantity = 1
                     }
@@ -313,26 +313,51 @@ public class PayPalController : ControllerBase
         }
     }
 
-    private string GetUserEmailFromToken()
-    {
-        // Check if user is authenticated
-        if (!User.Identity?.IsAuthenticated ?? true)
+        private string GetUserEmailFromToken()
         {
-            _logger.LogWarning("User is not authenticated when trying to get email from token. Using default email for PayPal callback.");
-            return "vida33085@gmail.com"; // Default email for PayPal callbacks
+            // Check if user is authenticated
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                _logger.LogWarning("User is not authenticated when trying to get email from token. Using default email for PayPal callback.");
+                return "vida33085@gmail.com"; // Default email for PayPal callbacks
+            }
+
+            // Get the user's email from the JWT token
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+            {
+                _logger.LogInformation("Successfully extracted email from JWT token: {Email}", emailClaim.Value);
+                return emailClaim.Value;
+            }
+
+            _logger.LogWarning("Email claim not found in JWT token. Using default email.");
+            return "vida33085@gmail.com"; // Fallback email
         }
 
-        // Get the user's email from the JWT token
-        var emailClaim = User.FindFirst(ClaimTypes.Email);
-        if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
+        private string GetRandomMovieName()
         {
-            _logger.LogInformation("Successfully extracted email from JWT token: {Email}", emailClaim.Value);
-            return emailClaim.Value;
-        }
+            var movies = new[]
+            {
+                "The Avengers: Endgame",
+                "Spider-Man: No Way Home", 
+                "Black Widow",
+                "Venom: Let There Be Carnage",
+                "The Matrix Resurrections",
+                "No Time to Die",
+                "Lightyear",
+                "Super Mario Bros. Movie",
+                "Avatar: The Way of Water",
+                "Top Gun: Maverick",
+                "Jurassic World: Dominion",
+                "Thor: Love and Thunder",
+                "Doctor Strange in the Multiverse of Madness",
+                "The Batman",
+                "Sonic the Hedgehog 2"
+            };
 
-        _logger.LogWarning("Email claim not found in JWT token. Using default email.");
-        return "vida33085@gmail.com"; // Fallback email
-    }
+            var random = new Random();
+            return movies[random.Next(movies.Length)];
+        }
 
 
 }

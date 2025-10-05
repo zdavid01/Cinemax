@@ -19,7 +19,7 @@ public class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Ag
         });
         
         var navigation = builder.Metadata.FindNavigation(nameof(Domain.Aggregates.Payment.PaymentItems)) 
-                         ?? throw new NullReferenceException($"Navigation property not found on {{nameof(Order.OrderItems)}}");
+                         ?? throw new NullReferenceException($"Navigation property not found on {nameof(Domain.Aggregates.Payment.PaymentItems)}");
         navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
