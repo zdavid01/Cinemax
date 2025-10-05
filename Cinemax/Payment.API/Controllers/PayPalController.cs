@@ -29,38 +29,46 @@ public class PayPalController : ControllerBase
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
     
-    // Endpoint to initiate the payment process
-    [HttpPost("create-payment")]
-    [Authorize]
-    public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest paymentRequest)
-    {
-        try
+        // Endpoint to initiate the payment process
+        [HttpPost("create-payment")]
+        [Authorize]
+        public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest paymentRequest)
         {
-            var (paymentId, approvalUrl) = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency);
-            
-            // Return the expected JSON structure
-            var response = new
+            try
             {
-                id = paymentId,
-                state = "created",
-                links = new[]
+                // Get the user's username from the JWT token
+                var userEmail = GetUserEmailFromToken();
+                var username = userEmail.Split('@')[0]; // Use email prefix as username
+                
+                // Create return URL with username parameter
+                var returnUrl = $"http://localhost:8004/api/paypal/return?username={username}";
+                var cancelUrl = "http://localhost:8004/api/paypal/cancel";
+                
+                var (paymentId, approvalUrl) = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency, returnUrl, cancelUrl);
+                
+                // Return the expected JSON structure
+                var response = new
                 {
-                    new
+                    id = paymentId,
+                    state = "created",
+                    links = new[]
                     {
-                        href = approvalUrl,
-                        rel = "approval_url",
-                        method = "REDIRECT"
+                        new
+                        {
+                            href = approvalUrl,
+                            rel = "approval_url",
+                            method = "REDIRECT"
+                        }
                     }
-                }
-            };
-            
-            return Ok(response);
+                };
+                
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
-    }
 
     // Endpoint to execute the payment after approval
     [HttpPost("execute-payment")]
@@ -84,7 +92,7 @@ public class PayPalController : ControllerBase
     }
     
     [HttpGet("return")]
-    public async Task<IActionResult> ReturnFromPayPal(string paymentId, string payerId)
+    public async Task<IActionResult> ReturnFromPayPal(string paymentId, string payerId, string? username = null)
     {
         try
         {
@@ -94,7 +102,7 @@ public class PayPalController : ControllerBase
             // If the payment was successful, save to database and send emails
             if (paymentState == "approved")
             {
-                await ProcessSuccessfulPayment(paymentId, payerId);
+                await ProcessSuccessfulPayment(paymentId, payerId, username);
                 
                 var html = $@"
                 <!DOCTYPE html>
@@ -203,12 +211,12 @@ public class PayPalController : ControllerBase
     }
 
 
-    private async Task ProcessSuccessfulPayment(string paymentId, string payerId)
+    private async Task ProcessSuccessfulPayment(string paymentId, string payerId, string? username = null)
     {
         try
         {
             // Save payment to database
-            await SavePaymentToDatabase(paymentId, payerId);
+            await SavePaymentToDatabase(paymentId, payerId, username);
             
             // Send emails
             await SendPaymentEmails(paymentId, payerId);
@@ -219,15 +227,28 @@ public class PayPalController : ControllerBase
         }
     }
 
-    private async Task SavePaymentToDatabase(string paymentId, string payerId)
+    private async Task SavePaymentToDatabase(string paymentId, string payerId, string? username = null)
     {
         try
         {
+            // Use passed username or fallback to extracting from token
+            string actualUsername;
+            if (!string.IsNullOrEmpty(username))
+            {
+                actualUsername = username;
+            }
+            else
+            {
+                // Fallback: try to get from JWT token
+                var userEmail = GetUserEmailFromToken();
+                actualUsername = userEmail.Split('@')[0]; // Use email prefix as username
+            }
+            
             // Create a payment entry for the database
             var createPaymentCommand = new CreatePaymentCommand
             {
                 BuyerId = payerId, // Using PayPal payer ID as buyer ID
-                BuyerUsername = $"PayPal_User_{payerId}", // Generate a username from payer ID
+                BuyerUsername = actualUsername, // Use actual logged-in user's username
                 Currency = "USD",
                 PaymentItems = new List<PaymentItemDTO>
                 {
@@ -242,7 +263,7 @@ public class PayPalController : ControllerBase
             };
 
             var paymentDbId = await _mediator.Send(createPaymentCommand);
-            _logger.LogInformation("Payment saved to database with ID: {PaymentDbId} for PayPal payment: {PaymentId}", paymentDbId, paymentId);
+            _logger.LogInformation("Payment saved to database with ID: {PaymentDbId} for PayPal payment: {PaymentId} for user: {Username}", paymentDbId, paymentId, actualUsername);
         }
         catch (Exception e)
         {
