@@ -1,36 +1,66 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { PaymentService } from '../services/payment.service';
 
 @Component({
   selector: 'app-payment-create',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   template: `
-  <div class="container">
-    <h2>Create Payment</h2>
-    <form (ngSubmit)="submit()">
-      <label>Buyer Id: <input [ngModel]="buyerId()" (ngModelChange)="buyerId.set($event)" name="buyerId" required /></label>
-      <label>Buyer Username: <input [ngModel]="buyerUsername()" (ngModelChange)="buyerUsername.set($event)" name="buyerUsername" required /></label>
-      <label>Currency: <input [ngModel]="currency()" (ngModelChange)="currency.set($event)" name="currency" required /></label>
-      <fieldset>
-        <legend>Item</legend>
-        <label>Movie Name: <input [ngModel]="movieName()" (ngModelChange)="movieName.set($event)" name="movieName" required /></label>
-        <label>Movie Id: <input [ngModel]="movieId()" (ngModelChange)="movieId.set($event)" name="movieId" required /></label>
-        <label>Price: <input type="number" step="0.01" [ngModel]="price()" (ngModelChange)="price.set($event)" name="price" required /></label>
-        <label>Quantity: <input type="number" [ngModel]="quantity()" (ngModelChange)="quantity.set($event)" name="quantity" required /></label>
-      </fieldset>
-      <button type="submit">Create</button>
+  <mat-card class="container">
+    <h2 class="title">Create Payment</h2>
+    <form (ngSubmit)="submit()" class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Buyer Id</mat-label>
+        <input matInput [ngModel]="buyerId()" (ngModelChange)="buyerId.set($event)" name="buyerId" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Buyer Username</mat-label>
+        <input matInput [ngModel]="buyerUsername()" (ngModelChange)="buyerUsername.set($event)" name="buyerUsername" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Currency</mat-label>
+        <input matInput [ngModel]="currency()" (ngModelChange)="currency.set($event)" name="currency" required />
+      </mat-form-field>
+
+      <div class="section">Item</div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Movie Name</mat-label>
+        <input matInput [ngModel]="movieName()" (ngModelChange)="movieName.set($event)" name="movieName" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Movie Id</mat-label>
+        <input matInput [ngModel]="movieId()" (ngModelChange)="movieId.set($event)" name="movieId" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" step="0.01" [ngModel]="price()" (ngModelChange)="price.set($event)" name="price" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Quantity</mat-label>
+        <input matInput type="number" [ngModel]="quantity()" (ngModelChange)="quantity.set($event)" name="quantity" required />
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">Create</button>
+      </div>
     </form>
-    <p *ngIf="createdId()">Created payment with id {{ createdId() }}</p>
-  </div>
+    <p class="success" *ngIf="createdId()">Created payment with id {{ createdId() }}</p>
+  </mat-card>
   `,
   styles: [`
-    .container { padding: 1rem; }
-    form { display: grid; gap: .5rem; max-width: 480px }
-    fieldset { border: 1px solid #ddd; padding: .5rem; }
-    label { display: grid; gap: .25rem }
+    .container { padding: 1rem; display: block; }
+    .title { margin: 0 0 1rem 0; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: .75rem; max-width: 720px; }
+    .section { grid-column: 1 / -1; font-weight: 600; margin-top: .5rem; }
+    .actions { grid-column: 1 / -1; }
+    .success { margin-top: .75rem; }
   `]
 })
 export class PaymentCreateComponent {
