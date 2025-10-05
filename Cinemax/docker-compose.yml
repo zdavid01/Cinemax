@@ -1,4 +1,21 @@
 ﻿services:
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MATF12345
+    ports:
+      - "1433:1433"
+    volumes:
+      - identity_mssql_data:/var/opt/mssql
+
+  identity.api:
+    image: identity.api
+    build:
+      context: .
+      dockerfile: Security/IdentityServer/Dockerfile
+    depends_on:
+      - identitydb
   paymentdb:
     image: postgres:15
     environment:
@@ -45,4 +62,4 @@ volumes:
   postgres_data:
   pgadmin_data:
   mongo_data:
-  sql-edge_data:
+  identity_mssql_data:

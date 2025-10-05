@@ -5,6 +5,7 @@ using Payment.Application.Factories;
 using Payment.Application.Models;
 using Payment.Infrastructure.Factories;
 using Payment.Infrastructure.Mail;
+using Payment.Infrastructure.PayPal;
 using Payment.Infrastructure.Persistence;
 using Payment.Infrastructure.Repositories;
 
@@ -33,8 +34,11 @@ public static class InfrastructureServiceRegistration
             c.Host = config["Host"];
             c.Port = int.Parse(config["Port"]);
         });
-        services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailService, EmailService>();
+            
+            // Register PayPal service
+            services.AddScoped<PayPalService>();
 
-        return services;
+            return services;
     }
 }

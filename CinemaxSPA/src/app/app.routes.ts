@@ -7,6 +7,7 @@ import { PrivateSessionComponent } from './private-session/private-session.compo
 import { PrivateSessionsList } from './private-session/private-session-list.component';
 import { PaymentListComponent } from './payment/payment-list.component';
 import { PaymentCreateComponent } from './payment/payment-create.component';
+import { PayPalPaymentComponent } from './paypal/paypal-payment.component';
 
 export const routes: Routes = [
     {
@@ -26,5 +27,6 @@ export const routes: Routes = [
     }
     ,
     { path: "payments", component: PaymentListComponent },
-    { path: "payments/create", component: PaymentCreateComponent }
+    { path: "payments/create", component: PaymentCreateComponent },
+    { path: "paypal", component: PayPalPaymentComponent }
 ];
