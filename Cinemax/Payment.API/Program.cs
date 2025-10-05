@@ -37,8 +37,8 @@ using (var scope = app.Services.CreateScope())
     
     try
     {
-        // Create database if it doesn't exist
-        await context.Database.EnsureCreatedAsync();
+        // Apply migrations
+        await context.Database.MigrateAsync();
         
         // Seed the database
         await PaymentContextSeed.SeedAsync(context, logger);

@@ -17,7 +17,8 @@ public class PaymentFactory : IPaymentFactory
             var paymentItem = new PaymentItem(item.MovieName, item.MovieId, item.Price, item.Quantity);
             payment.AddPaymentItem(paymentItem);
         }
-
+        // ensure aggregate total is up to date
+        payment.RecalculateTotal(command.Currency);
         return payment;
     }
 }

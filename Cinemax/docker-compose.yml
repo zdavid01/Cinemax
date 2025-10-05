@@ -13,9 +13,6 @@
   pgadmin:
     image: dpage/pgadmin4
   
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2017-latest
-  
   moviecatalogdb:
     image: mongo
 
@@ -47,6 +44,5 @@
 volumes:
   postgres_data:
   pgadmin_data:
-  mssql_data:
   mongo_data:
   sql-edge_data:

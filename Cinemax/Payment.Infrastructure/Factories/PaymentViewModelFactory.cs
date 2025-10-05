@@ -14,6 +14,7 @@ public class PaymentViewModelFactory : IPaymentViewModelFactory
         paymentVM.BuyerUsername = payment.BuyerUsername;
         paymentVM.Amount = payment.Money.Amount;
         paymentVM.Currency = payment.Money.Currency;
+        paymentVM.TotalPrice = payment.PaymentItems.Sum(i => i.Price * i.Quantity);
         
         var paymentItems = new List<PaymentItemViewModel>();
 

@@ -13,7 +13,7 @@ public class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Ag
 
         builder.OwnsOne(p => p.Money, m =>
         {
-            m.Property(money => money.Amount).HasColumnName("Amount");
+            m.Property(money => money.Amount).HasColumnName("Amount").HasColumnType("numeric(18,2)");
             m.Property(money => money.Currency).HasColumnName("Currency");
             m.WithOwner();
         });

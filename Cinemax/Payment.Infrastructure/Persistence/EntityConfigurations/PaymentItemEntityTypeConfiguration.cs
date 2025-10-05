@@ -16,5 +16,9 @@ public class PaymentItemEntityTypeConfiguration : IEntityTypeConfiguration<Payme
             .HasColumnType("VARCHAR(24)")
             .HasColumnName("MovieId")
             .IsRequired();
+
+        builder.Property(p => p.Price)
+            .HasColumnType("numeric(18,2)")
+            .IsRequired();
     }
 }

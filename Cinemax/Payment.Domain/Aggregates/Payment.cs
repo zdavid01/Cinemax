@@ -59,4 +59,9 @@ public class Payment : AggregateRoot
     //todo different currencies?
     public decimal GetTotal() => PaymentItems.Sum(paymentItem => paymentItem.Quantity * paymentItem.Price);
     
+    public void RecalculateTotal(string currency)
+    {
+        Money = new Money(GetTotal(), currency);
+    }
+    
 }

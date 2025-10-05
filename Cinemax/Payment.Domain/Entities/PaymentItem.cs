@@ -17,7 +17,7 @@ public class PaymentItem : EntityBase
     {
         MovieName = movieName ?? throw new ArgumentNullException(nameof(movieName));
         MovieId = movieId ?? throw new ArgumentNullException(nameof(movieId));
-        Price = TotalPrice();
+        Price = price;
         AddQuantity(quantity);
     }
 
