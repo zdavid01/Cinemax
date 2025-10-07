@@ -11,3 +11,12 @@ public class ShoppingCart
     public List<ShoppingCartItem> Items { get; set; } = new();
     public decimal TotalPrice => Items.Sum(i => i.Price);
 }
+
+public class ShoppingCartItem
+{ 
+    public decimal Price { get; set; }
+    public required string MovieId { get; set; }
+    public string Title { get; set; }
+    public string ImageUrl { get; set; }
+    public double Rating { get; set; }
+}   

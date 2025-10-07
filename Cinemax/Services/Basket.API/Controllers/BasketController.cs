@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ShoppingCartItem = Basket.API.Entities.ShoppingCartItem;
 
 [Authorize(Roles = "Buyer")]
 [ApiController]
@@ -81,29 +82,43 @@ public class BasketController: ControllerBase
         return Accepted();
     }
 
-    
-	/*
     [HttpPut]
     [ProducesResponseType(typeof(ShoppingCart), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ShoppingCart>> UpdateBasket([FromBody] ShoppingCart basket)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ShoppingCart>> AddOrUpdateBasket([FromBody] ShoppingCart basket)
     {
-        foreach (var item in basket.Items)
+        if (User.FindFirst(ClaimTypes.Name).Value != basket.Username)
         {
-            try
-            {
-                var coupon = await _couponService.GetDiscount(item.ProductName);
-                item.Price -= coupon.Amount;
-            }
-            catch (RpcException e)
-            {
-                _logger.LogInformation(
-                    "Error while retrieving coupon for item {ProductName}: {message}", item.ProductName, e.Message);
-            }
+            return Forbid();
         }
-        
-        return Ok(await _basketRepos+itory.UpdateBasket(basket));
+
+        if (basket == null || basket.Items == null)
+        {
+            return BadRequest();
+        }
+
+        var updatedBasket = await _basketRepository.UpdateBasket(basket);
+        return Ok(updatedBasket);
     }
-	*/
+
+    [HttpGet("movies/{username}")]
+    [ProducesResponseType(typeof(IEnumerable<ShoppingCartItem>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<ShoppingCartItem>>> GetMoviesFromCart(string username)
+    {
+        if (User.FindFirst(ClaimTypes.Name).Value != username)
+        {
+            return Forbid();
+        }
+
+        var basket = await _basketRepository.GetBasket(username);
+        if (basket == null || basket.Items == null || !basket.Items.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(basket.Items);
+    }
 
     [HttpDelete("{username}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]

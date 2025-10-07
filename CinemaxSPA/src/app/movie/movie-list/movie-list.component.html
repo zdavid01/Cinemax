@@ -1,1 +1,10 @@
-<p>movie-list works!</p>
+<div class="movie-grid">
+  <div *ngFor="let movie of movies" class="movie-poster">
+    <img [src]="'assets/' + movie.imageUrl" [alt]="movie.title" />
+    <div class="poster-footer">
+      <button (click)="toggleCart(movie)">
+        {{ isInCart(movie.id) ? 'Remove from Cart' : 'Add to Cart' }}
+      </button>
+    </div>
+  </div>
+</div>

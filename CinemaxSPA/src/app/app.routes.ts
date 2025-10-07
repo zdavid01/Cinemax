@@ -5,6 +5,7 @@ import { LogoutComponent } from './auth/logout/logout.component';
 import { ChatComponent } from './chat/chat.component';
 import { PrivateSessionComponent } from './private-session/private-session.component';
 import { PrivateSessionsList } from './private-session/private-session-list.component';
+import { BasketComponent } from './basket/basket.component';
 
 export const routes: Routes = [
     {
@@ -21,5 +22,8 @@ export const routes: Routes = [
     },
     {
         path: "sessions", component: PrivateSessionsList
+    },
+    {
+        path: "basket", component: BasketComponent 
     }
 ];
