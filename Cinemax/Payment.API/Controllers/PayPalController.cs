@@ -9,6 +9,7 @@ using MediatR;
 using Payment.Application.Features.Payments.Commands.CreatePayment;
 using Payment.Application.Features.Payments.Queries.ViewModels;
 using Payment.Application.Features.Payments.Commands.DTOs;
+using StackExchange.Redis;
 
 namespace Payment.API.Controllers;
 
@@ -20,13 +21,17 @@ public class PayPalController : ControllerBase
     private readonly ILogger<PayPalController> _logger;
     private readonly IEmailService _emailService;
     private readonly IMediator _mediator;
+    private readonly IConnectionMultiplexer _redis;
+    private readonly IConfiguration _configuration;
 
-    public PayPalController(ILogger<PayPalController> logger, IEmailService emailService, PayPalService payPalService, IMediator mediator)
+    public PayPalController(ILogger<PayPalController> logger, IEmailService emailService, PayPalService payPalService, IMediator mediator, IConnectionMultiplexer redis, IConfiguration configuration)
     {
         _payPalService = payPalService ?? throw new ArgumentNullException(nameof(payPalService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _redis = redis ?? throw new ArgumentNullException(nameof(redis));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
     
         // Endpoint to initiate the payment process
@@ -40,9 +45,9 @@ public class PayPalController : ControllerBase
                 var userEmail = GetUserEmailFromToken();
                 var username = userEmail.Split('@')[0]; // Use email prefix as username
                 
-                // Create return URL with username parameter
+                // Create return URL that redirects back to Angular app with username
                 var returnUrl = $"http://localhost:8004/api/paypal/return?username={username}";
-                var cancelUrl = "http://localhost:8004/api/paypal/cancel";
+                var cancelUrl = $"http://localhost:4200/basket?payment=cancelled";
                 
                 var (paymentId, approvalUrl) = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency, returnUrl, cancelUrl);
                 
@@ -96,117 +101,36 @@ public class PayPalController : ControllerBase
     {
         try
         {
+            _logger.LogInformation("PayPal return callback received: PaymentId={PaymentId}, PayerId={PayerId}, Username={Username}", 
+                paymentId, payerId, username);
+
             // Execute the payment after the user approves it
             var paymentState = await _payPalService.ExecutePayment(paymentId, payerId);
+            _logger.LogInformation("PayPal payment executed with state: {State}", paymentState);
 
             // If the payment was successful, save to database and send emails
             if (paymentState == "approved")
             {
                 await ProcessSuccessfulPayment(paymentId, payerId, username);
                 
-                var html = $@"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Payment Successful</title>
-                    <style>
-                        body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f0f8f0; }}
-                        .success {{ color: #4caf50; font-size: 24px; margin-bottom: 20px; }}
-                        .message {{ color: #333; font-size: 16px; margin-bottom: 30px; }}
-                        .close-btn {{ background-color: #4caf50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }}
-                    </style>
-                </head>
-                <body>
-                    <div class='success'>✅ Payment Successful!</div>
-                    <div class='message'>Your payment has been processed and a confirmation email has been sent.</div>
-                    <button class='close-btn' onclick='closeAndNotify()'>Close Window</button>
-                    
-                    <script>
-                        function closeAndNotify() {{
-                            // Notify the parent window about the successful payment
-                            if (window.opener) {{
-                                window.opener.postMessage({{
-                                    type: 'PAYPAL_PAYMENT_SUCCESS',
-                                    paymentId: '{paymentId}',
-                                    payerId: '{payerId}',
-                                    state: '{paymentState}'
-                                }}, '*');
-                            }}
-                            window.close();
-                        }}
-                        
-                        // Auto-close after 3 seconds
-                        setTimeout(closeAndNotify, 3000);
-                    </script>
-                </body>
-                </html>";
-                
-                return Content(html, "text/html");
+                // Redirect back to Angular app with success status
+                var redirectUrl = $"http://localhost:4200/payment-success?paymentId={paymentId}&status=success";
+                return Redirect(redirectUrl);
             }
             else
             {
-                var html = $@"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Payment Failed</title>
-                    <style>
-                        body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #ffeaea; }}
-                        .error {{ color: #f44336; font-size: 24px; margin-bottom: 20px; }}
-                        .message {{ color: #333; font-size: 16px; margin-bottom: 30px; }}
-                        .close-btn {{ background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }}
-                    </style>
-                </head>
-                <body>
-                    <div class='error'>❌ Payment Failed</div>
-                    <div class='message'>Payment was not approved. Please try again.</div>
-                    <button class='close-btn' onclick='closeAndNotify()'>Close Window</button>
-                    
-                    <script>
-                        function closeAndNotify() {{
-                            // Notify the parent window about the failed payment
-                            if (window.opener) {{
-                                window.opener.postMessage({{
-                                    type: 'PAYPAL_PAYMENT_FAILED',
-                                    paymentId: '{paymentId}',
-                                    payerId: '{payerId}',
-                                    state: '{paymentState}'
-                                }}, '*');
-                            }}
-                            window.close();
-                        }}
-                        
-                        // Auto-close after 3 seconds
-                        setTimeout(closeAndNotify, 3000);
-                    </script>
-                </body>
-                </html>";
-                
-                return Content(html, "text/html");
+                // Redirect back to Angular app with failure status
+                var redirectUrl = $"http://localhost:4200/payment-success?paymentId={paymentId}&status=failed";
+                return Redirect(redirectUrl);
             }
         }
         catch (Exception ex)
         {
-            var html = $@"
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Payment Error</title>
-                <style>
-                    body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #ffeaea; }}
-                    .error {{ color: #f44336; font-size: 24px; margin-bottom: 20px; }}
-                    .message {{ color: #333; font-size: 16px; margin-bottom: 30px; }}
-                    .close-btn {{ background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }}
-                </style>
-            </head>
-            <body>
-                <div class='error'>❌ Payment Error</div>
-                <div class='message'>An error occurred: {ex.Message}</div>
-                <button class='close-btn' onclick='window.close()'>Close Window</button>
-            </body>
-            </html>";
+            _logger.LogError(ex, "Error processing PayPal return for PaymentId={PaymentId}", paymentId);
             
-            return Content(html, "text/html");
+            // Redirect back to Angular app with error status
+            var redirectUrl = $"http://localhost:4200/payment-success?status=error&message={Uri.EscapeDataString(ex.Message)}";
+            return Redirect(redirectUrl);
         }
     }
 
@@ -244,26 +168,83 @@ public class PayPalController : ControllerBase
                 actualUsername = userEmail.Split('@')[0]; // Use email prefix as username
             }
             
+            // Get the basket from Redis
+            var db = _redis.GetDatabase();
+            var basketKey = actualUsername;
+            var basketData = await db.StringGetAsync(basketKey);
+            
+            List<PaymentItemDTO> paymentItems = new List<PaymentItemDTO>();
+            decimal totalAmount = 0;
+            
+            if (!basketData.IsNullOrEmpty)
+            {
+                try
+                {
+                    // Parse basket JSON
+                    var basket = System.Text.Json.JsonSerializer.Deserialize<BasketData>(basketData!);
+                    
+                    if (basket?.Items != null && basket.Items.Any())
+                    {
+                        // Convert basket items to payment items
+                        foreach (var item in basket.Items)
+                        {
+                            paymentItems.Add(new PaymentItemDTO
+                            {
+                                MovieName = item.Title,
+                                MovieId = item.MovieId,
+                                Price = item.Price,
+                                Quantity = 1 // Assuming quantity 1 per item
+                            });
+                            totalAmount += item.Price;
+                        }
+                        
+                        _logger.LogInformation("Retrieved {ItemCount} items from basket for user {Username}", basket.Items.Count, actualUsername);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Basket found but has no items for user {Username}", actualUsername);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to parse basket data for user {Username}", actualUsername);
+                }
+            }
+            else
+            {
+                _logger.LogWarning("No basket found in Redis for user {Username}", actualUsername);
+            }
+            
+            // If no basket items found, create a fallback payment item
+            if (!paymentItems.Any())
+            {
+                _logger.LogWarning("Using fallback payment item for user {Username} as no basket was found", actualUsername);
+                paymentItems.Add(new PaymentItemDTO
+                {
+                    MovieName = GetRandomMovieName(),
+                    MovieId = $"CINEMAX_TICKET_{paymentId.Substring(0, Math.Min(8, paymentId.Length))}",
+                    Price = 0.10m,
+                    Quantity = 1
+                });
+                totalAmount = 0.10m;
+            }
+            
             // Create a payment entry for the database
             var createPaymentCommand = new CreatePaymentCommand
             {
                 BuyerId = payerId, // Using PayPal payer ID as buyer ID
-                BuyerUsername = actualUsername, // Use actual logged-in user's username
+                BuyerUsername = actualUsername,
                 Currency = "USD",
-                PaymentItems = new List<PaymentItemDTO>
-                {
-                    new PaymentItemDTO
-                    {
-                        MovieName = GetRandomMovieName(),
-                        MovieId = $"CINEMAX_TICKET_{paymentId.Substring(0, Math.Min(8, paymentId.Length))}",
-                        Price = 0.10m, // Default amount for now
-                        Quantity = 1
-                    }
-                }
+                PaymentItems = paymentItems
             };
 
             var paymentDbId = await _mediator.Send(createPaymentCommand);
-            _logger.LogInformation("Payment saved to database with ID: {PaymentDbId} for PayPal payment: {PaymentId} for user: {Username}", paymentDbId, paymentId, actualUsername);
+            _logger.LogInformation("Payment saved to database with ID: {PaymentDbId} for PayPal payment: {PaymentId} for user: {Username} with {ItemCount} items totaling ${Total}", 
+                paymentDbId, paymentId, actualUsername, paymentItems.Count, totalAmount);
+            
+            // Clear the basket after successful payment
+            await db.KeyDeleteAsync(basketKey);
+            _logger.LogInformation("Basket cleared for user {Username} after successful payment", actualUsername);
         }
         catch (Exception e)
         {
@@ -372,4 +353,21 @@ public class ExecutePaymentRequest
 {
     public string PaymentId { get; set; }
     public string PayerId { get; set; }
+}
+
+// Classes for deserializing basket data from Redis
+public class BasketData
+{
+    public string Username { get; set; } = string.Empty;
+    public List<BasketItem> Items { get; set; } = new List<BasketItem>();
+    public decimal TotalPrice { get; set; }
+}
+
+public class BasketItem
+{
+    public decimal Price { get; set; }
+    public string MovieId { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
+    public int Rating { get; set; }
 }

@@ -7,8 +7,19 @@ using Payment.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Kestrel to support both HTTP/1.1 (REST) and HTTP/2 (gRPC) on port 8080
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // Listen on port 8080 for both HTTP/1.1 and HTTP/2 - unencrypted for internal service communication
+    options.ListenAnyIP(8080, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+    });
+});
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -17,6 +28,30 @@ builder.Services.AddSwaggerGen();
 
 // Add gRPC
 builder.Services.AddGrpc();
+
+// Add Redis connection for accessing basket data (with resilient connection)
+var redisConnectionString = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString") ?? "basketdb:6379";
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => 
+{
+    var logger = sp.GetRequiredService<ILogger<Program>>();
+    try 
+    {
+        var configOptions = ConfigurationOptions.Parse(redisConnectionString);
+        configOptions.AbortOnConnectFail = false; // Don't crash if Redis isn't immediately available
+        configOptions.ConnectRetry = 5;
+        configOptions.ConnectTimeout = 5000;
+        
+        var multiplexer = ConnectionMultiplexer.Connect(configOptions);
+        logger.LogInformation("Successfully connected to Redis at {ConnectionString}", redisConnectionString);
+        return multiplexer;
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(ex, "Failed to connect to Redis at {ConnectionString}. Payment API will continue without Redis basket integration.", redisConnectionString);
+        // Return a disconnected multiplexer - the app will still start but basket retrieval will fail gracefully
+        return ConnectionMultiplexer.Connect($"{redisConnectionString},abortConnect=false");
+    }
+});
 
 //
 builder.Services.AddControllers();
@@ -92,7 +127,9 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseHttpsRedirection();
+// HTTP redirect is disabled for containerized environment
+// app.UseHttpsRedirection();
+
 app.MapControllers();
 app.MapGrpcService<PaymentGrpcService>();
 app.Run();

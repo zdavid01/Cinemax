@@ -9,6 +9,7 @@ import { BasketComponent } from './basket/basket.component';
 import { PaymentListComponent } from './payment/payment-list.component';
 import { PaymentCreateComponent } from './payment/payment-create.component';
 import { PayPalPaymentComponent } from './paypal/paypal-payment.component';
+import { PaymentSuccessComponent } from './payment/payment-success.component';
 import { CatalogComponent } from './catalog/catalog.component';
 
 export const routes: Routes = [
@@ -37,5 +38,6 @@ export const routes: Routes = [
     ,
     { path: "payments", component: PaymentListComponent },
     { path: "payments/create", component: PaymentCreateComponent },
+    { path: "payment-success", component: PaymentSuccessComponent },
     { path: "paypal", component: PayPalPaymentComponent }
 ];
