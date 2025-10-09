@@ -1,4 +1,6 @@
 using Basket.API.Repositories;
+using Basket.API.GrpcServices;
+using Payment.API.Protos;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -21,6 +23,13 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 // Repository
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+// gRPC Client for Payment Service
+builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:PaymentServiceUrl"] ?? "https://localhost:7001");
+});
+builder.Services.AddScoped<PaymentGrpcClient>();
 
 // Controllers
 builder.Services.AddControllers();

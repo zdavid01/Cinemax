@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "Payment.API.Protos";
+
+package payment;
+
+// The Payment service definition
+service PaymentService {
+  // Initiate a checkout/payment from basket
+  rpc InitiateCheckout (CheckoutRequest) returns (CheckoutResponse);
+}
+
+// Request message containing basket checkout information
+message CheckoutRequest {
+  string buyer_id = 1;
+  string buyer_username = 2;
+  string email_address = 3;
+  repeated CheckoutItem items = 4;
+  double total_price = 5;
+  string currency = 6;
+}
+
+// Individual item in the checkout
+message CheckoutItem {
+  string movie_id = 1;
+  string movie_name = 2;
+  double price = 3;
+  int32 quantity = 4;
+}
+
+// Response message for checkout
+message CheckoutResponse {
+  bool success = 1;
+  string message = 2;
+  int32 payment_id = 3;
+  string payment_date = 4;
+}
+

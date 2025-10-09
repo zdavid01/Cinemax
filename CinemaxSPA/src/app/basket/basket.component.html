@@ -27,10 +27,33 @@
           <span class="rating-value">{{ movie.rating }}</span>
           <span class="rating-max">/10</span>
         </div>
+        <div class="movie-price">
+          <span class="price-label">Price:</span>
+          <span class="price-value">${{ movie.price?.toFixed(2) || '0.00' }}</span>
+        </div>
       </div>
       <div class="movie-actions">
         <button class="remove-btn" (click)="removeFromCart(movie.id)">Remove</button>
       </div>
     </div>
+  </div>
+
+  <!-- Checkout Section -->
+  <div *ngIf="cartItems.length > 0" class="checkout-section">
+    <div class="checkout-summary">
+      <div class="summary-row">
+        <span class="summary-label">Subtotal ({{ getTotalMovies() }} items):</span>
+        <span class="summary-value">${{ getTotalPrice().toFixed(2) }}</span>
+      </div>
+      <div class="summary-row total">
+        <span class="summary-label">Total:</span>
+        <span class="summary-value">${{ getTotalPrice().toFixed(2) }}</span>
+      </div>
+    </div>
+    <button class="checkout-btn" (click)="goToCheckout()" [disabled]="isProcessing">
+      <mat-icon>payment</mat-icon>
+      <span>{{ isProcessing ? 'Processing...' : 'Proceed to PayPal Checkout' }}</span>
+    </button>
+    <p class="checkout-note">You will be redirected to PayPal to complete your purchase</p>
   </div>
 </div>

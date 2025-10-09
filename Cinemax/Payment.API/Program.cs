@@ -3,6 +3,7 @@ using System.Text;
 using Payment.Application;
 using Payment.Infrastructure;
 using Payment.Infrastructure.Persistence;
+using Payment.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add gRPC
+builder.Services.AddGrpc();
 
 //
 builder.Services.AddControllers();
@@ -90,4 +94,5 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapGrpcService<PaymentGrpcService>();
 app.Run();

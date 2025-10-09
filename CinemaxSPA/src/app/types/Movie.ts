@@ -9,4 +9,5 @@ export interface Movie {
     imageUrl: string;
     trailerLink: string;
     rating: string;
+    price?: number;
 }

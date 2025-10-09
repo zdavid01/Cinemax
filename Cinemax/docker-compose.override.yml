@@ -96,7 +96,7 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - "CacheSettings:ConnectionString=basketdb:6379"
-            # - "GrpcSettings:DiscountUrl=http://discount.grpc"
+            - "GrpcSettings:PaymentServiceUrl=http://payment.api:8080"
             - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
             # JWT Settings - Must match Identity API settings
             - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
@@ -105,5 +105,6 @@ services:
         depends_on:
             - basketdb
             - rabbitmq
+            - payment.api
         ports:
             - "8001:8081"
