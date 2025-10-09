@@ -374,5 +374,5 @@ public class BasketItem
     public string MovieId { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
-    public int Rating { get; set; }
+    public decimal Rating { get; set; }
 }
