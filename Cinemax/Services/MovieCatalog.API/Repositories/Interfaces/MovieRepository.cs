@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace MovieCatalog.API.Repositories.Interfaces;
 
-public class MovieRepository : IMovieRepository
+public class  MovieRepository : IMovieRepository
 {
     private readonly IMovieCatalogContext _context;
 

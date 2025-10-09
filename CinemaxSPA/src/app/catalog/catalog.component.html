@@ -1,0 +1,14 @@
+<div class="catalog-grid">
+  <div class="movie-card" *ngFor="let movie of movies">
+    <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" alt="{{ movie.title }}">
+    <h3>{{ movie.title }}</h3>
+    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+    <p><strong>Director:</strong> {{ movie.director }}</p>
+    <p><strong>Length:</strong> {{ movie.length }} min</p>
+    <p>{{ movie.description }}</p>
+
+    <a *ngIf="movie.linkToTrailer" [href]="movie.linkToTrailer" target="_blank" class="trailer-button">
+      Watch Trailer
+    </a>
+  </div>
+</div>
