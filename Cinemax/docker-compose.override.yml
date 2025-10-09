@@ -98,6 +98,10 @@ services:
             - "CacheSettings:ConnectionString=basketdb:6379"
             # - "GrpcSettings:DiscountUrl=http://discount.grpc"
             - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+            # JWT Settings - Must match Identity API settings
+            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:validIssuer=Cinemax identity"
+            - "JwtSettings:validAudience=Cinemax"
         depends_on:
             - basketdb
             - rabbitmq

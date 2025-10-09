@@ -70,14 +70,14 @@ public class PaymentController : ControllerBase
             totalPayments = payments.Count,
             payments = payments.Select(p => new {
                 id = p.Id,
-                itemCount = p.PaymentItems?.Count ?? 0,
+                itemCount = p.PaymentItems?.Count() ?? 0,
                 items = p.PaymentItems?.Select(i => new {
                     id = i.Id,
                     movieName = i.MovieName,
                     movieId = i.MovieId,
                     price = i.Price,
                     quantity = i.Quantity
-                }) ?? new object[0]
+                }) ?? Enumerable.Empty<object>()
             })
         });
     }

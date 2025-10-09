@@ -9,7 +9,7 @@ import dbData from "../db.json"
   providedIn: 'root'
 })
 export class MoviesService {
-  private baseApiUrl = 'http://localhost:3000/movies';
+  private baseApiUrl = 'http://localhost:8000/api/v1/MovieCatalog';
 
   constructor(private http: HttpClient) { }
 
