@@ -10,11 +10,27 @@ public class PaymentItemEntityTypeConfiguration : IEntityTypeConfiguration<Payme
     {
         builder.ToTable("PaymentItems");
         builder.HasKey(o => o.Id);
-        builder.Property(o => o.Id).UseHiLo("paymentitemseq");
+        builder.Property(o => o.Id).UseIdentityColumn();
 
-        builder.Property<string>("MovieId")
-            .HasColumnType("VARCHAR(24)")
-            .HasColumnName("MovieId")
+        builder.Property(p => p.MovieName)
+            .IsRequired()
+            .HasMaxLength(200);
+
+        builder.Property(p => p.MovieId)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(p => p.Price)
+            .HasColumnType("numeric(18,2)")
             .IsRequired();
+
+        builder.Property(p => p.Quantity)
+            .IsRequired();
+
+        // Configure the relationship with Payment
+        builder.HasOne<Domain.Aggregates.Payment>()
+            .WithMany("PaymentItems")
+            .HasForeignKey("PaymentId")
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

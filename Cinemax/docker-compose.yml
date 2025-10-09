@@ -1,12 +1,34 @@
 ﻿services:
-  #  paymentdb:
-  #    image: postgres
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MATF12345
+    ports:
+      - "1433:1433"
+    volumes:
+      - identity_mssql_data:/var/opt/mssql
+
+  identity.api:
+    image: identity.api
+    build:
+      context: .
+      dockerfile: Security/IdentityServer/Dockerfile
+    depends_on:
+      - identitydb
+  paymentdb:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: MATF12345
+      POSTGRES_DB: PaymentDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   
   pgadmin:
     image: dpage/pgadmin4
-  
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2017-latest
   
   moviecatalogdb:
     image: mongo
@@ -37,8 +59,7 @@
       dockerfile: Services/Basket.API/Dockerfile
 
 volumes:
-  #  postgres_data:
+  postgres_data:
   pgadmin_data:
-  mssql_data:
   mongo_data:
-  sql-edge_data:
+  identity_mssql_data:

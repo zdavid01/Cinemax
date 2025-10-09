@@ -9,16 +9,17 @@ public class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Ag
     {
         builder.ToTable("Payments");
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.Id).UseHiLo("paymentseq");
+        builder.Property(p => p.Id).UseIdentityColumn();
 
         builder.OwnsOne(p => p.Money, m =>
         {
-            m.Property<int>("PaymentId").UseHiLo("paymentseq");
+            m.Property(money => money.Amount).HasColumnName("Amount").HasColumnType("numeric(18,2)");
+            m.Property(money => money.Currency).HasColumnName("Currency");
             m.WithOwner();
         });
         
         var navigation = builder.Metadata.FindNavigation(nameof(Domain.Aggregates.Payment.PaymentItems)) 
-                         ?? throw new NullReferenceException($"Navigation property not found on {{nameof(Order.OrderItems)}}");
+                         ?? throw new NullReferenceException($"Navigation property not found on {nameof(Domain.Aggregates.Payment.PaymentItems)}");
         navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

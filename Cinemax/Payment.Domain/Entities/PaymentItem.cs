@@ -9,7 +9,7 @@ public class PaymentItem : EntityBase
     public string MovieName { get; set; }
     public string MovieId { get; set; }
     public decimal Price { get; set; }
-    public int Quantity { get; private set; }
+    public int Quantity { get; set; }
 
     
     //todo FIX THIS DAPPER
@@ -17,7 +17,7 @@ public class PaymentItem : EntityBase
     {
         MovieName = movieName ?? throw new ArgumentNullException(nameof(movieName));
         MovieId = movieId ?? throw new ArgumentNullException(nameof(movieId));
-        Price = TotalPrice();
+        Price = price;
         AddQuantity(quantity);
     }
 

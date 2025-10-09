@@ -1,4 +1,4 @@
-using Azure.Core;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -7,16 +7,20 @@ namespace Payment.Infrastructure.PayPal;
 
 public class PayPalService
 {
-    private const string PayPalApiUrl = "https://api-m.sandbox.paypal.com";
-    private string _clientId = "AbwOUURIy30Sv997qpH0-Xzwb-rKENp64r2-F8jJx-GNMHcQ9ZFIwvQLjP2-sMe7-u-kg2AGAjjKtGSk";
-    private string _clientSecret = "EP--0kzPAWPT9yg5or-0qKVMWnjusLoqZ-aSIBWhtMouaWcbyORFvfXPPKKCNU77rzq4LHA_d_D9OvI7";
+    private readonly string _payPalApiUrl;
+    private readonly string _clientId;
+    private readonly string _clientSecret;
 
     private RestClient _client;
     private string _accessToken;
 
-    public PayPalService()
+    public PayPalService(IConfiguration configuration)
     {
-        _client = new RestClient(PayPalApiUrl);
+        _payPalApiUrl = configuration["PayPal:ApiUrl"] ?? "https://api-m.sandbox.paypal.com";
+        _clientId = configuration["PayPal:ClientId"] ?? throw new ArgumentNullException("PayPal:ClientId is required");
+        _clientSecret = configuration["PayPal:ClientSecret"] ?? throw new ArgumentNullException("PayPal:ClientSecret is required");
+        
+        _client = new RestClient(_payPalApiUrl);
     }
 
     //Get an OAuth token from PayPal
@@ -44,8 +48,8 @@ public class PayPalService
     }
 
 
-    public async Task<string> CreatePayment(decimal amount, string currency = "USD", 
-        string? returnUrl = "http://localhost:5017/swagger/index.html/api/paypal/return", string? cancelUrl = "http://localhost:5017/swagger/index.html/api/paypal/cancel" )
+    public async Task<(string paymentId, string approvalUrl)> CreatePayment(decimal amount, string currency = "USD", 
+        string? returnUrl = "http://localhost:8004/api/paypal/return", string? cancelUrl = "http://localhost:8004/api/paypal/cancel" )
     {
         if (string.IsNullOrEmpty(_accessToken))
         {
@@ -90,23 +94,24 @@ public class PayPalService
         if (response.IsSuccessful)
         {
             var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response.Content);
+            string paymentId = jsonResponse.id;
+            string approvalUrl = "";
             
             foreach (var link in jsonResponse.links)
             {
                 if (link.rel == "approval_url")
                 {
-                    //TODO return link and payerId
-                    return link.href;  // This is the approval URL
+                    approvalUrl = link.href;
+                    break;
                 }
             }
+            
+            return (paymentId, approvalUrl);
         }
         else
         {
             throw new Exception($"Error creating payment: {response.Content}");
         }
-        
-        //TODO return something meaningful ?
-        return null;
     }
 
     public async Task<string> ExecutePayment(string paymentId, string payerId)
