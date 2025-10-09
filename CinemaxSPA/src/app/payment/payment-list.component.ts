@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { PaymentService } from '../services/payment.service';
 import { PaymentVM } from '../types/Payment';
 import { AppStateService } from '../shared/app-state/app-state.service';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -435,6 +436,7 @@ import { Observable } from 'rxjs';
 export class PaymentListComponent implements OnInit {
   private readonly paymentService = inject(PaymentService);
   private readonly appStateService = inject(AppStateService);
+  private readonly route = inject(ActivatedRoute);
 
   username = signal<string>('');
   payments = signal<PaymentVM[]>([]);
@@ -448,6 +450,14 @@ export class PaymentListComponent implements OnInit {
         this.currentUser.set(appState.username);
         this.username.set(appState.username);
         this.load(); // Automatically load payments for current user
+      }
+    });
+
+    // Listen for query param changes to reload data (e.g., after payment completion)
+    this.route.queryParams.subscribe(params => {
+      if (params['refresh'] && this.currentUser()) {
+        console.log('Refreshing payments list after payment completion');
+        this.load();
       }
     });
   }

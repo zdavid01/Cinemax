@@ -142,7 +142,10 @@ export class PaymentSuccessComponent implements OnInit {
       // If payment was successful, redirect to payments page after 2 seconds
       if (this.status === 'success') {
         setTimeout(() => {
-          this.router.navigate(['/payments']);
+          // Navigate and force component reload by using skipLocationChange and then navigating again
+          this.router.navigate(['/payments'], { 
+            queryParams: { refresh: new Date().getTime() }
+          });
         }, 2000);
       }
     });

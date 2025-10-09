@@ -41,9 +41,14 @@ public class PayPalController : ControllerBase
         {
             try
             {
-                // Get the user's username from the JWT token
-                var userEmail = GetUserEmailFromToken();
-                var username = userEmail.Split('@')[0]; // Use email prefix as username
+                // Get the actual username from the JWT token claims
+                var username = User.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(username))
+                {
+                    return BadRequest(new { error = "Username not found in token" });
+                }
+                
+                _logger.LogInformation("Creating PayPal payment for user: {Username}, Amount: {Amount}", username, paymentRequest.Amount);
                 
                 // Create return URL that redirects back to Angular app with username
                 var returnUrl = $"http://localhost:8004/api/paypal/return?username={username}";
@@ -168,10 +173,10 @@ public class PayPalController : ControllerBase
                 actualUsername = userEmail.Split('@')[0]; // Use email prefix as username
             }
             
-            // Get the basket from Redis
+            // Get the basket from Redis (stored as hash by IDistributedCache)
             var db = _redis.GetDatabase();
             var basketKey = actualUsername;
-            var basketData = await db.StringGetAsync(basketKey);
+            var basketData = await db.HashGetAsync(basketKey, "data");
             
             List<PaymentItemDTO> paymentItems = new List<PaymentItemDTO>();
             decimal totalAmount = 0;
@@ -180,7 +185,7 @@ public class PayPalController : ControllerBase
             {
                 try
                 {
-                    // Parse basket JSON
+                    // Parse basket JSON from the hash field
                     var basket = System.Text.Json.JsonSerializer.Deserialize<BasketData>(basketData!);
                     
                     if (basket?.Items != null && basket.Items.Any())
@@ -198,7 +203,7 @@ public class PayPalController : ControllerBase
                             totalAmount += item.Price;
                         }
                         
-                        _logger.LogInformation("Retrieved {ItemCount} items from basket for user {Username}", basket.Items.Count, actualUsername);
+                        _logger.LogInformation("Retrieved {ItemCount} items from basket for user {Username}, Total: ${Total}", basket.Items.Count, actualUsername, totalAmount);
                     }
                     else
                     {
