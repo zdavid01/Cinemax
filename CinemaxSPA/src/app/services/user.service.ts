@@ -20,4 +20,11 @@ export class UserService {
   getUserDetails(username: string): Observable<IUserDetails> {
     return this.httpClient.get<IUserDetails>(`http://localhost:4000/api/v1/User/users/${username}`);
   }
+
+  upgradeToPremium(username: string): Observable<{ message: string; isPremium: boolean }> {
+    return this.httpClient.post<{ message: string; isPremium: boolean }>(
+      'http://localhost:4000/api/v1/User/upgrade-to-premium',
+      { username }
+    );
+  }
 }

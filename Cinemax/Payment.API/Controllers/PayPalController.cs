@@ -100,6 +100,91 @@ public class PayPalController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
     }
+
+    // Endpoint to create premium subscription payment
+    [HttpPost("create-premium-payment")]
+    [Authorize]
+    public async Task<IActionResult> CreatePremiumPayment([FromBody] PaymentRequest paymentRequest)
+    {
+        try
+        {
+            // Get the actual username from the JWT token claims
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(username))
+            {
+                return BadRequest(new { error = "Username not found in token" });
+            }
+            
+            _logger.LogInformation("Creating premium subscription PayPal payment for user: {Username}, Amount: {Amount}", username, paymentRequest.Amount);
+            
+            // Create return URL for premium subscription (different from regular checkout)
+            var returnUrl = $"http://localhost:8004/api/paypal/premium-return?username={username}";
+            var cancelUrl = $"http://localhost:4200/premium?payment=cancelled";
+            
+            var (paymentId, approvalUrl) = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency, returnUrl, cancelUrl);
+            
+            // Return the expected JSON structure
+            var response = new
+            {
+                id = paymentId,
+                state = "created",
+                links = new[]
+                {
+                    new
+                    {
+                        href = approvalUrl,
+                        rel = "approval_url",
+                        method = "REDIRECT"
+                    }
+                }
+            };
+            
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    // Endpoint to handle PayPal return for premium subscription
+    [HttpGet("premium-return")]
+    public async Task<IActionResult> PremiumReturnFromPayPal(string paymentId, string payerId, string? username = null)
+    {
+        try
+        {
+            _logger.LogInformation("Premium subscription PayPal return callback: PaymentId={PaymentId}, PayerId={PayerId}, Username={Username}", 
+                paymentId, payerId, username);
+
+            // Execute the payment after the user approves it
+            var paymentState = await _payPalService.ExecutePayment(paymentId, payerId);
+            _logger.LogInformation("Premium subscription PayPal payment executed with state: {State}", paymentState);
+
+            // If the payment was successful, redirect to Angular with success
+            if (paymentState == "approved")
+            {
+                _logger.LogInformation("Premium subscription payment approved for user: {Username}", username);
+                
+                // Redirect back to Angular app with success status
+                var redirectUrl = $"http://localhost:4200/premium?payment=success&username={username}";
+                return Redirect(redirectUrl);
+            }
+            else
+            {
+                // Redirect back to Angular app with failure status
+                var redirectUrl = $"http://localhost:4200/premium?payment=failed";
+                return Redirect(redirectUrl);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing premium subscription PayPal return for PaymentId={PaymentId}", paymentId);
+            
+            // Redirect back to Angular app with error status
+            var redirectUrl = $"http://localhost:4200/premium?payment=error&message={Uri.EscapeDataString(ex.Message)}";
+            return Redirect(redirectUrl);
+        }
+    }
     
     [HttpGet("return")]
     public async Task<IActionResult> ReturnFromPayPal(string paymentId, string payerId, string? username = null)
