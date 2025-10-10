@@ -89,3 +89,22 @@ services:
             - rabbitmq
         ports:
             - "8001:8081"
+
+    email.api:
+        container_name: email.api
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - "ConnectionStrings:RabbitMQ=amqp://guest:guest@rabbitmq:5672"
+            - "EmailSettings:SmtpServer=smtp.gmail.com"
+            - "EmailSettings:SmtpPort=587"
+            - "EmailSettings:Mail=vida33085@gmail.com"
+            - "EmailSettings:Password=kmfu haci tnno kjqd"
+            - "EmailSettings:SmtpUsername=vida33085@gmail.com"
+            - "EmailSettings:SmtpPassword=kmfu haci tnno kjqd"
+            - "EmailSettings:FromEmail=vida33085@gmail.com"
+            - "EmailSettings:FromName=Cinemax System"
+            - "EmailSettings:EnableSsl=true"
+        depends_on:
+            - rabbitmq
+        ports:
+            - "8006:8080"

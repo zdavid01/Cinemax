@@ -1,0 +1,55 @@
+@Email.API_HostAddress = https://localhost:7006
+
+### Health Check
+GET {{Email.API_HostAddress}}/health
+
+### Send Email Asynchronously (via RabbitMQ)
+POST {{Email.API_HostAddress}}/api/email/send-async
+Content-Type: application/json
+
+{
+  "to": "recipient@example.com",
+  "subject": "Test Email from Cinemax",
+  "body": "<h1>Hello from Cinemax!</h1><p>This is a test email sent via our microservice.</p>",
+  "isHtml": true,
+  "priority": 1
+}
+
+### Send Email Synchronously (for testing)
+POST {{Email.API_HostAddress}}/api/email/send-sync
+Content-Type: application/json
+
+{
+  "to": "recipient@example.com",
+  "subject": "Sync Test Email from Cinemax",
+  "body": "This is a test email sent synchronously.",
+  "isHtml": false,
+  "priority": 1
+}
+
+### Send Email with CC and BCC
+POST {{Email.API_HostAddress}}/api/email/send-async
+Content-Type: application/json
+
+{
+  "to": "recipient@example.com",
+  "subject": "Email with CC and BCC",
+  "body": "<h2>Important Notification</h2><p>This email has CC and BCC recipients.</p>",
+  "isHtml": true,
+  "cc": ["cc1@example.com", "cc2@example.com"],
+  "bcc": ["bcc@example.com"],
+  "priority": 2
+}
+
+### Send High Priority Email
+POST {{Email.API_HostAddress}}/api/email/send-async
+Content-Type: application/json
+
+{
+  "to": "urgent@example.com",
+  "subject": "URGENT: High Priority Email",
+  "body": "<h1 style='color: red;'>URGENT</h1><p>This is a high priority email.</p>",
+  "isHtml": true,
+  "priority": 2
+}
+

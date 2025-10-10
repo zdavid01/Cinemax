@@ -36,6 +36,12 @@
       context: .
       dockerfile: Services/Basket.API/Dockerfile
 
+  email.api:
+    image: email.api
+    build:
+      context: .
+      dockerfile: Email.API/Dockerfile
+
 volumes:
   #  postgres_data:
   pgadmin_data:
