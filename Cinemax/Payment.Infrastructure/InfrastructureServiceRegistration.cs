@@ -25,20 +25,12 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IPaymentFactory, PaymentFactory>();
         services.AddScoped<IPaymentViewModelFactory, PaymentViewModelFactory>();
         
-        services.Configure<EmailSettings>(c =>
-        {
-            var config = configuration.GetSection("EmailSettings");
-            c.Mail = config["Mail"];
-            c.DisplayName = config["DisplayName"];
-            c.Password = config["Password"];
-            c.Host = config["Host"];
-            c.Port = int.Parse(config["Port"]);
-        });
-            services.AddTransient<IEmailService, EmailService>();
+        // Register HttpClient for Email.API
+        services.AddHttpClient<IEmailService, EmailApiClient>();
             
-            // Register PayPal service
-            services.AddScoped<PayPalService>();
+        // Register PayPal service
+        services.AddScoped<PayPalService>();
 
-            return services;
+        return services;
     }
 }
