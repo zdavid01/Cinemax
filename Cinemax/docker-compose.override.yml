@@ -1,6 +1,22 @@
 version: '3.4'
 
 services:
+    identitydb:
+        container_name: identitydb
+        restart: always
+        ports:
+            - "1433:1433"
+        # SA password and EULA handled in base compose
+
+    identity.api:
+        container_name: identity.api
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - "ConnectionStrings:IdentityConnectionString=Server=identitydb;Database=IdentityDb;User Id=SA;Password=MATF12345;TrustServerCertificate=true"
+        depends_on:
+            - identitydb
+        ports:
+            - "4000:8080"
     #  paymentdb:
     #    container_name: paymentdb
     #    environment:
@@ -24,16 +40,7 @@ services:
         volumes:
             - pgadmin_data:/root/.pgadmin
 
-    mssql:
-        container_name: mssql
-        environment:
-            - SA_PASSWORD=MATF12345
-            - ACCEPT_EULA=Y
-        restart: always
-        ports:
-            - "1433:1433"
-        volumes:
-            - mssql_data:/var/opt/mssql/data
+    
 
     moviecatalogdb:
         container_name: moviecatalogdb
@@ -57,12 +64,22 @@ services:
         container_name: payment.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "ConnectionSettings:OrderingConnectionString=Server=mssql;Database=OrderDb;User Id=sa;Password=MATF12345;"
+            - "ConnectionStrings:PaymentConnectionString=Host=paymentdb;Port=5432;Database=PaymentDb;Username=postgres;Password=MATF12345;"
+            # Redis Cache Settings
+            - "CacheSettings:ConnectionString=basketdb:6379"
+            # Email Settings
+            - "EmailSettings:Mail=vida33085@gmail.com"
+            - "EmailSettings:Password=kmfu haci tnno kjqd"
+            # PayPal Settings
+            - "PayPal:ClientId=AbwOUURIy30Sv997qpH0-Xzwb-rKENp64r2-F8jJx-GNMHcQ9ZFIwvQLjP2-sMe7-u-kg2AGAjjKtGSk"
+            - "PayPal:ClientSecret=EP--0kzPAWPT9yg5or-0qKVMWnjusLoqZ-aSIBWhtMouaWcbyORFvfXPPKKCNU77rzq4LHA_d_D9OvI7"
+            # JWT Settings
+            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
         depends_on:
-            - mssql
-
+            - paymentdb
+            - basketdb
         ports:
-            - "8004:8004"
+            - "8004:8080"
 
     basketdb:
         container_name: basketdb
@@ -82,11 +99,16 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - "CacheSettings:ConnectionString=basketdb:6379"
-            # - "GrpcSettings:DiscountUrl=http://discount.grpc"
+            - "GrpcSettings:PaymentServiceUrl=http://payment.api:8080"
             - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+            # JWT Settings - Must match Identity API settings
+            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:validIssuer=Cinemax identity"
+            - "JwtSettings:validAudience=Cinemax"
         depends_on:
             - basketdb
             - rabbitmq
+            - payment.api
         ports:
             - "8001:8081"
 

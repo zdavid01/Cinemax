@@ -1,6 +1,6 @@
 using AutoMapper;
 using Basket.API.Entities;
-//using Basket.API.GrpcServices;
+using Basket.API.GrpcServices;
 using Basket.API.Repositories;
 using EventBus.Messages.Events;
 using Grpc.Core;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Payment.API.Protos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,15 +26,16 @@ public class BasketController: ControllerBase
     private readonly ILogger<BasketController> _logger;
     private readonly IMapper _mapper;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly PaymentGrpcClient _paymentGrpcClient;
 
     public BasketController(IBasketRepository basketRepository, ILogger<BasketController> logger,
-        IMapper mapper, IPublishEndpoint publishEndpoint)
+        IMapper mapper, IPublishEndpoint publishEndpoint, PaymentGrpcClient paymentGrpcClient)
     {
         _basketRepository = basketRepository ?? throw new ArgumentNullException(nameof(basketRepository));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
-        // _couponService = couponService ?? throw new ArgumentNullException(nameof(couponService));
+        _paymentGrpcClient = paymentGrpcClient ?? throw new ArgumentNullException(nameof(paymentGrpcClient));
     }
 
     [HttpGet("{username}")]
@@ -67,16 +69,54 @@ public class BasketController: ControllerBase
         var basket = await _basketRepository.GetBasket(basketCheckout.BuyerUsername);
         if (basket == null)
         {
-            return BadRequest();
+            return BadRequest("Basket not found");
         }
 
-        // Check if payment was successful
+        // Initiate payment via gRPC
+        try
+        {
+            var checkoutRequest = new CheckoutRequest
+            {
+                BuyerId = basketCheckout.BuyerId,
+                BuyerUsername = basketCheckout.BuyerUsername,
+                EmailAddress = basketCheckout.EmailAddress,
+                TotalPrice = (double)basket.TotalPrice,
+                Currency = "USD"
+            };
+
+            // Add items to the request
+            foreach (var item in basket.Items)
+            {
+                checkoutRequest.Items.Add(new CheckoutItem
+                {
+                    MovieId = item.MovieId,
+                    MovieName = item.Title,
+                    Price = (double)item.Price,
+                    Quantity = 1
+                });
+            }
+
+            var paymentResponse = await _paymentGrpcClient.InitiateCheckout(checkoutRequest);
+
+            if (!paymentResponse.Success)
+            {
+                _logger.LogWarning($"Payment initiation failed: {paymentResponse.Message}");
+                return BadRequest($"Payment failed: {paymentResponse.Message}");
+            }
+
+            _logger.LogInformation($"Payment {paymentResponse.PaymentId} initiated successfully");
+        }
+        catch (RpcException ex)
+        {
+            _logger.LogError(ex, "gRPC call to Payment service failed");
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, "Payment service unavailable");
+        }
 
 		// Send checkout event
         var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
         await _publishEndpoint.Publish(eventMessage);
 
-        // Remove the basket
+        // Remove the basket after successful payment
         await _basketRepository.DeleteBasket(basketCheckout.BuyerUsername);
 
         return Accepted();

@@ -42,4 +42,39 @@ public class UserController : ControllerBase
         }
         return Ok(_mapper.Map<UserDetails>(user));
     }
+
+    [Authorize(Roles = "Admin,Buyer")]
+    [HttpPost("upgrade-to-premium")]
+    public async Task<ActionResult> UpgradeToPremium([FromBody] UpgradePremiumRequest request)
+    {
+        var user = await _userManager.FindByNameAsync(request.Username);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        if (user.IsPremium)
+        {
+            return BadRequest(new { message = "User is already premium" });
+        }
+
+        // Update the user's premium status
+        user.IsPremium = true;
+        var result = await _userManager.UpdateAsync(user);
+
+        if (result.Succeeded)
+        {
+            return Ok(new { 
+                message = "Successfully upgraded to premium", 
+                isPremium = true 
+            });
+        }
+
+        return BadRequest(new { message = "Failed to upgrade user" });
+    }
+}
+
+public class UpgradePremiumRequest
+{
+    public string Username { get; set; } = string.Empty;
 }

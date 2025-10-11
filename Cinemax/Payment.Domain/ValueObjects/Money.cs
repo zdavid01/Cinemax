@@ -4,8 +4,8 @@ namespace Payment.Domain.ValueObjects;
 
 public class Money : ValueObject
 {
-    public decimal Amount;
-    public string Currency;
+    public decimal Amount { get; private set; }
+    public string Currency { get; private set; }
 
     public Money(decimal amount, string currency)
     {

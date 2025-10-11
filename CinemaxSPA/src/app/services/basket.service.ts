@@ -4,10 +4,10 @@ import { Observable, map, switchMap } from 'rxjs';
 import { Movie } from '../types/Movie';
 
 interface ShoppingCartItem {
-  movieId: number;
+  movieId: string;
   title: string;
   imageUrl: string;
-  rating: number;
+  rating: string;
 }
 
 interface ShoppingCart {
@@ -17,7 +17,7 @@ interface ShoppingCart {
 
 @Injectable({ providedIn: 'root' })
 export class BasketService {
-  private apiUrl = 'http://localhost:4200/api/v1/Basket'; 
+  private apiUrl = 'http://localhost:8001/api/v1/Basket'; 
   constructor(private http: HttpClient) {}
 
   getCart(username: string): Observable<ShoppingCart> {
@@ -44,7 +44,7 @@ export class BasketService {
     );
   }
 
-  removeFromCart(username: string, movieId: number): Observable<ShoppingCart> {
+  removeFromCart(username: string, movieId: string): Observable<ShoppingCart> {
     return this.getCart(username).pipe(
       map(cart => {
         cart.items = cart.items.filter(item => item.movieId !== movieId);
