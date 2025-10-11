@@ -9,7 +9,7 @@ using MediatR;
 using Payment.Application.Features.Payments.Commands.CreatePayment;
 using Payment.Application.Features.Payments.Queries.ViewModels;
 using Payment.Application.Features.Payments.Commands.DTOs;
-using StackExchange.Redis;
+using Payment.API.DTOs;
 
 namespace Payment.API.Controllers;
 
@@ -21,23 +21,27 @@ public class PayPalController : ControllerBase
     private readonly ILogger<PayPalController> _logger;
     private readonly IEmailService _emailService;
     private readonly IMediator _mediator;
-    private readonly IConnectionMultiplexer _redis;
+    private readonly IBasketService _basketService;
     private readonly IConfiguration _configuration;
 
-    public PayPalController(ILogger<PayPalController> logger, IEmailService emailService, PayPalService payPalService, IMediator mediator, IConnectionMultiplexer redis, IConfiguration configuration)
+    public PayPalController(ILogger<PayPalController> logger, IEmailService emailService, PayPalService payPalService, IMediator mediator, IBasketService basketService, IConfiguration configuration)
     {
         _payPalService = payPalService ?? throw new ArgumentNullException(nameof(payPalService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _redis = redis ?? throw new ArgumentNullException(nameof(redis));
+        _basketService = basketService ?? throw new ArgumentNullException(nameof(basketService));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
     
-        // Endpoint to initiate the payment process
+        /// <summary>
+        /// Initiates a PayPal payment process
+        /// </summary>
         [HttpPost("create-payment")]
         [Authorize]
-        public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest paymentRequest)
+        [ProducesResponseType(typeof(PaymentResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PaymentResponseDto>> CreatePayment([FromBody] PaymentRequestDto paymentRequest)
         {
             try
             {
@@ -47,7 +51,7 @@ public class PayPalController : ControllerBase
                 
                 if (string.IsNullOrEmpty(username))
                 {
-                    return BadRequest(new { error = "Username not found in token" });
+                    return BadRequest(new ErrorResponseDto { Error = "Username not found in token" });
                 }
                 
                 _logger.LogInformation("Creating PayPal payment for user: {Username} ({Email}), Amount: {Amount}", username, userEmail, paymentRequest.Amount);
@@ -58,33 +62,31 @@ public class PayPalController : ControllerBase
                 
                 var (paymentId, approvalUrl) = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency, returnUrl, cancelUrl);
                 
-                // Store user email in Redis temporarily (expires in 1 hour) for later retrieval
+                // Store user email temporarily (expires in 1 hour) for later retrieval
                 if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(paymentId))
                 {
                     try
                     {
-                        var db = _redis.GetDatabase();
-                        await db.StringSetAsync($"payment:email:{paymentId}", userEmail, TimeSpan.FromHours(1));
-                        _logger.LogInformation("Stored email {Email} for payment {PaymentId}", userEmail, paymentId);
+                        await _basketService.StorePaymentEmailAsync(paymentId, userEmail, TimeSpan.FromHours(1));
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogWarning(ex, "Failed to store email in Redis for payment {PaymentId}", paymentId);
+                        _logger.LogWarning(ex, "Failed to store email for payment {PaymentId}", paymentId);
                     }
                 }
                 
-                // Return the expected JSON structure
-                var response = new
+                // Return properly typed DTO response
+                var response = new PaymentResponseDto
                 {
-                    id = paymentId,
-                    state = "created",
-                    links = new[]
+                    Id = paymentId,
+                    State = "created",
+                    Links = new List<PaymentLinkDto>
                     {
-                        new
+                        new PaymentLinkDto
                         {
-                            href = approvalUrl,
-                            rel = "approval_url",
-                            method = "REDIRECT"
+                            Href = approvalUrl,
+                            Rel = "approval_url",
+                            Method = "REDIRECT"
                         }
                     }
                 };
@@ -93,14 +95,18 @@ public class PayPalController : ControllerBase
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = ex.Message });
+                return BadRequest(new ErrorResponseDto { Error = ex.Message, Details = ex.StackTrace });
             }
         }
 
-    // Endpoint to execute the payment after approval
+    /// <summary>
+    /// Executes a PayPal payment after user approval
+    /// </summary>
     [HttpPost("execute-payment")]
     [Authorize]
-    public async Task<IActionResult> ExecutePayment([FromBody] ExecutePaymentRequest executeRequest)
+    [ProducesResponseType(typeof(ExecutePaymentResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ExecutePaymentResponseDto>> ExecutePayment([FromBody] ExecutePaymentRequestDto executeRequest)
     {
         try
         {
@@ -108,20 +114,32 @@ public class PayPalController : ControllerBase
             if (state == "approved")
             {
                 await ProcessSuccessfulPayment(executeRequest.PaymentId, executeRequest.PayerId);
-                return Ok(new { state, message = "Payment successfully completed, saved to database, and emails sent." });
+                return Ok(new ExecutePaymentResponseDto 
+                { 
+                    State = state, 
+                    Message = "Payment successfully completed, saved to database, and emails sent." 
+                });
             }
-            return Ok(new { state });
+            return Ok(new ExecutePaymentResponseDto 
+            { 
+                State = state, 
+                Message = "Payment not approved" 
+            });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new ErrorResponseDto { Error = ex.Message, Details = ex.StackTrace });
         }
     }
 
-    // Endpoint to create premium subscription payment
+    /// <summary>
+    /// Initiates a PayPal payment for premium subscription
+    /// </summary>
     [HttpPost("create-premium-payment")]
     [Authorize]
-    public async Task<IActionResult> CreatePremiumPayment([FromBody] PaymentRequest paymentRequest)
+    [ProducesResponseType(typeof(PaymentResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PaymentResponseDto>> CreatePremiumPayment([FromBody] PaymentRequestDto paymentRequest)
     {
         try
         {
@@ -131,7 +149,7 @@ public class PayPalController : ControllerBase
             
             if (string.IsNullOrEmpty(username))
             {
-                return BadRequest(new { error = "Username not found in token" });
+                return BadRequest(new ErrorResponseDto { Error = "Username not found in token" });
             }
             
             _logger.LogInformation("Creating premium subscription PayPal payment for user: {Username} ({Email}), Amount: {Amount}", username, userEmail, paymentRequest.Amount);
@@ -142,33 +160,31 @@ public class PayPalController : ControllerBase
             
             var (paymentId, approvalUrl) = await _payPalService.CreatePayment(paymentRequest.Amount, paymentRequest.Currency, returnUrl, cancelUrl);
             
-            // Store user email in Redis temporarily (expires in 1 hour) for later retrieval
+            // Store user email temporarily (expires in 1 hour) for later retrieval
             if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(paymentId))
             {
                 try
                 {
-                    var db = _redis.GetDatabase();
-                    await db.StringSetAsync($"payment:email:{paymentId}", userEmail, TimeSpan.FromHours(1));
-                    _logger.LogInformation("Stored email {Email} for premium payment {PaymentId}", userEmail, paymentId);
+                    await _basketService.StorePaymentEmailAsync(paymentId, userEmail, TimeSpan.FromHours(1));
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, "Failed to store email in Redis for premium payment {PaymentId}", paymentId);
+                    _logger.LogWarning(ex, "Failed to store email for premium payment {PaymentId}", paymentId);
                 }
             }
             
-            // Return the expected JSON structure
-            var response = new
+            // Return properly typed DTO response
+            var response = new PaymentResponseDto
             {
-                id = paymentId,
-                state = "created",
-                links = new[]
+                Id = paymentId,
+                State = "created",
+                Links = new List<PaymentLinkDto>
                 {
-                    new
+                    new PaymentLinkDto
                     {
-                        href = approvalUrl,
-                        rel = "approval_url",
-                        method = "REDIRECT"
+                        Href = approvalUrl,
+                        Rel = "approval_url",
+                        Method = "REDIRECT"
                     }
                 }
             };
@@ -177,7 +193,7 @@ public class PayPalController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new ErrorResponseDto { Error = ex.Message, Details = ex.StackTrace });
         }
     }
 
@@ -292,51 +308,33 @@ public class PayPalController : ControllerBase
                 actualUsername = userEmail.Split('@')[0]; // Use email prefix as username
             }
             
-            // Get the basket from Redis (stored as hash by IDistributedCache)
-            var db = _redis.GetDatabase();
-            var basketKey = actualUsername;
-            var basketData = await db.HashGetAsync(basketKey, "data");
+            // Get the basket using BasketService
+            var basket = await _basketService.GetBasketAsync(actualUsername);
             
             List<PaymentItemDTO> paymentItems = new List<PaymentItemDTO>();
             decimal totalAmount = 0;
             
-            if (!basketData.IsNullOrEmpty)
+            if (basket?.Items != null && basket.Items.Any())
             {
-                try
+                // Convert basket items to payment items
+                foreach (var item in basket.Items)
                 {
-                    // Parse basket JSON from the hash field
-                    var basket = System.Text.Json.JsonSerializer.Deserialize<BasketData>(basketData!);
-                    
-                    if (basket?.Items != null && basket.Items.Any())
+                    paymentItems.Add(new PaymentItemDTO
                     {
-                        // Convert basket items to payment items
-                        foreach (var item in basket.Items)
-                        {
-                            paymentItems.Add(new PaymentItemDTO
-                            {
-                                MovieName = item.Title,
-                                MovieId = item.MovieId,
-                                Price = item.Price,
-                                Quantity = 1 // Assuming quantity 1 per item
-                            });
-                            totalAmount += item.Price;
-                        }
-                        
-                        _logger.LogInformation("Retrieved {ItemCount} items from basket for user {Username}, Total: ${Total}", basket.Items.Count, actualUsername, totalAmount);
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Basket found but has no items for user {Username}", actualUsername);
-                    }
+                        MovieName = item.Title,
+                        MovieId = item.MovieId,
+                        Price = item.Price,
+                        Quantity = 1 // Assuming quantity 1 per item
+                    });
+                    totalAmount += item.Price;
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to parse basket data for user {Username}", actualUsername);
-                }
+                
+                _logger.LogInformation("Retrieved {ItemCount} items from basket for user {Username}, Total: ${Total}", 
+                    basket.Items.Count, actualUsername, totalAmount);
             }
             else
             {
-                _logger.LogWarning("No basket found in Redis for user {Username}", actualUsername);
+                _logger.LogWarning("No basket found or basket is empty for user {Username}", actualUsername);
             }
             
             // If no basket items found, create a fallback payment item
@@ -367,8 +365,7 @@ public class PayPalController : ControllerBase
                 paymentDbId, paymentId, actualUsername, paymentItems.Count, totalAmount);
             
             // Clear the basket after successful payment
-            await db.KeyDeleteAsync(basketKey);
-            _logger.LogInformation("Basket cleared for user {Username} after successful payment", actualUsername);
+            await _basketService.ClearBasketAsync(actualUsername);
         }
         catch (Exception e)
         {
@@ -378,24 +375,19 @@ public class PayPalController : ControllerBase
 
     private async Task SendPaymentEmails(string paymentId, string payerId, string? username = null)
     {
-        // First, try to get email from Redis (stored during payment creation)
+        // First, try to get email from stored payment data (stored during payment creation)
         string? userEmailAddress = null;
         try
         {
-            var db = _redis.GetDatabase();
-            var storedEmail = await db.StringGetAsync($"payment:email:{paymentId}");
-            if (!storedEmail.IsNullOrEmpty)
+            userEmailAddress = await _basketService.GetPaymentEmailAsync(paymentId);
+            if (!string.IsNullOrEmpty(userEmailAddress))
             {
-                userEmailAddress = storedEmail.ToString();
-                _logger.LogInformation("Retrieved email {Email} from Redis for payment {PaymentId}", userEmailAddress, paymentId);
-                
-                // Clean up the temporary Redis entry
-                await db.KeyDeleteAsync($"payment:email:{paymentId}");
+                _logger.LogInformation("Retrieved stored email {Email} for payment {PaymentId}", userEmailAddress, paymentId);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to retrieve email from Redis for payment {PaymentId}", paymentId);
+            _logger.LogWarning(ex, "Failed to retrieve stored email for payment {PaymentId}", paymentId);
         }
         
         // Fallback: try to get email from username or JWT token
@@ -564,33 +556,4 @@ public class PayPalController : ControllerBase
         }
 
 
-}
-
-public class PaymentRequest
-{
-    public decimal Amount { get; set; }
-    public string Currency { get; set; } = "USD";
-}
-
-public class ExecutePaymentRequest
-{
-    public string PaymentId { get; set; }
-    public string PayerId { get; set; }
-}
-
-// Classes for deserializing basket data from Redis
-public class BasketData
-{
-    public string Username { get; set; } = string.Empty;
-    public List<BasketItem> Items { get; set; } = new List<BasketItem>();
-    public decimal TotalPrice { get; set; }
-}
-
-public class BasketItem
-{
-    public decimal Price { get; set; }
-    public string MovieId { get; set; } = string.Empty;
-    public string Title { get; set; } = string.Empty;
-    public string ImageUrl { get; set; } = string.Empty;
-    public decimal Rating { get; set; }
 }

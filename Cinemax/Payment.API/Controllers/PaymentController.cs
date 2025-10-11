@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Payment.Application.Features.Payments.Commands.CreatePayment;
 using Payment.Application.Features.Payments.Queries.GetListOfPaymentsQuery;
 using Payment.Application.Features.Payments.Queries.ViewModels;
+using Payment.Application.Features.Payments.Commands.DTOs;
+using Payment.API.DTOs;
 
 namespace Payment.API.Controllers;
 
@@ -17,6 +19,9 @@ public class PaymentController : ControllerBase
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
+    /// <summary>
+    /// Gets all payments for a specific user
+    /// </summary>
     [HttpGet("get-payments/{username}")]
     [ProducesResponseType(typeof(IEnumerable<PaymentViewModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PaymentViewModel>>> GetPayments(string username)
@@ -26,10 +31,30 @@ public class PaymentController : ControllerBase
         return Ok(payments);
     }
 
+    /// <summary>
+    /// Creates a new payment (uses DTO to avoid exposing Command)
+    /// </summary>
     [HttpPost("create-payment")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    public async Task<ActionResult<int>> CreatePayment([FromBody] CreatePaymentCommand command)
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<int>> CreatePayment([FromBody] CreatePaymentRequestDto request)
     {
+        // Map DTO to Command (proper DTO pattern - don't expose Commands to API)
+        var command = new CreatePaymentCommand
+        {
+            Amount = request.Amount,
+            Currency = request.Currency,
+            BuyerId = request.BuyerId,
+            BuyerUsername = request.BuyerUsername,
+            PaymentItems = request.PaymentItems.Select(item => new PaymentItemDTO
+            {
+                MovieName = item.MovieName,
+                MovieId = item.MovieId,
+                Price = item.Price,
+                Quantity = item.Quantity
+            })
+        };
+        
         var result = await _mediator.Send(command);
         return Ok(result);
     }

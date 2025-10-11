@@ -5,14 +5,42 @@ namespace Payment.Domain.Entities;
 
 public class PaymentItem : EntityBase
 {
+    // Encapsulated properties - private setters
+    public string MovieName { get; private set; }
+    public string MovieId { get; private set; }
+    public decimal Price { get; private set; }
+    public int Quantity { get; private set; }
 
-    public string MovieName { get; set; }
-    public string MovieId { get; set; }
-    public decimal Price { get; set; }
-    public int Quantity { get; set; }
+    // Private constructor for EF Core
+    private PaymentItem()
+    {
+        MovieName = string.Empty;
+        MovieId = string.Empty;
+    }
 
-    
-    //todo FIX THIS DAPPER
+    // Factory method for creating payment items
+    public static PaymentItem Create(string movieName, string movieId, decimal price, int quantity)
+    {
+        // Guard clauses
+        if (string.IsNullOrWhiteSpace(movieName))
+            throw new ArgumentNullException(nameof(movieName));
+        if (string.IsNullOrWhiteSpace(movieId))
+            throw new ArgumentNullException(nameof(movieId));
+        if (price < 0)
+            throw new ArgumentException("Price cannot be negative", nameof(price));
+        if (quantity <= 0)
+            throw new PaymentDomainException("Quantity must be greater than 0");
+
+        return new PaymentItem
+        {
+            MovieName = movieName,
+            MovieId = movieId,
+            Price = price,
+            Quantity = quantity
+        };
+    }
+
+    // Public constructor kept for backward compatibility (Dapper, Factory)
     public PaymentItem(string movieName, string movieId, decimal price, int quantity)
     {
         MovieName = movieName ?? throw new ArgumentNullException(nameof(movieName));
@@ -21,6 +49,9 @@ public class PaymentItem : EntityBase
         AddQuantity(quantity);
     }
 
+    /// <summary>
+    /// Adds quantity to this payment item. Must result in positive quantity.
+    /// </summary>
     public void AddQuantity(int quantity)
     {
         var newQuantity = Quantity + quantity;
@@ -32,6 +63,9 @@ public class PaymentItem : EntityBase
         Quantity = newQuantity;
     }
 
+    /// <summary>
+    /// Calculates the total price for this item (Price * Quantity)
+    /// </summary>
     public decimal TotalPrice()
     {
         return Price * Quantity;

@@ -8,6 +8,7 @@ using Payment.Infrastructure.Mail;
 using Payment.Infrastructure.PayPal;
 using Payment.Infrastructure.Persistence;
 using Payment.Infrastructure.Repositories;
+using Payment.Infrastructure.Services;
 
 namespace Payment.Infrastructure;
 
@@ -27,6 +28,9 @@ public static class InfrastructureServiceRegistration
         
         // Register HttpClient for Email.API
         services.AddHttpClient<IEmailService, EmailApiClient>();
+        
+        // Register Basket Service
+        services.AddScoped<IBasketService, BasketService>();
             
         // Register PayPal service
         services.AddScoped<PayPalService>();
