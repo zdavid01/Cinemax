@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, switchMap } from 'rxjs';
+import {Observable, map, switchMap, catchError, throwError} from 'rxjs';
 import { Movie } from '../types/Movie';
 
 interface ShoppingCartItem {
-  movieId: string;
-  title: string;
-  imageUrl: string;
-  rating: string;
+  MovieId: string;
+  Title: string;
+  ImageUrl: string;
+  Rating: string;
+  Price: number;
 }
 
 interface ShoppingCart {
@@ -17,25 +18,39 @@ interface ShoppingCart {
 
 @Injectable({ providedIn: 'root' })
 export class BasketService {
-  private apiUrl = 'http://localhost:8001/api/v1/Basket'; 
+  private apiUrl = 'http://localhost:8001/api/v1/Basket';
   constructor(private http: HttpClient) {}
 
   getCart(username: string): Observable<ShoppingCart> {
-    return this.http.get<ShoppingCart>(`${this.apiUrl}/${username}`);
+    return this.http.get<ShoppingCart>(`${this.apiUrl}/${username}`).pipe(
+      catchError(err => {
+        if (err.status === 404) {
+          // Basket not found — create a new one
+          const newCart: ShoppingCart = { username, items: [] };
+          return this.http.put<ShoppingCart>(`${this.apiUrl}`, newCart);
+        } else {
+          return throwError(() => err);
+        }
+      })
+    );
   }
 
   addToCart(username: string, movie: Movie): Observable<ShoppingCart> {
     return this.getCart(username).pipe(
       map(cart => {
         // Prevent duplicates
-        if (!cart.items.some(item => item.movieId === movie.id)) {
+        if (!cart.items.some(item => item.MovieId === movie.id)) {
           cart.items.push({
-            movieId: movie.id,
-            title: movie.title,
-            imageUrl: movie.imageUrl,
-            rating: movie.rating
+            MovieId: movie.id,
+            Title: movie.title,
+            ImageUrl: movie.imageUrl,
+            Rating: movie.rating,
+            Price: movie.price ?? 12.99
           });
+          console.log(cart.items[0].Title);
+          console.log("___________")
         }
+        console.log(cart.items.length);
         return cart;
       }),
       switchMap(cart =>
@@ -47,7 +62,8 @@ export class BasketService {
   removeFromCart(username: string, movieId: string): Observable<ShoppingCart> {
     return this.getCart(username).pipe(
       map(cart => {
-        cart.items = cart.items.filter(item => item.movieId !== movieId);
+        console.log(movieId)
+        cart.items = cart.items.filter(item => item.MovieId !== movieId);
         return cart;
       }),
       switchMap(cart =>

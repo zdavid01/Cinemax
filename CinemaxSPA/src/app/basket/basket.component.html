@@ -1,39 +1,35 @@
 <div class="basket-container">
   <h2 class="basket-title">Your Movie Basket</h2>
-  
+
   <div class="basket-stats">
     <div class="stat-item">
       <span class="stat-label">Total Movies:</span>
       <span class="stat-value">{{ getTotalMovies() }}</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-label">Average Rating:</span>
-      <span class="stat-value">{{ getAverageRating() }} / 10</span>
     </div>
   </div>
 
   <div *ngIf="cartItems.length === 0" class="empty-basket">
     <p>Your cart is empty.</p>
   </div>
-  
+
   <div *ngFor="let movie of cartItems" class="movie-list">
     <div class="movie-card">
       <div class="movie-image">
-        <img [src]="'assets/' + movie.imageUrl" [alt]="movie.title" width="80" (error)="handleImageError($event)">
+        <img [src]="movie.ImageUrl" [alt]="movie.Title" width="80" (error)="handleImageError($event)">
       </div>
       <div class="movie-details">
-        <h3 class="movie-title">{{ movie.title }}</h3>
+        <h3 class="movie-title">{{ movie.Title }}</h3>
         <div class="movie-rating">
-          <span class="rating-value">{{ movie.rating }}</span>
-          <span class="rating-max">/10</span>
+          <span class="rating-value">{{ movie.Rating }}</span>
+          <span class="rating-max"></span>
         </div>
         <div class="movie-price">
           <span class="price-label">Price:</span>
-          <span class="price-value">${{ movie.price?.toFixed(2) || '0.00' }}</span>
+          <span class="price-value">${{ movie.Price.toFixed(2) || '0.00' }}</span>
         </div>
       </div>
       <div class="movie-actions">
-        <button class="remove-btn" (click)="removeFromCart(movie.id)">Remove</button>
+        <button class="remove-btn" (click)="removeFromCart(movie.MovieId)">Remove</button>
       </div>
     </div>
   </div>

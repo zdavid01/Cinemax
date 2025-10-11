@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
   }
   error: string[] = [];
   registerForm: FormGroup;
-  errors: Map<string, Array<string>> = new Map();;
+  errors: Map<string, Array<string>> = new Map();
 
   public payPalConfig: IPayPalConfig;
 

@@ -18,5 +18,6 @@ public class ShoppingCartItem
     public required string MovieId { get; set; }
     public string Title { get; set; }
     public string ImageUrl { get; set; }
-    public double Rating { get; set; }
+    public string Rating { get; set; }
 }   
+

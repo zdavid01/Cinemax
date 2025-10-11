@@ -11,10 +11,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppStateService } from '../shared/app-state/app-state.service';
 import { take } from 'rxjs';
 
-interface CartItem extends Movie {
-  price?: number;
+interface ShoppingCartItem {
+  MovieId: string;
+  Title: string;
+  ImageUrl: string;
+  Rating: string;
+  Price: number;
 }
-
 @Component({
   selector: 'app-basket',
   standalone: true,
@@ -24,7 +27,7 @@ interface CartItem extends Movie {
 })
 
 export class BasketComponent implements OnInit {
-  cartItems: CartItem[] = [];
+  cartItems: ShoppingCartItem[] = [];
   username: string = '';
   isProcessing: boolean = false;
 
@@ -50,21 +53,15 @@ export class BasketComponent implements OnInit {
       this.cartItems = [];
       return;
     }
-    
+
     this.basketService.getCart(this.username).subscribe({
       next: (cart) => {
         this.cartItems = cart.items.map((item: any) => ({
-          id: item.movieId,
-          title: item.title,
-          length: 0,
-          genre: '',
-          director: '',
-          actors: '',
-          description: '',
-          imageUrl: item.imageUrl,
-          trailerLink: '',
-          rating: item.rating,
-          price: item.price || 12.99 // Default price if not provided
+          MovieId: item.id,
+          Title: item.title,
+          ImageUrl: item.imageUrl,
+          Rating: item.rating,
+          Price: item.price || 12.99 // Default price if not provided
         }));
       },
       error: (error) => {
@@ -81,7 +78,7 @@ export class BasketComponent implements OnInit {
     });
   }
 
-  removeFromCart(movieId: string) { 
+  removeFromCart(movieId: string) {
     this.basketService.removeFromCart(this.username, movieId).subscribe(() => this.loadCart());
   }
 
@@ -90,12 +87,12 @@ export class BasketComponent implements OnInit {
   }
 
   getTotalPrice(): number {
-    return this.cartItems.reduce((sum, item) => sum + (item.price || 12.99), 0);
+    return this.cartItems.reduce((sum, item) => sum + (item.Price || 12.99), 0);
   }
 
   getAverageRating(): string {
     if (!this.cartItems.length) return '0.0';
-    const avg = this.cartItems.reduce((sum, m) => sum + (parseFloat(m.rating) || 0), 0) / this.cartItems.length;
+    const avg = this.cartItems.reduce((sum, m) => sum + (parseFloat(m.Rating) || 0), 0) / this.cartItems.length;
     return avg.toFixed(1);
   }
 
@@ -118,7 +115,7 @@ export class BasketComponent implements OnInit {
         // Store payment details for later
         localStorage.setItem('pendingPaymentId', response.id);
         localStorage.setItem('basketTotal', totalAmount.toString());
-        
+
         // Find approval URL
         const approvalLink = response.links.find(link => link.rel === 'approval_url');
         if (approvalLink) {
