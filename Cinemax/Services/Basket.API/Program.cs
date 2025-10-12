@@ -31,8 +31,12 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 });
 builder.Services.AddScoped<PaymentGrpcClient>();
 
-// Controllers
-builder.Services.AddControllers();
+// Controllers with PascalCase JSON serialization
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Use PascalCase (C# property names)
+    });
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

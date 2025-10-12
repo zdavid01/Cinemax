@@ -56,12 +56,12 @@ export class BasketComponent implements OnInit {
 
     this.basketService.getCart(this.username).subscribe({
       next: (cart) => {
-        this.cartItems = cart.items.map((item: any) => ({
-          MovieId: item.id,
-          Title: item.title,
-          ImageUrl: item.imageUrl,
-          Rating: item.rating,
-          Price: item.price || 12.99 // Default price if not provided
+        this.cartItems = cart.Items.map((item: any) => ({
+          MovieId: item.MovieId || item.id,
+          Title: item.Title || item.title,
+          ImageUrl: item.ImageUrl || item.imageUrl,
+          Rating: String(item.Rating || item.rating || '0'),
+          Price: item.Price || item.price || 12.99 // Default price if not provided
         }));
       },
       error: (error) => {
