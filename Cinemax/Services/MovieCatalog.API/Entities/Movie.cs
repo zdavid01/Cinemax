@@ -16,4 +16,5 @@ public class Movie
     public string ImageUrl { get; set; }
     public string linkToTrailer { get; set; }
     public string Rating { get; set; }
+    public decimal Price { get; set; }
 }

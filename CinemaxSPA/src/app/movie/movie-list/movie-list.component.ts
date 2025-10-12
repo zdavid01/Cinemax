@@ -15,7 +15,7 @@ import { BasketService } from '../../services/basket.service';
 })
 export class MovieListComponent implements OnInit{
   private movies: Movie[] = [];
-  cartMovieIds: number[] = [];
+  cartMovieIds: string[] = [];
   username: string = '';
 
   constructor(private moviesService: MoviesService, private basketService: BasketService) {}
@@ -28,12 +28,12 @@ export class MovieListComponent implements OnInit{
 
   loadCart() {
     this.basketService.getCart(this.username).subscribe(cart => {
-      this.cartMovieIds = cart.items.map(item => item.movieId);
+      this.cartMovieIds = cart.Items.map(item => item.MovieId);
     });
   }
 
-  isInCart(movieId: number): boolean {
-    return this.cartMovieIds.includes(movieId);
+  isInCart(movieId: string | number): boolean {
+    return this.cartMovieIds.includes(String(movieId));
   }
 
   toggleCart(movie: Movie) {
