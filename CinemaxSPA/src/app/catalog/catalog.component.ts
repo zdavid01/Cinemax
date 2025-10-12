@@ -9,13 +9,15 @@ import { BasketService } from '../services/basket.service';
 import {IdentityService} from '../services/identity.service';
 import { FormsModule } from '@angular/forms';
 import {Movie} from '../types/Movie';
+import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+
 
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, FormsModule, MatCardModule, MatSnackBarModule]
+  imports: [CommonModule, MatButtonModule, FormsModule, MatCardModule, MatSnackBarModule, SafeUrlPipe]
 })
 
 export class CatalogComponent implements OnInit {
@@ -24,6 +26,7 @@ export class CatalogComponent implements OnInit {
   isAdmin: boolean = true;
   showAddMovieForm = false;
   isEditing = false;
+  selectedMovie: any = null;
 
   editMovieForm: any = {
     id: null,
@@ -214,4 +217,23 @@ export class CatalogComponent implements OnInit {
       price: 0.0
     };
   }
+
+  openMovieDetails(movie: any) {
+    this.selectedMovie = movie;
+  }
+
+  closeMovieDetails() {
+    this.selectedMovie = null;
+  }
+
+  getEmbedUrl(url: string): string {
+    if (!url) return '';
+
+    const videoIdMatch = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (videoIdMatch && videoIdMatch[1]) {
+      return `https://www.youtube.com/embed/${videoIdMatch[1]}`;
+    }
+    return url;
+  }
+
 }

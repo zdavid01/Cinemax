@@ -1,5 +1,5 @@
 <div class="catalog-grid">
-  <div class="movie-card" *ngFor="let movie of movies">
+  <div class="movie-card" *ngFor="let movie of movies" (click)="!isEditing ? openMovieDetails(movie) : null">
     <div *ngIf="isEditing && editMovieForm.id === movie.id; else viewMovie" class="movie-card edit-movie-card">
       <h3>Edit Movie</h3>
       <input [(ngModel)]="editMovieForm.title" placeholder="Title" required />
@@ -13,8 +13,8 @@
       <input [(ngModel)]="editMovieForm.linkToTrailer" placeholder="Trailer URL" />
       <textarea [(ngModel)]="editMovieForm.description" placeholder="Description"></textarea>
 
-      <button (click)="updateMovie()">Save Changes</button>
-      <button (click)="resetEditForm()">Cancel</button>
+      <button (click)="updateMovie()" (click)="$event.stopPropagation()">Save Changes</button>
+      <button (click)="resetEditForm()" (click)="$event.stopPropagation()">Cancel</button>
     </div>
 
     <ng-template #viewMovie>
@@ -26,17 +26,17 @@
         <p><strong>Length:</strong> {{ movie.length }} min</p>
         <p class="description">{{ movie.description }}</p>
       </div>
-      <div class="card-buttons">
+      <div class="card-buttons" (click)="$event.stopPropagation()">
         <a *ngIf="movie.linkToTrailer" [href]="movie.linkToTrailer" target="_blank" class="trailer-button">
           Watch Trailer
         </a>
         <button (click)="addToBasket(movie)" class="add-btn">Add to Basket</button>
-        <button *ngIf="isAdmin" (click)="deleteMovie(movie)" class="delete-btn">Delete</button>
-        <button *ngIf="isAdmin" (click)="editMovie(movie)" class="edit-btn">Edit</button>
+        <button *ngIf="!isAdmin" (click)="deleteMovie(movie)" class="delete-btn">Delete</button>
+        <button *ngIf="!isAdmin" (click)="editMovie(movie)" class="edit-btn">Edit</button>
       </div>
     </ng-template>
   </div>
-  <div class="movie-card add-movie-card" *ngIf="isAdmin">
+  <div class="movie-card add-movie-card" *ngIf="!isAdmin">
     <button (click)="showAddMovieForm = !showAddMovieForm" *ngIf="!showAddMovieForm" class="add-btn">
       + Add Movie
     </button>
@@ -56,5 +56,36 @@
       <button (click)="showAddMovieForm = false">Cancel</button>
     </div>
   </div>
+</div>
+<div class="modal" *ngIf="selectedMovie">
+  <div class="modal-content">
+    <span class="close" (click)="closeMovieDetails()">&times;</span>
 
+    <div class="modal-body">
+      <div class="modal-image">
+        <img [src]="selectedMovie.imageUrl" [alt]="selectedMovie.title" />
+      </div>
+
+      <div class="modal-details">
+        <h2>{{ selectedMovie.title }}</h2>
+        <p><strong>Genre:</strong> {{ selectedMovie.genre }}</p>
+        <p><strong>Director:</strong> {{ selectedMovie.director }}</p>
+        <p><strong>Actors:</strong> {{ selectedMovie.actors }}</p>
+        <p><strong>Length:</strong> {{ selectedMovie.length }} min</p>
+        <p><strong>Rating:</strong> {{ selectedMovie.rating }}</p>
+        <p><strong>Price:</strong> ${{ selectedMovie.price }}</p>
+        <p class="description">{{ selectedMovie.description }}</p>
+
+        <div class="trailer-player" *ngIf="selectedMovie.linkToTrailer">
+          <iframe [src]="getEmbedUrl(selectedMovie.linkToTrailer) | safeUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <div class="modal-buttons">
+          <button (click)="addToBasket(selectedMovie)" class="add-btn">
+            Add to Basket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
