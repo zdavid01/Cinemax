@@ -31,12 +31,12 @@
           Watch Trailer
         </a>
         <button (click)="addToBasket(movie)" class="add-btn">Add to Basket</button>
-        <button *ngIf="!isAdmin" (click)="deleteMovie(movie)" class="delete-btn">Delete</button>
-        <button *ngIf="!isAdmin" (click)="editMovie(movie)" class="edit-btn">Edit</button>
+        <button *ngIf="isAdmin" (click)="deleteMovie(movie)" class="delete-btn">Delete</button>
+        <button *ngIf="isAdmin" (click)="editMovie(movie)" class="edit-btn">Edit</button>
       </div>
     </ng-template>
   </div>
-  <div class="movie-card add-movie-card" *ngIf="!isAdmin">
+  <div class="movie-card add-movie-card" *ngIf="isAdmin">
     <button (click)="showAddMovieForm = !showAddMovieForm" *ngIf="!showAddMovieForm" class="add-btn">
       + Add Movie
     </button>
