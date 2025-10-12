@@ -37,8 +37,12 @@ public class BasketService : IBasketService
                 return null;
             }
 
-            // Deserialize basket data
-            var basket = JsonSerializer.Deserialize<BasketData>(basketData!);
+            // Deserialize basket data with case-insensitive property names
+            var options = new JsonSerializerOptions 
+            { 
+                PropertyNameCaseInsensitive = true 
+            };
+            var basket = JsonSerializer.Deserialize<BasketData>(basketData!, options);
             _logger.LogInformation("Retrieved basket with {ItemCount} items for user {Username}", 
                 basket?.Items?.Count ?? 0, username);
 

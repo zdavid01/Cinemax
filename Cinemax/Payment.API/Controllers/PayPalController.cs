@@ -365,7 +365,9 @@ public class PayPalController : ControllerBase
                 paymentDbId, paymentId, actualUsername, paymentItems.Count, totalAmount);
             
             // Clear the basket after successful payment
+            _logger.LogInformation("Attempting to clear basket for user: {Username}", actualUsername);
             await _basketService.ClearBasketAsync(actualUsername);
+            _logger.LogInformation("Successfully cleared basket for user: {Username}", actualUsername);
         }
         catch (Exception e)
         {
