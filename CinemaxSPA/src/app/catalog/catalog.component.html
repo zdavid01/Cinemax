@@ -1,21 +1,60 @@
 <div class="catalog-grid">
   <div class="movie-card" *ngFor="let movie of movies">
-    <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" alt="{{ movie.title }}" />
-    <div class="movie-content">
-      <h3>{{ movie.title }}</h3>
-      <p><strong>Genre:</strong> {{ movie.genre }}</p>
-      <p><strong>Director:</strong> {{ movie.director }}</p>
-      <p><strong>Length:</strong> {{ movie.length }} min</p>
-      <p class="description">{{ movie.description }}</p>
+    <div *ngIf="isEditing && editMovieForm.id === movie.id; else viewMovie" class="movie-card edit-movie-card">
+      <h3>Edit Movie</h3>
+      <input [(ngModel)]="editMovieForm.title" placeholder="Title" required />
+      <input [(ngModel)]="editMovieForm.genre" placeholder="Genre" required />
+      <input [(ngModel)]="editMovieForm.director" placeholder="Director" required />
+      <input type="number" [(ngModel)]="editMovieForm.length" placeholder="Length (min)" required />
+      <input [(ngModel)]="editMovieForm.actors" placeholder="Actors" required />
+      <input [(ngModel)]="editMovieForm.rating" placeholder="Rating" required />
+      <input type="number" step="0.01" [(ngModel)]="editMovieForm.price" placeholder="Price" required />
+      <input [(ngModel)]="editMovieForm.imageUrl" placeholder="Image URL" required />
+      <input [(ngModel)]="editMovieForm.linkToTrailer" placeholder="Trailer URL" />
+      <textarea [(ngModel)]="editMovieForm.description" placeholder="Description"></textarea>
+
+      <button (click)="updateMovie()">Save Changes</button>
+      <button (click)="resetEditForm()">Cancel</button>
     </div>
 
-    <div class="card-buttons">
-      <a *ngIf="movie.linkToTrailer" [href]="movie.linkToTrailer" target="_blank" class="trailer-button">
-        Watch Trailer
-      </a>
-      <button (click)="addToBasket(movie)" class="add-btn">
-        Add to Basket
-      </button>
+    <ng-template #viewMovie>
+      <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" alt="{{ movie.title }}" />
+      <div class="movie-content">
+        <h3>{{ movie.title }}</h3>
+        <p><strong>Genre:</strong> {{ movie.genre }}</p>
+        <p><strong>Director:</strong> {{ movie.director }}</p>
+        <p><strong>Length:</strong> {{ movie.length }} min</p>
+        <p class="description">{{ movie.description }}</p>
+      </div>
+      <div class="card-buttons">
+        <a *ngIf="movie.linkToTrailer" [href]="movie.linkToTrailer" target="_blank" class="trailer-button">
+          Watch Trailer
+        </a>
+        <button (click)="addToBasket(movie)" class="add-btn">Add to Basket</button>
+        <button *ngIf="!isAdmin" (click)="deleteMovie(movie)" class="delete-btn">Delete</button>
+        <button *ngIf="!isAdmin" (click)="editMovie(movie)" class="edit-btn">Edit</button>
+      </div>
+    </ng-template>
+  </div>
+  <div class="movie-card add-movie-card" *ngIf="!isAdmin">
+    <button (click)="showAddMovieForm = !showAddMovieForm" *ngIf="!showAddMovieForm" class="add-btn">
+      + Add Movie
+    </button>
+    <div *ngIf="showAddMovieForm" class="add-movie-form">
+      <input [(ngModel)]="newMovie.Title" placeholder="Title" required />
+      <input [(ngModel)]="newMovie.Genre" placeholder="Genre" required />
+      <input [(ngModel)]="newMovie.Director" placeholder="Director" required />
+      <input type="number" [(ngModel)]="newMovie.Length" placeholder="Length (min)" required />
+      <input [(ngModel)]="newMovie.Actors" placeholder="Actors" required />
+      <input [(ngModel)]="newMovie.Rating" placeholder="Rating" required />
+      <input type="number" step="0.01" [(ngModel)]="newMovie.Price" placeholder="Price" required />
+      <input [(ngModel)]="newMovie.ImageUrl" placeholder="Image URL" required />
+      <input [(ngModel)]="newMovie.linkToTrailer" placeholder="Trailer URL" />
+      <textarea [(ngModel)]="newMovie.Description" placeholder="Description"></textarea>
+
+      <button (click)="addMovie()">Add Movie</button>
+      <button (click)="showAddMovieForm = false">Cancel</button>
     </div>
   </div>
+
 </div>

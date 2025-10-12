@@ -9,7 +9,7 @@
 .movie-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* keeps buttons at bottom */
+  justify-content: space-between;
   align-items: center;
   width: 260px;
   min-height: 520px;
@@ -62,7 +62,7 @@
   gap: 0.5rem;
   width: 100%;
   align-items: center;
-  margin-top: auto; /* pushes to bottom */
+  margin-top: auto;
 }
 
 .trailer-button {
@@ -96,6 +96,179 @@
 }
 
 .add-btn:hover {
+  background-color: #e84118;
+  transform: scale(1.05);
+}
+
+.add-movie-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s;
+  flex-direction: column;
+  width: 260px;
+  min-height: 520px;
+  background-color: #1e1e1e;
+  color: #fff;
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.add-movie-card:hover {
+  background: black;
+}
+
+.plus-symbol {
+  font-size: 3rem;
+  display: block;
+}
+
+.add-movie-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1rem;
+  border-radius: 15px;
+  background-color: #1e1e1e;
+  color: #fff;
+  width: 100%;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.add-movie-form label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  color: #ccc;
+}
+
+.add-movie-form input,
+.add-movie-form textarea {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-movie-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.add-movie-form button {
+  align-self: flex-start;
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.add-movie-form button:hover {
+  background-color: #e84118;
+  transform: scale(1.05);
+}
+
+
+.add-movie-container {
+  width: 260px;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+
+.delete-btn {
+  width: 80%;
+  background-color: #ff3f34; /* red for delete */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: #e03127;
+  transform: scale(1.05);
+}
+
+
+.edit-btn {
+  width: 80%;
+  background-color: #ff3f34; /* red for delete */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  background-color: #e03127;
+  transform: scale(1.05);
+}
+
+
+.edit-movie-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1rem;
+  border-radius: 15px;
+  background-color: #1e1e1e;
+  color: #fff;
+  width: 100%;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.edit-movie-card input,
+.edit-movie-card textarea {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: #fff;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-movie-card textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.edit-movie-card button {
+  align-self: flex-start;
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.edit-movie-card button:hover {
   background-color: #e84118;
   transform: scale(1.05);
 }

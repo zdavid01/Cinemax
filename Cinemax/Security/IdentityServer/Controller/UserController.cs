@@ -72,7 +72,25 @@ public class UserController : ControllerBase
 
         return BadRequest(new { message = "Failed to upgrade user" });
     }
+    
+    [Authorize(Roles = "Admin,Buyer")]
+    [HttpGet("{username}/isAdmin")]
+    public async Task<ActionResult> IsAdmin(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        bool isAdmin = roles.Contains("Admin");
+
+        return Ok(new { isAdmin });
+    }
 }
+
+
 
 public class UpgradePremiumRequest
 {

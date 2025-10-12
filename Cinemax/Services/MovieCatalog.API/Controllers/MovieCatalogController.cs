@@ -24,7 +24,7 @@ public class MovieCatalogController : ControllerBase
         return Ok(movies);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetMovie")]
     [ProducesResponseType(typeof(Movie), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Movie), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Movie>>> GetMovieById(string id)
@@ -45,8 +45,14 @@ public class MovieCatalogController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(IEnumerable<Movie>), StatusCodes.Status200OK)]
+    [HttpPost]
     public async Task<ActionResult<Movie>> CreateMovie([FromBody] Movie movie)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _repository.CreateMovie(movie);
         return CreatedAtRoute("GetMovie", new { id = movie.Id }, movie);
     }

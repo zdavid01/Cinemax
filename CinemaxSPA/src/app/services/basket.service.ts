@@ -40,7 +40,7 @@ export class BasketService {
       map(cart => {
         // Convert movie.id to string and ensure all required fields are present
         const movieId = String(movie.id);
-        
+
         // Prevent duplicates
         if (!cart.Items.some(item => item.MovieId === movieId)) {
           cart.Items.push({
@@ -50,10 +50,7 @@ export class BasketService {
             Rating: String(movie.rating || '0'),
             Price: movie.price ?? 12.99
           });
-          console.log(cart.Items[0].Title);
-          console.log("___________")
         }
-        console.log(cart.Items.length);
         return cart;
       }),
       switchMap(cart =>
@@ -67,7 +64,7 @@ export class BasketService {
       map(cart => {
         // Convert movieId to string for comparison
         const movieIdStr = String(movieId);
-        console.log(movieIdStr)
+        console.log("Removed from cart", movieId);
         cart.Items = cart.Items.filter(item => item.MovieId !== movieIdStr);
         return cart;
       }),
