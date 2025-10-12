@@ -7,23 +7,38 @@
     </button>
     <span><a href="/">Cinemaxx</a></span>
     <span class="toolbar-spacer"></span>
-    <a mat-button href="/basket">My Basket</a>
+    <a mat-button href="/catalog">
+      <mat-icon>movie</mat-icon>
+      Browse Movies
+    </a>
+    <a mat-button href="/basket">
+      <mat-icon>shopping_cart</mat-icon>
+      My Basket
+    </a>
     @if(appState.userId )
     {
-    <button mat-button [matMenuTriggerFor]="menu">Hi, {{appState.firstName}}</button>
+    <button mat-button [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+      Hi, {{appState.firstName}}
+    </button>
     <mat-menu #menu="matMenu">
       @if(appState.isPremium) {
       <button mat-menu-item>
-        <a mat-button href="/sessions">Watch online</a>
+        <mat-icon>play_circle</mat-icon>
+        <a mat-button href="/sessions">Watch Online</a>
+      </button>
+      } @else {
+      <button mat-menu-item>
+        <mat-icon>stars</mat-icon>
+        <a mat-button href="/premium">Go Premium</a>
       </button>
       }
       <button mat-menu-item>
-        <a mat-button href="/payments">Payments</a>
+        <mat-icon>receipt</mat-icon>
+        <a mat-button href="/payments">My Payments</a>
       </button>
       <button mat-menu-item>
-        <a mat-button href="/paypal">PayPal Test</a>
-      </button>
-      <button mat-menu-item>
+        <mat-icon>logout</mat-icon>
         <a mat-button href="/logout">Logout</a>
       </button>
 
