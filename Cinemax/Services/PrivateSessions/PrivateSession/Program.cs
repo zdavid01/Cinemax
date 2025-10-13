@@ -14,6 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddHttpClient<IGoogleDriveService, GoogleDriveService>();
+builder.Services.AddScoped<IGoogleDriveService, GoogleDriveService>();
 
 builder.Services.AddCors(options =>
 {
