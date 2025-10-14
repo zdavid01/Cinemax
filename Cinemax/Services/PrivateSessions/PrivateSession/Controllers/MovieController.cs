@@ -32,19 +32,19 @@ public class MovieController : ControllerBase
         return Ok(movies);
     }
     
-    [HttpGet("imageForMovie/{movieId}")]
-    public async Task<IActionResult> GetImageForMovie(string movieId)
+    [HttpGet("imageForMovie/{fileId}")]
+    public async Task<IActionResult> GetImageForMovie(string fileId)
     {
-        _logger.LogInformation($"Returning image for movie {movieId}");
+        _logger.LogInformation($"Returning image for file {fileId}");
         try
         {
-            var imageUrl = _googleDriveService.GetImageUrl(movieId);
+            var imageUrl = _googleDriveService.GetImageUrl(fileId);
             _logger.LogInformation($"Redirecting to Google Drive image URL: {imageUrl}");
             return Redirect(imageUrl);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error getting image for movie {movieId}");
+            _logger.LogError(ex, $"Error getting image for file {fileId}");
             return NotFound();
         }
     }
@@ -62,42 +62,30 @@ public class MovieController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("stream/{movieId}/{filename}")]
-    public async Task<IActionResult> Stream(string movieId, string filename)
+    [HttpGet("stream/{fileId}")]
+    public async Task<ActionResult> StreamMovie(string fileId)
     {
         try
         {
-            var streamUrl = _googleDriveService.GetVideoStreamUrl(movieId, filename);
-            _logger.LogInformation($"Redirecting to Google Drive stream URL: {streamUrl}");
-            return Redirect(streamUrl);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"Error getting stream for movie {movieId}, filename {filename}");
-            return NotFound();
-        }
-    }
-    
-    [Authorize]
-    [HttpGet("stream/{movieId}")]
-    public async Task<ActionResult> StreamMovie(string movieId)
-    {
-        var movie = await _movieService.GetMovieById(movieId);
-        if (movie == null)
-            return NotFound();
+            _logger.LogInformation($"Proxying video stream for file {fileId}");
+            
+            // Get the video stream from Google Drive
+            var stream = await _googleDriveService.GetFileStreamAsync(fileId);
+            
+            if (stream == null)
+            {
+                _logger.LogWarning($"Video stream not found for file {fileId}");
+                return NotFound();
+            }
 
-        try
-        {
-            // Streaming logic (serve HLS or DASH)
-            _logger.LogInformation($"Streaming movie for {movieId}");
-            var streamUrl = _googleDriveService.GetVideoStreamUrl(movieId);
-            _logger.LogInformation($"Redirecting to Google Drive stream URL: {streamUrl}");
-            return Redirect(streamUrl);
+            // Return the stream with proper content type
+            // Let the browser determine content type, or set it to video/mp4 as default
+            return File(stream, "video/mp4", enableRangeProcessing: true);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error streaming movie {movieId}");
-            return NotFound();
+            _logger.LogError(ex, $"Error streaming video {fileId}");
+            return StatusCode(500, "Error streaming video");
         }
     }
 }

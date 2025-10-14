@@ -64,6 +64,12 @@
       context: .
       dockerfile: Email.API/Dockerfile
 
+  privatesession.api:
+    image: privatesession.api
+    build:
+      context: .
+      dockerfile: Services/PrivateSessions/PrivateSession/Dockerfile
+
 volumes:
   postgres_data:
   pgadmin_data:

@@ -20,4 +20,5 @@ RUN dotnet publish "PrivateSession.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["Services/PrivateSessions/PrivateSession/cinemax-475115-7345803004e9.json", "./"]
 ENTRYPOINT ["dotnet", "PrivateSession.dll"]

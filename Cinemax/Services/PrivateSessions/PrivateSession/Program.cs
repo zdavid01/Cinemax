@@ -14,8 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddHttpClient<IGoogleDriveService, GoogleDriveService>();
-builder.Services.AddScoped<IGoogleDriveService, GoogleDriveService>();
+builder.Services.AddSingleton<IGoogleDriveService, GoogleDriveService>();
 
 builder.Services.AddCors(options =>
 {
@@ -55,9 +54,12 @@ builder.Services.AddAuthentication(o =>
         {
             var accessToken = context.Request.Query["access_token"];
 
-            // If the request is for our hub...
+            // Support token from query string for SignalR hubs and video streaming
             var path = context.HttpContext.Request.Path;
-            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/notify")))
+            if (!string.IsNullOrEmpty(accessToken) && 
+                (path.StartsWithSegments("/notify") || 
+                 path.StartsWithSegments("/chat-hub") ||
+                 path.StartsWithSegments("/Movie/stream")))
             {
                 // Read the token out of the query string
                 context.Token = accessToken;

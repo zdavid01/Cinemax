@@ -1,85 +1,62 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AppStateService } from '../../shared/app-state/app-state.service';
-
-declare let shaka: any;
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
     selector: 'app-video-player',
     templateUrl: './video-player.component.html',
 })
-export class VideoPlayerComponent implements AfterViewInit {
+export class VideoPlayerComponent implements AfterViewInit, OnChanges {
     @ViewChild('videoPlayer') videoElementRef!: ElementRef;
     @Input("movieUrl") movieUrl: string = "";
     @Input("streamId") streamId: string = "1";
 
     videoElement!: HTMLVideoElement;
-
     private authToken = "";
 
-    constructor(private readonly appStateService: AppStateService) {
+    constructor(
+        private readonly appStateService: AppStateService,
+        private http: HttpClient
+    ) {
         this.appStateService.getAppState().subscribe((appState) => {
             this.authToken = appState.accessToken || "";
         })
     }
 
     ngAfterViewInit() {
-        // Install built-in polyfills to patch browser incompatibilities.
-        shaka.polyfill.installAll();
-
-        // Check to see if the browser supports the basic APIs Shaka needs.
-        if (shaka.Player.isBrowserSupported()) {
-            // Everything looks good!
-            this.videoElement = this.videoElementRef.nativeElement;
-            this.initPlayer();
-        } else {
-            // This browser does not have the minimum set of APIs we need.
-            console.error('Browser not supported!');
+        this.videoElement = this.videoElementRef.nativeElement;
+        if (this.movieUrl) {
+            this.loadVideo();
         }
     }
 
-    private initPlayer() {
-        // Create a Player instance.
-        // var video = document.getElementById('video');
-        let player = new shaka.Player(this.videoElement);
-
-        // Attach player to the window to make it easy to access in the JS console.
-        // window.player = player;
-
-        // Listen for error events.
-        player.addEventListener('error', this.onErrorEvent);
-
-        player.getNetworkingEngine().registerRequestFilter((type: any, request: any) => {
-            if (type === shaka.net.NetworkingEngine.RequestType.LICENSE) {
-                // license-specific headers
-            } else {
-                request.headers["Authorization"] = `Bearer ${this.authToken}`;
-                const { uris } = request;
-                if (uris[0].endsWith('ts')) {
-                    const uri = uris[0];
-                    const base = uri.slice(0, uri.lastIndexOf("/"))
-                    const filename = uri.slice(uri.lastIndexOf("/") + 1)
-                    const newUri = `${base}/${this.streamId}/${filename}`;
-                    uris[0] = newUri;
-                }
-            }
-        })
-
-        // // Try to load a manifest.
-        // // This is an asynchronous process.
-        player.load(this.movieUrl).then(() => {
-            //     // This runs if the asynchronous load is successful.
-            console.log('The video has now been loaded!');
-        }).catch(this.onError);  // onError is executed if the asynchronous load fails.
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['movieUrl'] && !changes['movieUrl'].firstChange && this.videoElement) {
+            this.loadVideo();
+        }
     }
 
-    private onErrorEvent(event: any) {
-        // Extract the shaka.util.Error object from the event.
-        this.onError(event.detail);
-    }
+    private loadVideo() {
+        if (!this.movieUrl || !this.videoElement) return;
 
-    private onError(error: any) {
-        // Log the error.
-        console.error('Error code', error.code, 'object', error);
-    }
+        console.log('Loading video from Google Drive via backend proxy:', this.movieUrl);
+        
+        // Since Google Drive has CORS restrictions, we need to add the auth token
+        // as a query parameter so the backend can authenticate the request
+        const urlWithAuth = `${this.movieUrl}?access_token=${encodeURIComponent(this.authToken)}`;
+        
+        // Set the video source directly - the backend will proxy/redirect to Google Drive
+        this.videoElement.src = urlWithAuth;
+        
+        // Add error handler
+        this.videoElement.onerror = (error) => {
+            console.error('Error loading video:', error);
+            console.log('Video URL:', urlWithAuth);
+        };
 
+        // Add loaded handler
+        this.videoElement.onloadedmetadata = () => {
+            console.log('Video metadata loaded successfully');
+        };
+    }
 }
