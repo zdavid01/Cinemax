@@ -58,7 +58,7 @@ export class SignalRService {
       this.hubConnection = new signalR
         .HubConnectionBuilder()
         .configureLogging(signalR.LogLevel.Information)
-        .withUrl("http://localhost:5224/chat-hub", this.getOptions(appState.accessToken || ""))
+        .withUrl("http://localhost:8005/chat-hub", this.getOptions(appState.accessToken || ""))
         .build();
       this.startConnection();
     })

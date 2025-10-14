@@ -4,3 +4,9 @@
 /Cinemax/Cinemax.sln
 /Cinemax/package-lock.json
 /CinemaxSPA/.vs
+
+# Google Drive credentials and tokens
+**/client_secret_*.json
+**/cinemax-*.json
+**/token.json
+**/token.json/*

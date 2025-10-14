@@ -179,3 +179,4 @@ The service uses the following RabbitMQ configuration:
 ### Testing
 Use the provided HTTP file or Swagger UI for testing endpoints.
 
+

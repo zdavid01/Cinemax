@@ -6,23 +6,36 @@ export interface IMovieForStreaming {
     id: string;    
     description: string;
     title: string,
-    imageUrl: string
+    imageUrl: string,
+    releaseDate?: string,
+    expiresInDays?: number
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class MovieStreamingService {
+    // Use Docker port 8005 for PrivateSession API
+    private readonly API_URL = 'http://localhost:8005/Movie';
+
     constructor(private httpClient: HttpClient) {
 
     }
 
     getUpcomingMovies(): Observable<Array<IMovieForStreaming>> {
-        return this.httpClient.get<Array<IMovieForStreaming>>('http://localhost:5224/Movie/Movies');
+        // Updated endpoint to match Google Drive API
+        return this.httpClient.get<Array<IMovieForStreaming>>(`${this.API_URL}/movies`);
     }
 
     getMovieMetadata(id: string): Observable<IMovieForStreaming> {
-        return this.httpClient.get<IMovieForStreaming>(`http://localhost:5224/Movie/${id}`)
+        return this.httpClient.get<IMovieForStreaming>(`${this.API_URL}/${id}`)
     }
 
+    getStreamUrl(id: string): string {
+        return `${this.API_URL}/stream/${id}`;
+    }
+
+    getImageUrl(id: string): string {
+        return `${this.API_URL}/imageForMovie/${id}`;
+    }
 }

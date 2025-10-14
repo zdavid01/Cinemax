@@ -105,7 +105,8 @@ export class AppStateService {
         appState.email,
         appState.firstName,
         appState.lastName,
-        appState.userId
+        appState.userId,
+        appState.isPremium
       );
       this.appStateSubject.next(this.appState);
     }

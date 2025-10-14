@@ -12,6 +12,7 @@ import { PayPalPaymentComponent } from './paypal/paypal-payment.component';
 import { PaymentSuccessComponent } from './payment/payment-success.component';
 import { PremiumSubscriptionComponent } from './premium/premium-subscription.component';
 import { CatalogComponent } from './catalog/catalog.component';
+import { premiumGuard } from './shared/guards/premium.guard';
 
 export const routes: Routes = [
     {
@@ -24,10 +25,14 @@ export const routes: Routes = [
         path: "register", component: RegisterComponent
     },
     {
-        path: "session/:sessionId", component: PrivateSessionComponent,
+        path: "session/:sessionId", 
+        component: PrivateSessionComponent,
+        canActivate: [premiumGuard]
     },
     {
-        path: "sessions", component: PrivateSessionsList
+        path: "sessions", 
+        component: PrivateSessionsList,
+        canActivate: [premiumGuard]
     },
     {
         path: "basket", component: BasketComponent,

@@ -133,3 +133,18 @@ services:
             - rabbitmq
         ports:
             - "8006:8080"
+
+    privatesession.api:
+        container_name: privatesession.api
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            # JWT Settings - Must match Identity API settings
+            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:validIssuer=Cinemax identity"
+            - "JwtSettings:validAudience=Cinemax"
+            # Google Drive Settings
+            - "GoogleDrive:CredentialsPath=cinemax-475115-7345803004e9.json"
+            - "GoogleDrive:FolderId=1MZlZG7ikum_H_Hizys5gvK0A-wz1SEq4"
+            - "GoogleDrive:ApplicationName=Cinemax Private Sessions"
+        ports:
+            - "8005:8080"

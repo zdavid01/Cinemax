@@ -26,7 +26,7 @@ export class AppState implements IAppState {
     public isPremium?: boolean | undefined
 
     public constructor();
-    public constructor(accessToken?: string, refreshToken?: string, username?: string, roles?: Role | Role[], email?: string, firstName?: string, lastName?: string, userId?: string);
+    public constructor(accessToken?: string, refreshToken?: string, username?: string, roles?: Role | Role[], email?: string, firstName?: string, lastName?: string, userId?: string, isPremium?: boolean);
 
     public constructor(...args: any[]) {
         if (args.length === 0) {
@@ -40,6 +40,7 @@ export class AppState implements IAppState {
         this.firstName = args[5];
         this.lastName = args[6];
         this.userId = args[7];
+        this.isPremium = args[8];
     }
 
     public hasRole(role: Role): boolean {

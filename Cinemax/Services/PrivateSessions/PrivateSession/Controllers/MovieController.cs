@@ -11,18 +11,16 @@ namespace PrivateSession.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly IMovieService _movieService;
+    private readonly IGoogleDriveService _googleDriveService;
     private readonly ILogger<MovieController> _logger;
     private readonly IConfiguration _configuration;
 
-    private readonly String baseLocation;
-
-    public MovieController(IMovieService movieService, ILogger<MovieController> logger, IConfiguration configuration)
+    public MovieController(IMovieService movieService, IGoogleDriveService googleDriveService, ILogger<MovieController> logger, IConfiguration configuration)
     {
         _movieService = movieService;
+        _googleDriveService = googleDriveService;
         _logger = logger;
         _configuration = configuration;
-        
-        this.baseLocation = _configuration.GetValue<String>("MoviesFolder");
     }
 
     [Authorize]
@@ -34,12 +32,21 @@ public class MovieController : ControllerBase
         return Ok(movies);
     }
     
-    [HttpGet("imageForMovie/{movieId}")]
-    public async Task<IActionResult> GetImageForMovie(string movieId)
+    [HttpGet("imageForMovie/{fileId}")]
+    public async Task<IActionResult> GetImageForMovie(string fileId)
     {
-        _logger.LogInformation($"Returning image for movie {movieId}");
-        StringBuilder sb = new StringBuilder().Append(this.baseLocation).Append(movieId).Append("/image.jpg");
-        return PhysicalFile( sb.ToString(), "application/octet-stream");
+        _logger.LogInformation($"Returning image for file {fileId}");
+        try
+        {
+            var imageUrl = _googleDriveService.GetImageUrl(fileId);
+            _logger.LogInformation($"Redirecting to Google Drive image URL: {imageUrl}");
+            return Redirect(imageUrl);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error getting image for file {fileId}");
+            return NotFound();
+        }
     }
     
     [Authorize]
@@ -55,28 +62,30 @@ public class MovieController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("stream/{movieId}/{filename}")]
-    public async Task<IActionResult> Stream(string movieId, string filename)
+    [HttpGet("stream/{fileId}")]
+    public async Task<ActionResult> StreamMovie(string fileId)
     {
-        StringBuilder sb = new StringBuilder().Append(this.baseLocation).Append(movieId).Append("/").Append(filename);
+        try
+        {
+            _logger.LogInformation($"Proxying video stream for file {fileId}");
+            
+            // Get the video stream from Google Drive
+            var stream = await _googleDriveService.GetFileStreamAsync(fileId);
+            
+            if (stream == null)
+            {
+                _logger.LogWarning($"Video stream not found for file {fileId}");
+                return NotFound();
+            }
 
-        return PhysicalFile(sb.ToString(), "application/x-mpegURL");
-    }
-    
-    [Authorize]
-    [HttpGet("stream/{movieId}")]
-    public async Task<ActionResult> StreamMovie(string movieId)
-    {
-        var movie = await _movieService.GetMovieById(movieId);
-        if (movie == null)
-            return NotFound();
-
-        // Streaming logic (serve HLS or DASH)
-        _logger.LogInformation($"Streaming movie for {movieId}");
-        // return PhysicalFile(movie.StreamUrl, "application/octet-stream");
-        
-        StringBuilder sb = new StringBuilder().Append(this.baseLocation).Append(movieId).Append("/output.m3u8");
-
-        return PhysicalFile(sb.ToString(), "application/x-mpegURL");
+            // Return the stream with proper content type
+            // Let the browser determine content type, or set it to video/mp4 as default
+            return File(stream, "video/mp4", enableRangeProcessing: true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error streaming video {fileId}");
+            return StatusCode(500, "Error streaming video");
+        }
     }
 }

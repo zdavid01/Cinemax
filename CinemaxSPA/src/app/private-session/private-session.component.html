@@ -1,10 +1,40 @@
-<div class="flex flex-row h-[calc(100vh-64px)]">
-    @if(movieForStreaming){
-    <div class="basis-9/10">
-        <app-video-player [movieUrl]="movieStreamUrl" />
-    </div>
-    <div class="basis-xs">
-        <app-group-chat [movieTitle]="movieForStreaming.title" />
-    </div>
+<div class="flex flex-col h-[calc(100vh-64px)]">
+    @if(loading) {
+        <div class="flex items-center justify-center h-full">
+            <div class="text-center text-white">
+                <div class="animate-pulse text-2xl mb-4">🎬</div>
+                <p class="text-xl">Loading movie from Google Drive...</p>
+            </div>
+        </div>
+    }
+    
+    @if(error) {
+        <div class="flex items-center justify-center h-full">
+            <div class="bg-red-500 text-white p-8 rounded-lg max-w-md">
+                <p class="font-bold text-xl mb-2">⚠️ Error</p>
+                <p>{{error}}</p>
+                <a routerLink="/sessions" class="mt-4 inline-block bg-white text-red-500 px-4 py-2 rounded hover:bg-gray-100">
+                    ← Back to Movies
+                </a>
+            </div>
+        </div>
+    }
+    
+    @if(movieForStreaming && !loading && !error) {
+        <div class="bg-gray-800 text-white p-4">
+            <h1 class="text-2xl font-bold">🎬 {{movieForStreaming.title}}</h1>
+            <p class="text-gray-400 text-sm mt-1">{{movieForStreaming.description}}</p>
+            <div class="mt-2 text-xs text-green-400">
+                ✓ Streaming from Google Drive
+            </div>
+        </div>
+        <div class="flex flex-row flex-1 overflow-hidden">
+            <div class="flex-1 bg-black flex items-center justify-center p-2 min-w-0 overflow-hidden">
+                <app-video-player [movieUrl]="movieStreamUrl" [streamId]="movieId" />
+            </div>
+            <div class="w-[450px] flex-shrink-0 bg-gray-900 border-l border-gray-700 flex flex-col">
+                <app-group-chat [movieTitle]="movieForStreaming.title" />
+            </div>
+        </div>
     }
 </div>
