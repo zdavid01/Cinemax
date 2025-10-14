@@ -29,10 +29,10 @@
             </div>
         </div>
         <div class="flex flex-row flex-1 overflow-hidden">
-            <div class="basis-9/10 bg-black">
+            <div class="flex-1 bg-black flex items-center justify-center p-2 min-w-0 overflow-hidden">
                 <app-video-player [movieUrl]="movieStreamUrl" [streamId]="movieId" />
             </div>
-            <div class="basis-xs overflow-y-auto">
+            <div class="w-[450px] flex-shrink-0 bg-gray-900 border-l border-gray-700 flex flex-col">
                 <app-group-chat [movieTitle]="movieForStreaming.title" />
             </div>
         </div>

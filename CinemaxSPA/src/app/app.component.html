@@ -15,6 +15,12 @@
       <mat-icon>shopping_cart</mat-icon>
       My Basket
     </a>
+    @if(appState.isPremium) {
+    <a mat-button href="/sessions" class="premium-link">
+      <mat-icon>cloud_queue</mat-icon>
+      My Drive Movies
+    </a>
+    }
     @if(appState.userId )
     {
     <button mat-button [matMenuTriggerFor]="menu">
@@ -25,7 +31,7 @@
       @if(appState.isPremium) {
       <button mat-menu-item>
         <mat-icon>play_circle</mat-icon>
-        <a mat-button href="/sessions">Watch Online</a>
+        <a mat-button href="/sessions">Private Sessions</a>
       </button>
       } @else {
       <button mat-menu-item>

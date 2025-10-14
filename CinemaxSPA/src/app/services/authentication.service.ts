@@ -88,6 +88,10 @@ export class AuthenticationService {
         this.appStateService.setUsername(payload[JwtPayloadKeys.Username])
         this.appStateService.setRoles(payload[JwtPayloadKeys.Role]);
         this.appStateService.setEmail(payload[JwtPayloadKeys.Email])
+        
+        // Set isPremium from JWT token
+        const isPremium = payload[JwtPayloadKeys.IsPremium] === 'true';
+        this.appStateService.setIsPremium(isPremium);
 
         return this.userService.getUserDetails(payload[JwtPayloadKeys.Username]);
       }), map((userDetails: IUserDetails) => {

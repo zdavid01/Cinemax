@@ -47,6 +47,25 @@ mat-toolbar a[mat-button] mat-icon {
   height: 20px;
 }
 
+/* Premium link styles */
+mat-toolbar a.premium-link {
+  background-color: rgba(255, 215, 0, 0.2);
+  border-radius: 4px;
+  padding: 0 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+mat-toolbar a.premium-link:hover {
+  background-color: rgba(255, 215, 0, 0.3);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+mat-toolbar a.premium-link mat-icon {
+  color: #ffd700;
+}
+
 /* App wrapper */
 .app-wrappers {
   min-height: 100vh;
