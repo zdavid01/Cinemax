@@ -32,7 +32,8 @@ export class MovieStreamingService {
     }
 
     getStreamUrl(id: string): string {
-        return `${this.API_URL}/stream/${id}`;
+        // Return the stream endpoint - backend will handle HLS vs direct streaming
+        return `/Movie/stream/${id}`;
     }
 
     getImageUrl(id: string): string {

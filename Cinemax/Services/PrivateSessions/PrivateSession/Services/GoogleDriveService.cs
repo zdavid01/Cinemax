@@ -73,8 +73,9 @@ public class GoogleDriveService : IGoogleDriveService
             var movies = new List<Movie>();
 
             var request = service.Files.List();
-            request.Q = $"'{_folderId}' in parents and (mimeType contains 'video/' or mimeType='application/vnd.google-apps.folder')";
-            request.Fields = "files(id, name, mimeType, description, createdTime, thumbnailLink, videoMediaMetadata)";
+            // Look for both folders (HLS) and video files (single file streaming)
+            request.Q = $"'{_folderId}' in parents and (mimeType='application/vnd.google-apps.folder' or mimeType contains 'video/') and trashed=false";
+            request.Fields = "files(id, name, mimeType, description, createdTime, modifiedTime, thumbnailLink)";
             request.PageSize = 100;
 
             var result = await request.ExecuteAsync();
@@ -83,8 +84,28 @@ public class GoogleDriveService : IGoogleDriveService
             {
                 foreach (var file in result.Files)
                 {
-                    // Only process video files
-                    if (file.MimeType != null && file.MimeType.Contains("video"))
+                    // Case 1: Folder with HLS chunks (preferred)
+                    if (file.MimeType == "application/vnd.google-apps.folder")
+                    {
+                        var hasPlaylist = await HasPlaylistFileAsync(file.Id);
+                        
+                        if (hasPlaylist)
+                        {
+                            var movie = new Movie
+                            {
+                                Id = file.Id,
+                                Title = file.Name,
+                                Description = file.Description ?? "No description available",
+                                ImageUrl = GetImageUrl(file.Id),
+                                ReleaseDate = file.CreatedTime ?? DateTime.Now,
+                                ExpiresInDays = 30
+                            };
+                            movies.Add(movie);
+                            _logger.LogInformation($"Found HLS movie folder: {file.Name} (ID: {file.Id})");
+                        }
+                    }
+                    // Case 2: Single video file (backward compatibility)
+                    else if (file.MimeType != null && file.MimeType.Contains("video"))
                     {
                         var movie = new Movie
                         {
@@ -96,12 +117,12 @@ public class GoogleDriveService : IGoogleDriveService
                             ExpiresInDays = 30
                         };
                         movies.Add(movie);
-                        _logger.LogInformation($"Found video: {file.Name} (ID: {file.Id})");
+                        _logger.LogInformation($"Found single video file: {file.Name} (ID: {file.Id})");
                     }
                 }
             }
 
-            _logger.LogInformation($"Found {movies.Count} videos in Google Drive folder");
+            _logger.LogInformation($"Found {movies.Count} movies in Google Drive (folders + files)");
             return movies;
         }
         catch (Exception ex)
@@ -110,26 +131,61 @@ public class GoogleDriveService : IGoogleDriveService
             throw;
         }
     }
+    
+    private async Task<bool> HasPlaylistFileAsync(string folderId)
+    {
+        try
+        {
+            var playlistId = await GetPlaylistFileIdAsync(folderId);
+            return !string.IsNullOrEmpty(playlistId);
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
-    public async Task<Movie?> GetMovieByIdAsync(string fileId)
+    public async Task<Movie?> GetMovieByIdAsync(string fileOrFolderId)
     {
         try
         {
             var service = await GetDriveServiceAsync();
-            var request = service.Files.Get(fileId);
-            request.Fields = "id, name, mimeType, description, createdTime, thumbnailLink, videoMediaMetadata";
+            var request = service.Files.Get(fileOrFolderId);
+            request.Fields = "id, name, mimeType, description, createdTime, thumbnailLink";
 
-            var file = await request.ExecuteAsync();
+            var item = await request.ExecuteAsync();
 
-            if (file != null && file.MimeType != null && file.MimeType.Contains("video"))
+            if (item == null)
+                return null;
+
+            // Case 1: Folder with HLS chunks
+            if (item.MimeType == "application/vnd.google-apps.folder")
+            {
+                var hasPlaylist = await HasPlaylistFileAsync(item.Id);
+                
+                if (hasPlaylist)
+                {
+                    return new Movie
+                    {
+                        Id = item.Id,
+                        Title = item.Name,
+                        Description = item.Description ?? "No description available",
+                        ImageUrl = GetImageUrl(item.Id),
+                        ReleaseDate = item.CreatedTime ?? DateTime.Now,
+                        ExpiresInDays = 30
+                    };
+                }
+            }
+            // Case 2: Single video file
+            else if (item.MimeType != null && item.MimeType.Contains("video"))
             {
                 return new Movie
                 {
-                    Id = file.Id,
-                    Title = Path.GetFileNameWithoutExtension(file.Name),
-                    Description = file.Description ?? "No description available",
-                    ImageUrl = file.ThumbnailLink ?? GetImageUrl(file.Id),
-                    ReleaseDate = file.CreatedTime ?? DateTime.Now,
+                    Id = item.Id,
+                    Title = Path.GetFileNameWithoutExtension(item.Name),
+                    Description = item.Description ?? "No description available",
+                    ImageUrl = item.ThumbnailLink ?? GetImageUrl(item.Id),
+                    ReleaseDate = item.CreatedTime ?? DateTime.Now,
                     ExpiresInDays = 30
                 };
             }
@@ -138,7 +194,7 @@ public class GoogleDriveService : IGoogleDriveService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error fetching movie with ID: {fileId}");
+            _logger.LogError(ex, $"Error fetching movie with ID: {fileOrFolderId}");
             return null;
         }
     }
@@ -155,11 +211,100 @@ public class GoogleDriveService : IGoogleDriveService
         return $"https://drive.google.com/thumbnail?id={fileId}&sz=w400";
     }
 
-    public string GetVideoStreamUrl(string fileId)
+    public string GetVideoStreamUrl(string folderId)
     {
-        // For video streaming, we can use the webContentLink or construct a streaming URL
-        // Google Drive supports direct video streaming via this URL format
-        return $"https://drive.google.com/uc?export=download&id={fileId}";
+        // Return the base URL for HLS streaming - will serve playlist from this folder
+        return $"/Movie/hls/{folderId}/playlist.m3u8";
+    }
+
+    public async Task<string?> GetPlaylistFileIdAsync(string folderId)
+    {
+        try
+        {
+            var service = await GetDriveServiceAsync();
+            var request = service.Files.List();
+            
+            // Look for .m3u8 playlist file in the folder
+            request.Q = $"'{folderId}' in parents and (name contains '.m3u8' or name = 'output.m3u8' or name = 'playlist.m3u8') and trashed=false";
+            request.Fields = "files(id, name)";
+            request.PageSize = 10;
+
+            var result = await request.ExecuteAsync();
+
+            if (result.Files != null && result.Files.Count > 0)
+            {
+                var playlistFile = result.Files.FirstOrDefault();
+                _logger.LogInformation($"Found playlist file: {playlistFile?.Name} (ID: {playlistFile?.Id})");
+                return playlistFile?.Id;
+            }
+
+            _logger.LogWarning($"No playlist file found in folder {folderId}");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error finding playlist in folder {folderId}");
+            return null;
+        }
+    }
+
+    public async Task<List<string>> GetChunkFileIdsAsync(string folderId)
+    {
+        try
+        {
+            var service = await GetDriveServiceAsync();
+            var request = service.Files.List();
+            
+            // Look for .ts chunk files in the folder
+            request.Q = $"'{folderId}' in parents and name contains '.ts' and trashed=false";
+            request.Fields = "files(id, name)";
+            request.PageSize = 1000; // Support many chunks
+
+            var result = await request.ExecuteAsync();
+
+            if (result.Files != null)
+            {
+                _logger.LogInformation($"Found {result.Files.Count} chunk files in folder {folderId}");
+                return result.Files.Select(f => f.Id).ToList();
+            }
+
+            return new List<string>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error finding chunks in folder {folderId}");
+            return new List<string>();
+        }
+    }
+
+    public async Task<string?> FindFileInFolderAsync(string folderId, string fileName)
+    {
+        try
+        {
+            var service = await GetDriveServiceAsync();
+            var request = service.Files.List();
+            
+            request.Q = $"'{folderId}' in parents and name = '{fileName}' and trashed=false";
+            request.Fields = "files(id, name)";
+            request.PageSize = 1;
+
+            var result = await request.ExecuteAsync();
+            var file = result.Files?.FirstOrDefault();
+            
+            if (file != null)
+            {
+                _logger.LogInformation($"Found file {fileName} in folder {folderId}: {file.Id}");
+                return file.Id;
+            }
+
+            _logger.LogWarning($"File {fileName} not found in folder {folderId}");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error finding file {fileName} in folder {folderId}");
+            return null;
+        }
     }
 
     public async Task<Stream> GetFileStreamAsync(string fileId)

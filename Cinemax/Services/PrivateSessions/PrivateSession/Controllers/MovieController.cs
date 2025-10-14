@@ -83,8 +83,70 @@ public class MovieController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("stream/{fileId}")]
-    public async Task<ActionResult> StreamMovie(string fileId)
+    [HttpGet("stream/{fileOrFolderId}")]
+    public async Task<ActionResult> StreamMovie(string fileOrFolderId)
+    {
+        try
+        {
+            // Get username from JWT claims
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Invalid token");
+            }
+
+            // Verify user has purchased this movie
+            var movie = await _movieService.GetMovieById(fileOrFolderId, username);
+            if (movie == null)
+            {
+                _logger.LogWarning($"User {username} does not have access to movie {fileOrFolderId}");
+                return Forbid("You don't have access to this movie. Please purchase it first.");
+            }
+
+            // Check if it's a folder (HLS) or file (direct stream)
+            var playlistId = await _googleDriveService.GetPlaylistFileIdAsync(fileOrFolderId);
+            
+            if (!string.IsNullOrEmpty(playlistId))
+            {
+                // It's a folder with HLS - redirect to HLS endpoint
+                // Pass through the access token if provided
+                var accessToken = Request.Query["access_token"].ToString();
+                var redirectUrl = $"/Movie/hls/{fileOrFolderId}/playlist.m3u8";
+                
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    redirectUrl += $"?access_token={accessToken}";
+                }
+                
+                _logger.LogInformation($"HLS folder detected, redirecting to playlist: {redirectUrl}");
+                return Redirect(redirectUrl);
+            }
+            else
+            {
+                // It's a single video file - stream it directly
+                _logger.LogInformation($"Single file detected, streaming directly for {fileOrFolderId}");
+                var stream = await _googleDriveService.GetFileStreamAsync(fileOrFolderId);
+                
+                if (stream == null)
+                {
+                    return NotFound();
+                }
+
+                return File(stream, "video/mp4", enableRangeProcessing: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error streaming {fileOrFolderId}");
+            return StatusCode(500, "Error streaming video");
+        }
+    }
+
+    [Authorize]
+    [HttpGet("hls/{folderId}/playlist.m3u8")]
+    [HttpHead("hls/{folderId}/playlist.m3u8")]
+    public async Task<ActionResult> GetPlaylist(string folderId)
     {
         try
         {
@@ -98,32 +160,136 @@ public class MovieController : ControllerBase
             }
 
             // Verify user has purchased this movie
-            var movie = await _movieService.GetMovieById(fileId, username);
+            var movie = await _movieService.GetMovieById(folderId, username);
             if (movie == null)
             {
-                _logger.LogWarning($"User {username} does not have access to movie {fileId}");
+                _logger.LogWarning($"User {username} does not have access to movie folder {folderId}");
                 return Forbid("You don't have access to this movie. Please purchase it first.");
             }
-
-            _logger.LogInformation($"Proxying video stream for file {fileId} for user {username}");
             
-            // Get the video stream from Google Drive
-            var stream = await _googleDriveService.GetFileStreamAsync(fileId);
+            // Get the playlist file ID from the folder
+            var playlistFileId = await _googleDriveService.GetPlaylistFileIdAsync(folderId);
             
-            if (stream == null)
+            if (string.IsNullOrEmpty(playlistFileId))
             {
-                _logger.LogWarning($"Video stream not found for file {fileId}");
-                return NotFound();
+                _logger.LogWarning($"Playlist file not found in folder {folderId}");
+                return NotFound("Playlist file not found");
             }
 
-            // Return the stream with proper content type
-            // Let the browser determine content type, or set it to video/mp4 as default
-            return File(stream, "video/mp4", enableRangeProcessing: true);
+            // For HEAD requests, just return 200 OK
+            if (Request.Method == "HEAD")
+            {
+                return Ok();
+            }
+
+            _logger.LogInformation($"Serving playlist for folder {folderId} to user {username}");
+
+            // Download and serve the playlist
+            var playlistStream = await _googleDriveService.GetFileStreamAsync(playlistFileId);
+            
+            if (playlistStream == null)
+            {
+                return NotFound("Failed to load playlist");
+            }
+
+            // Read the playlist content and update chunk URLs to point to our API
+            using var reader = new StreamReader(playlistStream);
+            var playlistContent = await reader.ReadToEndAsync();
+            
+            // Get access token to pass to chunks
+            var accessToken = Request.Query["access_token"].ToString();
+            
+            // Replace relative chunk URLs with our API endpoints
+            var modifiedPlaylist = ModifyPlaylistUrls(playlistContent, folderId, accessToken);
+            
+            return Content(modifiedPlaylist, "application/vnd.apple.mpegurl");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error streaming video {fileId}");
-            return StatusCode(500, "Error streaming video");
+            _logger.LogError(ex, $"Error serving playlist for folder {folderId}");
+            return StatusCode(500, "Error loading playlist");
         }
+    }
+
+    [Authorize]
+    [HttpGet("hls/{folderId}/{chunkFileName}")]
+    public async Task<ActionResult> GetChunk(string folderId, string chunkFileName)
+    {
+        try
+        {
+            // Get username from JWT claims
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
+            // Verify user has purchased this movie
+            var movie = await _movieService.GetMovieById(folderId, username);
+            if (movie == null)
+            {
+                return Forbid();
+            }
+
+            _logger.LogInformation($"Serving chunk {chunkFileName} from folder {folderId}");
+            
+            // Find the chunk file in the folder
+            var chunkFileId = await _googleDriveService.FindFileInFolderAsync(folderId, chunkFileName);
+            
+            if (string.IsNullOrEmpty(chunkFileId))
+            {
+                _logger.LogWarning($"Chunk file {chunkFileName} not found in folder {folderId}");
+                return NotFound();
+            }
+
+            // Stream the chunk file
+            var stream = await _googleDriveService.GetFileStreamAsync(chunkFileId);
+            
+            if (stream == null)
+            {
+                return NotFound();
+            }
+
+            // Return with proper MIME type for HLS chunks
+            return File(stream, "video/mp2t", enableRangeProcessing: true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error serving chunk {chunkFileName} from folder {folderId}");
+            return StatusCode(500, "Error loading video chunk");
+        }
+    }
+
+    private string ModifyPlaylistUrls(string playlistContent, string folderId, string? accessToken)
+    {
+        // Replace relative .ts file references with full API URLs
+        var lines = playlistContent.Split('\n');
+        var modifiedLines = new List<string>();
+
+        foreach (var line in lines)
+        {
+            if (line.Trim().EndsWith(".ts"))
+            {
+                // Extract just the filename
+                var fileName = Path.GetFileName(line.Trim());
+                // Replace with full URL to our API endpoint
+                var chunkUrl = $"/Movie/hls/{folderId}/{fileName}";
+                
+                // Add access token if provided
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    chunkUrl += $"?access_token={accessToken}";
+                }
+                
+                modifiedLines.Add(chunkUrl);
+            }
+            else
+            {
+                modifiedLines.Add(line);
+            }
+        }
+
+        return string.Join("\n", modifiedLines);
     }
 }

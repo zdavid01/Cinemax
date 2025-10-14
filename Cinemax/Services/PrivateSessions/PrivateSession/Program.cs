@@ -54,17 +54,29 @@ builder.Services.AddAuthentication(o =>
         OnMessageReceived = context =>
         {
             var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            var method = context.HttpContext.Request.Method;
+
+            // Log for debugging
+            Console.WriteLine($"JWT OnMessageReceived: {method} {path}, HasToken: {!string.IsNullOrEmpty(accessToken)}");
 
             // Support token from query string for SignalR hubs and video streaming
-            var path = context.HttpContext.Request.Path;
             if (!string.IsNullOrEmpty(accessToken) && 
                 (path.StartsWithSegments("/notify") || 
                  path.StartsWithSegments("/chat-hub") ||
-                 path.StartsWithSegments("/Movie/stream")))
+                 path.StartsWithSegments("/Movie/stream") ||
+                 path.StartsWithSegments("/Movie/hls")))
             {
                 // Read the token out of the query string
                 context.Token = accessToken;
+                Console.WriteLine($"✅ Token extracted from query string for {method} {path}");
             }
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"❌ JWT Authentication Failed: {context.HttpContext.Request.Method} {context.HttpContext.Request.Path}");
+            Console.WriteLine($"   Error: {context.Exception.Message}");
             return Task.CompletedTask;
         }
     };
