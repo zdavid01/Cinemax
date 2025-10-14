@@ -15,6 +15,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddSingleton<IGoogleDriveService, GoogleDriveService>();
+builder.Services.AddHttpClient<IPaymentService, PaymentService>();
 
 builder.Services.AddCors(options =>
 {

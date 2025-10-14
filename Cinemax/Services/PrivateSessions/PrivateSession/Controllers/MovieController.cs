@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -27,8 +28,19 @@ public class MovieController : ControllerBase
     [HttpGet("movies")]
     public async Task<IActionResult> GetMovies()
     {
-        // add filtering so that only movies for specific user got returned
-        var movies = await _movieService.GetAllMoviesAsync();
+        // Get username from JWT claims
+        var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        
+        if (string.IsNullOrEmpty(username))
+        {
+            _logger.LogWarning("Could not extract username from JWT token");
+            return Unauthorized("Invalid token");
+        }
+
+        _logger.LogInformation($"Fetching movies for user: {username}");
+        
+        // Filter movies based on user's purchases
+        var movies = await _movieService.GetAllMoviesAsync(username);
         return Ok(movies);
     }
     
@@ -53,10 +65,19 @@ public class MovieController : ControllerBase
     [HttpGet("{movieId}")]
     public async Task<ActionResult> Get(string movieId)
     {
-        var movie = await _movieService.GetMovieById(movieId);
+        // Get username from JWT claims
+        var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        
+        if (string.IsNullOrEmpty(username))
+        {
+            _logger.LogWarning("Could not extract username from JWT token");
+            return Unauthorized("Invalid token");
+        }
+
+        var movie = await _movieService.GetMovieById(movieId, username);
         if (movie == null)
         {
-            return NotFound();
+            return NotFound("Movie not found or you don't have access to it");
         }
         return Ok(movie);
     }
@@ -67,7 +88,24 @@ public class MovieController : ControllerBase
     {
         try
         {
-            _logger.LogInformation($"Proxying video stream for file {fileId}");
+            // Get username from JWT claims
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            
+            if (string.IsNullOrEmpty(username))
+            {
+                _logger.LogWarning("Could not extract username from JWT token");
+                return Unauthorized("Invalid token");
+            }
+
+            // Verify user has purchased this movie
+            var movie = await _movieService.GetMovieById(fileId, username);
+            if (movie == null)
+            {
+                _logger.LogWarning($"User {username} does not have access to movie {fileId}");
+                return Forbid("You don't have access to this movie. Please purchase it first.");
+            }
+
+            _logger.LogInformation($"Proxying video stream for file {fileId} for user {username}");
             
             // Get the video stream from Google Drive
             var stream = await _googleDriveService.GetFileStreamAsync(fileId);

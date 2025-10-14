@@ -150,5 +150,9 @@ services:
             - "GoogleDrive:CredentialsPath=cinemax-475115-7345803004e9.json"
             - "GoogleDrive:FolderId=1MZlZG7ikum_H_Hizys5gvK0A-wz1SEq4"
             - "GoogleDrive:ApplicationName=Cinemax Private Sessions"
+            # Payment API Settings
+            - "PaymentApi:BaseUrl=http://payment.api:8080"
+        depends_on:
+            - payment.api
         ports:
             - "8005:8080"
