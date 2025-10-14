@@ -55,6 +55,10 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - "DataBaseSettings:ConnectionString=mongodb://moviecatalogdb:27017"
+            # JWT Settings - Must match Identity API settings
+            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:validIssuer=Cinemax identity"
+            - "JwtSettings:validAudience=Cinemax"
         depends_on:
             - moviecatalogdb
         ports:

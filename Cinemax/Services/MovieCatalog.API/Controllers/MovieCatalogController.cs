@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MovieCatalog.API.Data;
 using MovieCatalog.API.Entities;
 using MovieCatalog.API.Repositories.Interfaces;
@@ -43,9 +44,11 @@ public class MovieCatalogController : ControllerBase
         return Ok(movies);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(IEnumerable<Movie>), StatusCodes.Status200OK)]
-    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<Movie>> CreateMovie([FromBody] Movie movie)
     {
         if (!ModelState.IsValid)
@@ -57,9 +60,12 @@ public class MovieCatalogController : ControllerBase
         return CreatedAtRoute("GetMovie", new { id = movie.Id }, movie);
     }
     
+    [Authorize(Roles = "Admin")]
     [HttpPut]
-    [ProducesResponseType( StatusCodes.Status200OK)]
-    [ProducesResponseType( StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UpdateMovie([FromBody] Movie movie)
     {
         var result = await _repository.UpdateMovie(movie);
@@ -68,10 +74,12 @@ public class MovieCatalogController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete]
-    [ProducesResponseType( StatusCodes.Status200OK)]
-    [ProducesResponseType( StatusCodes.Status404NotFound)]
-
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> DeleteMovie(string id)
     {
         var result = await _repository.DeleteMovie(id);

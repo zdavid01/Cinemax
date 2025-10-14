@@ -1,3 +1,6 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using MovieCatalog.API.Data;
 using MovieCatalog.API.Repositories.Interfaces;
 
@@ -24,6 +27,31 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Add JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+    var secretKey = jwtSettings.GetValue<string>("SecretKey");
+
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        
+        ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
+        ValidAudience = jwtSettings.GetSection("validAudience").Value,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey ?? ""))
+    };
+});
+
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 
@@ -34,6 +62,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 //app.UseHttpsRedirection();
 app.MapControllers();
 

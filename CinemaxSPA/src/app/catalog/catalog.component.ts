@@ -6,10 +6,10 @@ import {MatCardModule} from '@angular/material/card';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {AppStateService} from '../shared/app-state/app-state.service';
 import { BasketService } from '../services/basket.service';
-import {IdentityService} from '../services/identity.service';
 import { FormsModule } from '@angular/forms';
 import {Movie} from '../types/Movie';
 import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+import { Role } from '../shared/app-state/role';
 
 
 @Component({
@@ -23,10 +23,11 @@ import { SafeUrlPipe } from '../pipes/safe-url.pipe';
 export class CatalogComponent implements OnInit {
   movies: any[] = [];
   username: string = '';
-  isAdmin: boolean = true;
+  isAdmin: boolean = false;
   showAddMovieForm = false;
   isEditing = false;
   selectedMovie: any = null;
+  private authToken: string = '';
 
   editMovieForm: any = {
     id: null,
@@ -60,8 +61,7 @@ export class CatalogComponent implements OnInit {
     private http: HttpClient,
     private appStateService: AppStateService,
     private snackBar: MatSnackBar,
-    private basketService: BasketService,
-    private identityService: IdentityService
+    private basketService: BasketService
   ) {
   }
 
@@ -77,13 +77,22 @@ export class CatalogComponent implements OnInit {
 
     this.appStateService.getAppState().subscribe(appState => {
       this.username = appState.username || '';
-      console.log('Logged in username:', this.username);
-      if (this.username) {
-        this.identityService.isAdmin(this.username).subscribe({
-          next: isAdmin => this.isAdmin = isAdmin,
-          error: err => console.error('Error checking admin status', err)
-        });
+      this.authToken = appState.accessToken || '';
+      
+      // Check if user has Admin role
+      if (appState.roles) {
+        if (Array.isArray(appState.roles)) {
+          this.isAdmin = appState.roles.includes(Role.Administrator);
+        } else {
+          this.isAdmin = appState.roles === Role.Administrator;
+        }
+      } else {
+        this.isAdmin = false;
       }
+      
+      console.log('Logged in username:', this.username);
+      console.log('Is Admin:', this.isAdmin);
+      console.log('Roles:', appState.roles);
     });
   }
 
@@ -97,8 +106,12 @@ export class CatalogComponent implements OnInit {
     this.newMovie.Price = Number(this.newMovie.Price);
 
     console.log('Posting movie:', this.newMovie);
-    this.http.post('http://localhost:8000/api/v1/MovieCatalog', this.newMovie, {headers: {'Content-Type': 'application/json'}})
-      .subscribe({
+    this.http.post('http://localhost:8000/api/v1/MovieCatalog', this.newMovie, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.authToken}`
+      }
+    }).subscribe({
         next: (movie: any) => {
           this.movies.push(movie);
           this.snackBar.open('Movie added!', 'Close', {duration: 3000});
@@ -145,8 +158,11 @@ export class CatalogComponent implements OnInit {
     if (!confirm(`Are you sure you want to delete "${movie.title}"?`)) return;
     console.log('Deleting movie: ', movie.title);
 
-    this.http.delete(`http://localhost:8000/api/v1/MovieCatalog?id=${movie.id}`)
-      .subscribe({
+    this.http.delete(`http://localhost:8000/api/v1/MovieCatalog/${movie.id}`, {
+      headers: {
+        'Authorization': `Bearer ${this.authToken}`
+      }
+    }).subscribe({
         next: () => {
           this.movies = this.movies.filter(m => m.id !== movie.id);
           this.snackBar.open('Movie deleted!', 'Close', {duration: 3000});
@@ -174,10 +190,12 @@ export class CatalogComponent implements OnInit {
 
     const movieId = this.editMovieForm.id;
 
-    this.http.put(`http://localhost:8000/api/v1/MovieCatalog?id=${movieId}`, this.editMovieForm, {
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .subscribe({
+    this.http.put(`http://localhost:8000/api/v1/MovieCatalog`, this.editMovieForm, {
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.authToken}`
+      }
+    }).subscribe({
         next: (updatedMovie: any) => {
           if (!updatedMovie) {
             const index = this.movies.findIndex(m => m.id === movieId);
