@@ -73,11 +73,12 @@ docker-compose up -d
 - ✅ Test database passwords
 - ✅ Google Drive development folder
 
-**Also available for the team:**
-- ✅ Google Drive service account JSON (`cinemax-475115-7345803004e9.json`)
-  - See: `Cinemax/Services/PrivateSessions/GET_CREDENTIALS.md` for how to obtain
-  - Restricted to development folder only
-  - Safe to use for development
+**Google Drive Service Account (for Private Sessions):**
+- ✅ Full credentials documented in: `docs/GOOGLE_SERVICE_ACCOUNT.md`
+- ✅ One-command setup available in the doc
+- ✅ Restricted to development folder only
+- ✅ Safe to use for development
+- ℹ️ See: `Cinemax/Services/PrivateSessions/GET_CREDENTIALS.md` for setup instructions
 
 **PayPal Sandbox Test Account (for testing payments):**
 ```
@@ -500,6 +501,7 @@ docker-compose logs --tail=50 payment.api
 - **🛡️ Security Guide:** `docs/SECURITY_GUIDE.md` ⭐ **READ THIS FIRST**
 - **🔑 Development Credentials:** `docs/DEVELOPMENT_CREDENTIALS.md` - Why credentials are in the repo
 - **💳 Testing Payments:** `docs/TESTING_PAYMENTS.md` - PayPal sandbox testing guide
+- **🔑 Google Service Account:** `docs/GOOGLE_SERVICE_ACCOUNT.md` - Google Drive credentials for dev
 - **Google Drive Service Account Setup:** `docs/SERVICE_ACCOUNT_SETUP.md`
 - **HLS Video Streaming Guide:** `docs/HLS_STREAMING_GUIDE.md`
 - **Frontend Testing Guide:** `docs/FRONTEND_TESTING_GUIDE.md`

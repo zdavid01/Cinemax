@@ -2,24 +2,32 @@
 
 ## For Development
 
-The Google Drive service account credentials are stored securely for the team.
+The Google Drive service account credentials are documented for team use.
 
-### Option 1: Download from GitHub Release (Recommended)
+### Quick Setup (Copy-Paste)
 
-1. Go to: https://github.com/zdavid01/Cinemax/releases
-2. Download `cinemax-dev-credentials.zip`
-3. Extract `cinemax-475115-7345803004e9.json` to this directory
-4. The file is gitignored - it won't be committed
+**The full JSON is available in:** `docs/GOOGLE_SERVICE_ACCOUNT.md`
 
-### Option 2: Get from Team Lead
+1. Open the documentation:
+   ```bash
+   cat docs/GOOGLE_SERVICE_ACCOUNT.md
+   ```
 
-Contact one of the team members to get the service account JSON:
+2. Copy the "Quick Setup" command from that document and run it in your terminal
+
+3. The file will be created automatically in the correct location
+
+**The file is gitignored** - it's safe to have locally but won't be committed.
+
+### Alternative: Get from Team Lead
+
+If you prefer, contact one of the team members:
 - Bojan Velickovic
 - David Zivkovic
 - Dusan Trtica
 - Stefan Jevtic
 
-### Option 3: Create Your Own (Advanced)
+### Advanced: Create Your Own
 
 See `PrivateSession/GOOGLE_DRIVE_SETUP.md` for instructions on creating your own service account.
 
