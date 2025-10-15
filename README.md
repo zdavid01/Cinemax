@@ -73,11 +73,11 @@ docker-compose up -d
 - ✅ Test database passwords
 - ✅ Google Drive development folder
 
-**Also included in the repository:**
+**Also available for the team:**
 - ✅ Google Drive service account JSON (`cinemax-475115-7345803004e9.json`)
-  - Located in: `Cinemax/Services/PrivateSessions/PrivateSession/`
+  - See: `Cinemax/Services/PrivateSessions/GET_CREDENTIALS.md` for how to obtain
   - Restricted to development folder only
-  - Safe to share with team
+  - Safe to use for development
 
 **PayPal Sandbox Test Account (for testing payments):**
 ```

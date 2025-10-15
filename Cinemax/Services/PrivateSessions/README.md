@@ -4,7 +4,9 @@
 
 ### Development Credentials
 
-The file `cinemax-475115-7345803004e9.json` is a **shared development service account** that is safe to commit to the repository.
+The file `cinemax-475115-7345803004e9.json` is a **shared development service account** for the team.
+
+**To get this file:** See `GET_CREDENTIALS.md` in this directory.
 
 **This credential is:**
 - ✅ Safe to share with your development team
