@@ -457,15 +457,18 @@ docker-compose logs --tail=50 payment.api
 
 ---
 
-## 📄 License
+<!-- ## 📄 License
 
-[Your License Here]
+[Your License Here] -->
 
 ---
 
 ## 👥 Authors
 
-[Your Name/Team Here]
+Bojan Velickovic 1070/2024
+David Zivkovic 1027/2024
+Dusan Trtica 1041/2023
+Stefan Jevtic 1043/2024
 
 ---
 
