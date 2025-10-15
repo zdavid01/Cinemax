@@ -44,7 +44,7 @@
     image: payment.api
     build:
       context: .
-      dockerfile: Payment.API/Dockerfile
+      dockerfile: Services/Payment/Payment.API/Dockerfile
 
   basketdb:
     image: redis:alpine
@@ -62,7 +62,7 @@
     image: email.api
     build:
       context: .
-      dockerfile: Email.API/Dockerfile
+      dockerfile: Services/Email.API/Dockerfile
 
   privatesession.api:
     image: privatesession.api
