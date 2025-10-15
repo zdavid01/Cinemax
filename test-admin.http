@@ -1,0 +1,62 @@
+### Register Admin User
+POST http://localhost:4000/api/v1/Authentication/RegisterAdministrator
+Content-Type: application/json
+
+{
+  "firstName": "Admin",
+  "lastName": "User",
+  "username": "admin",
+  "password": "Admin123!",
+  "email": "admin@cinemax.com"
+}
+
+###
+
+### Register Regular Buyer User
+POST http://localhost:4000/api/v1/Authentication/RegisterBuyer
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "username": "johndoe",
+  "password": "Buyer123!",
+  "email": "john.doe@example.com"
+}
+
+###
+
+### Login as Admin
+POST http://localhost:4000/api/v1/Authentication/Login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin123!"
+}
+
+###
+
+### Login as Buyer
+POST http://localhost:4000/api/v1/Authentication/Login
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "Buyer123!"
+}
+
+###
+
+### Get All Users (Requires Admin Token)
+GET http://localhost:4000/api/v1/User/users
+Authorization: Bearer {{adminToken}}
+
+###
+
+### Get User by Username (Requires Admin or Owner)
+GET http://localhost:4000/api/v1/User/users/admin
+Authorization: Bearer {{adminToken}}
+
+###
+
