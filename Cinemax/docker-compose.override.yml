@@ -12,7 +12,7 @@ services:
         container_name: identity.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "ConnectionStrings:IdentityConnectionString=Server=identitydb;Database=IdentityDb;User Id=SA;Password=MATF12345;TrustServerCertificate=true"
+            - "ConnectionStrings:IdentityConnectionString=Server=identitydb;Database=IdentityDb;User Id=SA;Password=${DB_SA_PASSWORD:-MATF12345};TrustServerCertificate=true"
         depends_on:
             - identitydb
         ports:
@@ -32,8 +32,8 @@ services:
     pgadmin:
         container_name: pgadmin
         environment:
-            - PGADMIN_DEFAULT_EMAIL=dev@gmail.com
-            - PGADMIN_DEFAULT_PASSWORD=admin1234
+            - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-dev@gmail.com}
+            - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin1234}
         restart: always
         ports:
             - "5050:5080"
@@ -56,7 +56,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development
             - "DataBaseSettings:ConnectionString=mongodb://moviecatalogdb:27017"
             # JWT Settings - Must match Identity API settings
-            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:secretKey=${JWT_SECRET_KEY:-MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken}"
             - "JwtSettings:validIssuer=Cinemax identity"
             - "JwtSettings:validAudience=Cinemax"
         depends_on:
@@ -68,17 +68,17 @@ services:
         container_name: payment.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "ConnectionStrings:PaymentConnectionString=Host=paymentdb;Port=5432;Database=PaymentDb;Username=postgres;Password=MATF12345;"
+            - "ConnectionStrings:PaymentConnectionString=Host=paymentdb;Port=5432;Database=PaymentDb;Username=postgres;Password=${POSTGRES_PASSWORD:-MATF12345};"
             # Redis Cache Settings
             - "CacheSettings:ConnectionString=basketdb:6379"
             # Email Settings
-            - "EmailSettings:Mail=vida33085@gmail.com"
-            - "EmailSettings:Password=kmfu haci tnno kjqd"
+            - "EmailSettings:Mail=${EMAIL_ADDRESS:-vida33085@gmail.com}"
+            - "EmailSettings:Password=${EMAIL_APP_PASSWORD:-kmfu haci tnno kjqd}"
             # PayPal Settings
-            - "PayPal:ClientId=AbwOUURIy30Sv997qpH0-Xzwb-rKENp64r2-F8jJx-GNMHcQ9ZFIwvQLjP2-sMe7-u-kg2AGAjjKtGSk"
-            - "PayPal:ClientSecret=EP--0kzPAWPT9yg5or-0qKVMWnjusLoqZ-aSIBWhtMouaWcbyORFvfXPPKKCNU77rzq4LHA_d_D9OvI7"
+            - "PayPal:ClientId=${PAYPAL_CLIENT_ID:-AbwOUURIy30Sv997qpH0-Xzwb-rKENp64r2-F8jJx-GNMHcQ9ZFIwvQLjP2-sMe7-u-kg2AGAjjKtGSk}"
+            - "PayPal:ClientSecret=${PAYPAL_CLIENT_SECRET:-EP--0kzPAWPT9yg5or-0qKVMWnjusLoqZ-aSIBWhtMouaWcbyORFvfXPPKKCNU77rzq4LHA_d_D9OvI7}"
             # JWT Settings
-            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:secretKey=${JWT_SECRET_KEY:-MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken}"
             # RabbitMQ Event Bus Settings
             - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
         depends_on:
@@ -109,7 +109,7 @@ services:
             - "GrpcSettings:PaymentServiceUrl=http://payment.api:8080"
             - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
             # JWT Settings - Must match Identity API settings
-            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:secretKey=${JWT_SECRET_KEY:-MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken}"
             - "JwtSettings:validIssuer=Cinemax identity"
             - "JwtSettings:validAudience=Cinemax"
         depends_on:
@@ -126,11 +126,11 @@ services:
             - "ConnectionStrings:RabbitMQ=amqp://guest:guest@rabbitmq:5672"
             - "EmailSettings:SmtpServer=smtp.gmail.com"
             - "EmailSettings:SmtpPort=587"
-            - "EmailSettings:Mail=vida33085@gmail.com"
-            - "EmailSettings:Password=kmfu haci tnno kjqd"
-            - "EmailSettings:SmtpUsername=vida33085@gmail.com"
-            - "EmailSettings:SmtpPassword=kmfu haci tnno kjqd"
-            - "EmailSettings:FromEmail=vida33085@gmail.com"
+            - "EmailSettings:Mail=${EMAIL_ADDRESS:-vida33085@gmail.com}"
+            - "EmailSettings:Password=${EMAIL_APP_PASSWORD:-kmfu haci tnno kjqd}"
+            - "EmailSettings:SmtpUsername=${EMAIL_ADDRESS:-vida33085@gmail.com}"
+            - "EmailSettings:SmtpPassword=${EMAIL_APP_PASSWORD:-kmfu haci tnno kjqd}"
+            - "EmailSettings:FromEmail=${EMAIL_ADDRESS:-vida33085@gmail.com}"
             - "EmailSettings:FromName=Cinemax System"
             - "EmailSettings:EnableSsl=true"
         depends_on:
@@ -143,12 +143,12 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             # JWT Settings - Must match Identity API settings
-            - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
+            - "JwtSettings:secretKey=${JWT_SECRET_KEY:-MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken}"
             - "JwtSettings:validIssuer=Cinemax identity"
             - "JwtSettings:validAudience=Cinemax"
             # Google Drive Settings
             - "GoogleDrive:CredentialsPath=cinemax-475115-7345803004e9.json"
-            - "GoogleDrive:FolderId=1MZlZG7ikum_H_Hizys5gvK0A-wz1SEq4"
+            - "GoogleDrive:FolderId=${GOOGLE_DRIVE_FOLDER_ID:-1MZlZG7ikum_H_Hizys5gvK0A-wz1SEq4}"
             - "GoogleDrive:ApplicationName=Cinemax Private Sessions"
             # Payment API Settings
             - "PaymentApi:BaseUrl=http://payment.api:8080"

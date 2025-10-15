@@ -53,6 +53,68 @@ This project follows **Clean Architecture** and **Microservices** patterns with 
 
 ---
 
+## 🔐 Security Setup
+
+### Quick Setup for Development
+
+**The `.env.example` file contains working development credentials ready to use!**
+
+Simply copy the template and you're ready to go:
+```bash
+cd Cinemax
+cp .env.example .env
+docker-compose up -d
+```
+
+**What's included in `.env.example`:**
+- ✅ PayPal **sandbox** credentials (test mode - no real money) 
+- ✅ Shared team email for development testing
+- ✅ Development-safe JWT secret
+- ✅ Test database passwords
+- ✅ Google Drive development folder
+
+**Also included in the repository:**
+- ✅ Google Drive service account JSON (`cinemax-475115-7345803004e9.json`)
+  - Located in: `Cinemax/Services/PrivateSessions/PrivateSession/`
+  - Restricted to development folder only
+  - Safe to share with team
+
+**PayPal Sandbox Test Account (for testing payments):**
+```
+Email: sb-2qjuu34887226@personal.example.com
+Password: 4)grxJ35
+```
+Use these credentials to log in to PayPal during checkout testing. This is a PayPal sandbox account - no real money will be charged.
+
+**These credentials are:**
+- ✅ Safe to share within your development team
+- ✅ Safe to commit for development use
+- ✅ Ready to use immediately - no setup required
+- ⚠️ **NOT for production use** - see production setup guide
+
+### For Production Deployment
+
+⚠️ **IMPORTANT:** Before deploying to production:
+
+1. **Generate new secure credentials:**
+   ```bash
+   # JWT Secret (use this in production!)
+   openssl rand -base64 64
+   ```
+
+2. **Get your own API credentials:**
+   - **PayPal**: Create production app at https://developer.paypal.com
+   - **Gmail**: Generate app password at https://myaccount.google.com/apppasswords
+   - **Databases**: Use strong random passwords (20+ chars)
+
+3. **Update `.env`** with production values
+
+4. **Never commit `.env` to git** (already in `.gitignore` ✅)
+
+See `docs/SECURITY_GUIDE.md` for detailed production security practices.
+
+---
+
 ## 🐳 Running with Docker (Recommended)
 
 ### Step 1: Clone the Repository
@@ -61,7 +123,15 @@ git clone <repository-url>
 cd Cinemax
 ```
 
-### Step 2: Start All Services
+### Step 2: Setup Environment Variables
+```bash
+cd Cinemax
+cp .env.example .env
+```
+
+**Note:** The `.env.example` contains working development credentials - no editing needed for testing!
+
+### Step 3: Start All Services
 ```bash
 cd Cinemax
 docker-compose up -d
@@ -422,9 +492,14 @@ docker-compose logs --tail=50 payment.api
 ### Service-Specific Documentation
 - **Payment Setup:** `Cinemax/Services/Payment/Payment.API/PAYPAL_SETUP.md`
 - **Email Setup:** `Cinemax/Services/Email.API/README.md`
-- **Private Sessions:** `Cinemax/Services/PrivateSessions/PrivateSession/GOOGLE_DRIVE_SETUP.md`
+- **Private Sessions:** 
+  - Overview: `Cinemax/Services/PrivateSessions/README.md`
+  - Google Drive Setup: `Cinemax/Services/PrivateSessions/PrivateSession/GOOGLE_DRIVE_SETUP.md`
 
 ### General Documentation (in `/docs`)
+- **🛡️ Security Guide:** `docs/SECURITY_GUIDE.md` ⭐ **READ THIS FIRST**
+- **🔑 Development Credentials:** `docs/DEVELOPMENT_CREDENTIALS.md` - Why credentials are in the repo
+- **💳 Testing Payments:** `docs/TESTING_PAYMENTS.md` - PayPal sandbox testing guide
 - **Google Drive Service Account Setup:** `docs/SERVICE_ACCOUNT_SETUP.md`
 - **HLS Video Streaming Guide:** `docs/HLS_STREAMING_GUIDE.md`
 - **Frontend Testing Guide:** `docs/FRONTEND_TESTING_GUIDE.md`
@@ -478,6 +553,50 @@ For issues and questions:
 - Check the troubleshooting section above
 - Review service-specific README files
 - Check Docker logs: `docker-compose logs [service-name]`
+
+---
+
+## 🛡️ Security Best Practices
+
+### ⚠️ IMPORTANT: Before Deploying to Production
+
+1. **Rotate ALL Credentials**
+   - Generate new JWT secret with `openssl rand -base64 64`
+   - Create new PayPal API credentials
+   - Generate new database passwords
+   - Create new email app password
+
+2. **Use Docker Secrets or Cloud Secret Management**
+   - For production: Use Docker Swarm secrets or Kubernetes secrets
+   - For cloud: Use Azure Key Vault, AWS Secrets Manager, or Google Secret Manager
+   - See `Cinemax/Services/Payment/Payment.API/docker-secrets-setup.md`
+
+3. **Never Commit to Git**
+   - `.env` file (already gitignored ✅)
+   - Google Drive credentials (already gitignored ✅)
+   - Any file containing passwords or API keys
+
+4. **Environment-Specific Secrets**
+   - Use different credentials for dev/staging/production
+   - Never use production credentials in development
+   - Implement secret rotation policies
+
+5. **Additional Security Measures**
+   - Enable HTTPS/TLS in production
+   - Use strong database passwords (20+ characters)
+   - Implement rate limiting on APIs
+   - Enable firewall rules to restrict database access
+   - Regular security audits
+
+### If Secrets Are Compromised
+
+1. **Immediately rotate the compromised credentials**
+2. **Check git history** if secrets were committed:
+   ```bash
+   git log --all --full-history -- "*docker-compose*"
+   ```
+3. **Use BFG Repo Cleaner** to remove secrets from git history
+4. **Force push** to remote (only if you control all copies)
 
 ---
 

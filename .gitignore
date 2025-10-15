@@ -5,8 +5,19 @@
 /Cinemax/package-lock.json
 /CinemaxSPA/.vs
 
+# Environment variables with secrets
+**/.env
+.env
+Cinemax/.env
+
 # Google Drive credentials and tokens
 **/client_secret_*.json
-**/cinemax-*.json
 **/token.json
 **/token.json/*
+
+# Allow the shared development service account (safe to commit)
+!Cinemax/Services/PrivateSessions/cinemax-475115-7345803004e9.json
+!Cinemax/Services/PrivateSessions/PrivateSession/cinemax-475115-7345803004e9.json
+
+# But ignore any OTHER service account files (personal ones)
+**/cinemax-*-*.json
