@@ -11,6 +11,7 @@ COPY ["Services/Payment/Payment.API/Payment.API.csproj", "Services/Payment/Payme
 COPY ["Services/Payment/Payment.Application/Payment.Application.csproj", "Services/Payment/Payment.Application/"]
 COPY ["Services/Payment/Payment.Domain/Payment.Domain.csproj", "Services/Payment/Payment.Domain/"]
 COPY ["Services/Payment/Payment.Infrastructure/Payment.Infrastructure.csproj", "Services/Payment/Payment.Infrastructure/"]
+COPY ["Common/EventBus.Messages/EventBus.Messages.csproj", "Common/EventBus.Messages/"]
 RUN dotnet restore "Services/Payment/Payment.API/Payment.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Payment/Payment.API"

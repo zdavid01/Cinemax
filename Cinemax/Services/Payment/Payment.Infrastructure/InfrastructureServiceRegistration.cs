@@ -28,8 +28,8 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IPaymentFactory, PaymentFactory>();
         services.AddScoped<IPaymentViewModelFactory, PaymentViewModelFactory>();
         
-        // Register HttpClient for Email.API
-        services.AddHttpClient<IEmailService, EmailApiClient>();
+        // Register Email Publisher (via RabbitMQ)
+        services.AddScoped<IEmailService, EmailPublisher>();
         
         // Register Basket Service
         services.AddScoped<IBasketService, BasketService>();

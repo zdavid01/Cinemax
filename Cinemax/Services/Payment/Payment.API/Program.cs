@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,16 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+// Configure MassTransit with RabbitMQ for publishing email events
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"] ?? 
+                 "amqp://guest:guest@rabbitmq:5672");
+    });
+});
 
 //Mapper
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

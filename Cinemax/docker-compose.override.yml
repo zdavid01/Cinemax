@@ -79,12 +79,12 @@ services:
             - "PayPal:ClientSecret=EP--0kzPAWPT9yg5or-0qKVMWnjusLoqZ-aSIBWhtMouaWcbyORFvfXPPKKCNU77rzq4LHA_d_D9OvI7"
             # JWT Settings
             - "JwtSettings:secretKey=MyVerySecretMessageWhichIsVeryVeryLongAndCannotBeBroken"
-            # Email API
-            - "EmailApi:BaseUrl=http://email.api:8080"
+            # RabbitMQ Event Bus Settings
+            - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
         depends_on:
             - paymentdb
             - basketdb
-            - email.api
+            - rabbitmq
         ports:
             - "8004:8080"
 
