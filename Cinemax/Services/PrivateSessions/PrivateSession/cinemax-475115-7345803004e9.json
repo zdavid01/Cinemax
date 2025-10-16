@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "cinemax-475115",
+  "private_key_id": "7345803004e9ebad1781fee0aa19e46300db9085",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCdW6Je+U9+n2pJ\nYK3RVnL3FCAf1xoP/ol74P6B2+sRIcsKo1RiVdFdUzMtDNhIn9W3gIP7ze/ElnHi\nO5IJ9pmBhU4489SIKltqr4mrlOX4IvoIPrCrMPKJbY3Ip7VeaQWCIxlj/I2I0G3w\ncNNlVf6Stuoyxd6/ANssjVeKMpCEcvqVpNTDanXp1/C+JpqGsyU1yb0jKBFTqYjN\nhub/0hiMbHmbmvCIXDgCd7IjkxZUs+5uKmAWjbRja9qUuDjKQXVH1m1oN+NAXZrQ\nUWjGg5e8Issc+KUnvZ9tmRB9KGu21EHOoWWr/UNHTWMNIQRJIFqXV/upDp1vbytQ\ndmyqopTXAgMBAAECggEAMMcF5wDLJooN7V79omV0z6g6aQRJfOm+/lp5KhHcpPvf\nr5V/g9fsRUyUEYPoy2JYYkCBKR3mE/86oBEtLM93OBH1dGwI1oiiu8hcGYbXXnqh\nHMsqAnbyx6zhBXEPJIvTfEqbBUZ1LRLG8YBX1xK4DgyLPl/ds0F1rzLFDv6rk5KA\nMGOU8Wbt1UfXIGGkdHBVV4bndQqcfwwZ85rzDuZHm4M9ZCj3ixG0poXqdYjo/yVA\nGIE1/Jbl6zjevjPTLCsp8bUsTQ15Z9JAsIDe/YttHFKpEkCt5Bhh/ophWaRflSHh\nzcWQwkMzYjQwBvOaJPQBGmUCz7/lr3bZ7uqoKBHnCQKBgQDK39dnZQdaVgN08KBs\nv86mLSvVntcmPgDJBrIKUXOJf2i2taiRJqwlOsaJk9sYZuB8ktsuW1LtuXgQwcWP\n7H7yT2gceuRcb1Y/1lVOE9m97Ev+MDfAiXulLVdc6MVEpAB+fOaYBUiOmlKK3BCs\nvr3QiWulE4Jn8gLdY2tpeQ8oUwKBgQDGkH4CGs6IY5U4BDR/bwzMdY3MwHzNea68\nID2Vv8FV9LiLRSJZr2xoHVzXg+tF/xZBR+fK5JBloW+zGkC1cVHG5O9Ul1yLJdDs\nRnGbd7iMbdcCfrhY7uD7gxpfnYodHKnDTGUEnwg1Ozs1zn/Wy9+IeWM36kJB+Ta0\ngVsExbTA7QKBgDWWYNB32DRdafZWpRl0pMIyRlTb6xq33/85nIerMiiMlf1FCKym\nmWwQFWc7vfC5I+zj4a9iAgq3JebPOD8nCfU5UlfLgkyEQDUGiWvhRG+tXflbhS5/\nYkCkNGJfPdQ+ub6vgT2Aj8TTMKBrNqBalcrisaNd/uE0BNuzqiinCIDvAoGBALJN\n2flF3SR4V+x/Si0MqW+IOBce2nMgy5m/Uc4A7TmkkXruT9Q9RJmRlGcq3MB0OaXR\nTgHRkSDSAJ3R+z1zTr3NomRRrxZ8lMk20JmMvjnMAIELDbs+duUjazFlJDrUHFV1\naljl/dbfI2JD1mQpmsbQShpRz8Gyaj9Y0UTNzGxZAoGAC4dydn5evQ/HqM5Htmnf\n+BPk/9yY99yXLGVnHXObHTw7xXDMATzG96BdC7K6p0Znlyhpj9kqRX4xL1gVrfpp\nrKemzY8+vPqox8IelkNS6tIqnhbiGNuGUPRz7Q/jEkVmFnWqQrBgFawusB2Lo6aS\n1txUQ5CT2HfLIOZmySOMPgM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cinemax@cinemax-475115.iam.gserviceaccount.com",
+  "client_id": "105420144637520585320",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cinemax%40cinemax-475115.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
